@@ -1,6 +1,6 @@
 {
   "name": "epsilon-launcher",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Launcher Minecraft dédié au serveur EPSILON",
   "main": "src/main.js",
   "type": "commonjs",
@@ -10,12 +10,15 @@
     "manifest": "node tools/build-manifest.js server-files server-files/manifest.json",
     "pack": "electron-builder --win --dir",
     "dist": "electron-builder --win nsis",
-    "release": "electron-builder --win nsis --publish always"
+    "release": "electron-builder --win nsis --publish always",
+    "release:win": "electron-builder --win nsis --publish always",
+    "release:mac": "electron-builder --mac dmg zip --x64 --arm64 --publish always"
   },
   "devDependencies": {
     "electron": "33.4.11",
     "electron-builder": "25.1.8",
     "png-to-ico": "^3.0.2",
+    "png2icons": "^2.0.1",
     "sharp": "^0.35.3"
   },
   "build": {
@@ -36,7 +39,14 @@
     "win": {
       "target": "nsis",
       "artifactName": "Installer-TomizeCorpLauncher-${version}.exe",
-      "signAndEditExecutable": false
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": true
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "icon": "build/icon.icns",
+      "category": "public.app-category.games",
+      "artifactName": "TomizeCorpLauncher-${version}-mac-${arch}.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -57,6 +67,7 @@
     "discord-rpc": "^4.0.1",
     "electron-updater": "^6.8.9",
     "extract-zip": "^2.0.1",
-    "msmc": "^5.0.5"
+    "prismarine-auth": "^3.1.1",
+    "tar": "^7.5.20"
   }
 }

@@ -133,7 +133,7 @@ async function findJava(dir) {
   for (const entry of await fs.readdir(dir,{withFileTypes:true})) {
     const item=path.join(dir,entry.name);
     if(entry.isDirectory()){const found=await findJava(item);if(found)return found;}
-    else if(entry.name.toLowerCase()==='javaw.exe'&&path.basename(path.dirname(item)).toLowerCase()==='bin')return item;
+    else if(((process.platform==='win32'&&entry.name.toLowerCase()==='javaw.exe')||(process.platform!=='win32'&&entry.name==='java'))&&path.basename(path.dirname(item)).toLowerCase()==='bin')return item;
   }
   return null;
 }
@@ -142,11 +142,15 @@ async function ensureJava(settings, win) {
   const runtimeRoot=path.join(settings.instancePath,'runtime','java-21');
   try { const existing=await findJava(runtimeRoot);if(existing){await checkJava(existing);await saveSettings({...settings,javaPath:existing});return existing;} } catch (_) {}
   await fs.mkdir(runtimeRoot,{recursive:true});
-  const archive=path.join(app.getPath('temp'),'epsilon-java21.zip');
+  const isMac=process.platform==='darwin';
+  if(process.platform!=='win32'&&!isMac)throw new Error('Ce système n’est pas encore pris en charge.');
+  const archive=path.join(app.getPath('temp'),isMac?'epsilon-java21.tar.gz':'epsilon-java21.zip');
+  const os=isMac?'mac':'windows',arch=process.arch==='arm64'?'aarch64':'x64';
   win.webContents.send('sync-progress',{percent:5,message:'Installation automatique de Java 21…'});
-  await download('https://api.adoptium.net/v3/binary/latest/21/ga/windows/x64/jre/hotspot/normal/eclipse',archive,ratio=>win.webContents.send('sync-progress',{percent:Math.round(5+ratio*18),message:`Téléchargement de Java 21 — ${Math.round(ratio*100)}%`}));
+  await download(`https://api.adoptium.net/v3/binary/latest/21/ga/${os}/${arch}/jre/hotspot/normal/eclipse`,archive,ratio=>win.webContents.send('sync-progress',{percent:Math.round(5+ratio*18),message:`Téléchargement de Java 21 — ${Math.round(ratio*100)}%`}));
   win.webContents.send('sync-progress',{percent:24,message:'Préparation du moteur Java…'});
-  await extractZip(archive,{dir:runtimeRoot});await fs.unlink(archive).catch(()=>{});
+  if(isMac){const tar=require('tar');await tar.x({file:archive,cwd:runtimeRoot});}else await extractZip(archive,{dir:runtimeRoot});
+  await fs.unlink(archive).catch(()=>{});
   const javaPath=await findJava(runtimeRoot);if(!javaPath)throw new Error('Le runtime Java téléchargé est incomplet.');
   await checkJava(javaPath);await saveSettings({...settings,javaPath});return javaPath;
 }
@@ -193,7 +197,22 @@ app.whenReady().then(() => {
   ipcMain.handle('auth:offline', async (_, username) => { const name=String(username||'').trim(); if(!/^[A-Za-z0-9_]{3,16}$/.test(name)) throw new Error('Pseudo invalide (3 à 16 caractères).'); activeSession=null; const s=await loadSettings(); await saveSettings({...s,username:name,displayName:name,authMode:'offline'}); return {name,mode:'offline'}; });
   ipcMain.handle('auth:register', async (_, value) => { const {username,password}=validateCredentials(value),accounts=await localAccounts(),key=username.toLowerCase();if(accounts[key])throw new Error('Ce pseudo existe déjà sur ce PC.');const salt=crypto.randomBytes(16).toString('hex');accounts[key]={username,salt,hash:await scrypt(password,salt),createdAt:new Date().toISOString()};await saveLocalAccounts(accounts);activeSession={type:'local',name:username};const s=await loadSettings();await saveSettings({...s,username,displayName:username,authMode:'epsilon'});return{name:username,mode:'epsilon'}; });
   ipcMain.handle('auth:login', async (_, value) => { const {username,password}=validateCredentials(value),accounts=await localAccounts(),account=accounts[username.toLowerCase()];if(!account)throw new Error('Pseudo ou mot de passe incorrect.');const actual=Buffer.from(await scrypt(password,account.salt),'hex'),expected=Buffer.from(account.hash,'hex');if(actual.length!==expected.length||!crypto.timingSafeEqual(actual,expected))throw new Error('Pseudo ou mot de passe incorrect.');activeSession={type:'local',name:account.username};const s=await loadSettings();await saveSettings({...s,username:account.username,displayName:account.username,authMode:'epsilon'});return{name:account.username,mode:'epsilon'}; });
-  ipcMain.handle('auth:microsoft', async () => { const { Auth }=require('msmc'); const manager=new Auth('select_account'); const xbox=await manager.launch('electron',{width:520,height:720,resizable:true,title:'Connexion Microsoft — EpsilonLauncher',icon:path.join(__dirname,'renderer','assets','epsilon-logo.png'),backgroundColor:'#000000'}); const mc=await xbox.getMinecraft(); activeSession={name:mc.profile.name,id:mc.profile.id,accessToken:mc.mcToken}; const s=await loadSettings(); await saveSettings({...s,displayName:activeSession.name,authMode:'microsoft'}); return {name:activeSession.name,mode:'microsoft'}; });
+  ipcMain.handle('auth:microsoft', async () => {
+    const { Authflow }=require('prismarine-auth');
+    const cacheDir=path.join(app.getPath('userData'),'microsoft-auth');
+    await fs.mkdir(cacheDir,{recursive:true});
+    const flow=new Authflow('epsilon-player',cacheDir,{flow:'msal'},code=>{
+      const verificationUrl=code.verification_uri_complete||code.verificationUriComplete||`https://microsoft.com/link?otc=${encodeURIComponent(code.user_code)}`;
+      require('electron').clipboard.writeText(code.user_code||'');
+      shell.openExternal(verificationUrl).catch(()=>{});
+      dialog.showMessageBox(hubWindow,{type:'info',title:'Connexion Microsoft — EpsilonLauncher',message:'Terminez la connexion dans votre navigateur.',detail:`Code Microsoft : ${code.user_code}\n\nLe code a été copié automatiquement. Revenez ensuite dans le launcher.`,buttons:['J’ai compris'],icon:path.join(__dirname,'renderer','assets','epsilon-logo.png'),noLink:true}).catch(()=>{});
+    });
+    const mc=await flow.getMinecraftJavaToken({fetchProfile:true,fetchEntitlements:true});
+    if(!mc.profile?.name||!mc.profile?.id)throw new Error('Ce compte ne possède pas de profil Minecraft Java.');
+    activeSession={name:mc.profile.name,id:mc.profile.id,accessToken:mc.token};
+    const s=await loadSettings();await saveSettings({...s,username:activeSession.name,displayName:activeSession.name,authMode:'microsoft'});
+    return{name:activeSession.name,mode:'microsoft'};
+  });
   ipcMain.handle('game:launch', (event, profile) => installAndLaunch(BrowserWindow.fromWebContents(event.sender), profile));
   ipcMain.handle('folder:pick', async () => (await dialog.showOpenDialog({ properties: ['openDirectory', 'createDirectory'] })).filePaths[0] || null);
   ipcMain.handle('file:pick', async () => (await dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'Exécutable', extensions: ['exe'] }] })).filePaths[0] || null);

@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  release-windows:
     runs-on: windows-latest
     steps:
       - name: Récupérer le projet
@@ -31,7 +31,34 @@ jobs:
           node --check src/renderer/app.js
           node --check src/renderer/epsilon.js
 
-      - name: Compiler et publier la Release
-        run: npm run release
+      - name: Compiler et publier Windows
+        run: npm run release:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-macos:
+    needs: release-windows
+    runs-on: macos-latest
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Vérifier les sources
+        run: |
+          node --check src/main.js
+          node --check src/renderer/app.js
+          node --check src/renderer/epsilon.js
+
+      - name: Compiler et publier macOS
+        run: npm run release:mac
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
