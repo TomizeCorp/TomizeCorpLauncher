@@ -8,7 +8,6 @@ const { spawn } = require('child_process');
 const { pipeline } = require('stream/promises');
 const extractZip = require('extract-zip');
 const DiscordRPC = require('discord-rpc');
-const { autoUpdater } = require('electron-updater');
 
 const configPath = path.join(__dirname, '..', 'config', 'launcher.json');
 const defaultInstance = path.join(app.getPath('appData'), '.epsilon');
@@ -33,6 +32,7 @@ async function setDiscordMode(mode) {
 }
 function configureAutoUpdater() {
   if(!app.isPackaged)return;
+  const { autoUpdater } = require('electron-updater');
   autoUpdater.autoDownload=true;autoUpdater.autoInstallOnAppQuit=true;autoUpdater.allowPrerelease=false;
   autoUpdater.on('update-downloaded',async info=>{const result=await dialog.showMessageBox({type:'info',title:'Mise à jour TomizeCorpLauncher',message:`La version ${info.version} est prête.`,detail:'Redémarrer maintenant pour terminer la mise à jour ?',buttons:['Redémarrer maintenant','Plus tard'],defaultId:0,cancelId:1,noLink:true});if(result.response===0)autoUpdater.quitAndInstall(false,true);});
   autoUpdater.on('error',error=>console.warn('Auto-update:',error.message));
