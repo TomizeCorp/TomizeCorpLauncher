@@ -1,0 +1,1 @@
+.account-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.account-actions .provider{padding:0 10px}.create:hover{border-color:#f2f2f2!important}.login-dialog{max-height:92vh;overflow:auto}

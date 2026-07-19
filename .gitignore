@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.tools/
+node-portable.zip
+auth-server/
+paper-plugin/
+*.log
+*.download

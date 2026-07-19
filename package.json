@@ -1,0 +1,62 @@
+{
+  "name": "epsilon-launcher",
+  "version": "1.4.0",
+  "description": "Launcher Minecraft dédié au serveur EPSILON",
+  "main": "src/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "manifest": "node tools/build-manifest.js server-files server-files/manifest.json",
+    "pack": "electron-builder --win --dir",
+    "dist": "electron-builder --win nsis",
+    "release": "electron-builder --win nsis --publish always"
+  },
+  "devDependencies": {
+    "electron": "33.4.11",
+    "electron-builder": "25.1.8",
+    "png-to-ico": "^3.0.2",
+    "sharp": "^0.35.3"
+  },
+  "build": {
+    "appId": "fr.epsilon.minecraft.launcher",
+    "productName": "TomizeCorpLauncher",
+    "publish": {
+      "provider": "github",
+      "owner": "TomizeCorp",
+      "repo": "TomizeCorpLauncher",
+      "releaseType": "release"
+    },
+    "files": [
+      "src/**/*",
+      "config/**/*",
+      "server-files/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "artifactName": "Installer-TomizeCorpLauncher-${version}.exe",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "TomizeCorpLauncher",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "dependencies": {
+    "@xmcl/core": "^2.15.1",
+    "@xmcl/installer": "^6.1.2",
+    "discord-rpc": "^4.0.1",
+    "electron-updater": "^6.8.9",
+    "extract-zip": "^2.0.1",
+    "msmc": "^5.0.5"
+  }
+}

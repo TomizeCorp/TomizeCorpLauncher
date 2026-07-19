@@ -1,0 +1,15 @@
+{
+  "serverName": "EPSILON",
+  "serverAddress": "play.minecraft.epsilon.tomize.fr",
+  "serverPort": 25568,
+  "minecraftVersion": "1.21.11",
+  "loader": "Paper",
+  "discord": {
+    "tomizeCorpApplicationId": "1528486845598666752",
+    "epsilonApplicationId": "1528488560813015210",
+    "tomizeCorpLargeImageKey": "tomizecorp",
+    "epsilonLargeImageKey": "epsilon"
+  },
+  "manifestUrl": "../server-files/manifest.json",
+  "news": "Bienvenue sur EPSILON ! L'instance sera vérifiée avant chaque lancement."
+}
