@@ -17,6 +17,35 @@ let discordClient = null;
 app.setAppUserModelId('fr.tomizecorp.launcher');
 
 async function readJson(file) { return JSON.parse(await fs.readFile(file, 'utf8')); }
+async function validJsonFile(file) { try { const content=await fs.readFile(file,'utf8');if(!content.trim())return false;JSON.parse(content);return true;} catch (_) { return false; } }
+async function repairMinecraftFiles(version,win) {
+  const { diagnose }=await import('@xmcl/core');
+  let report=await diagnose(version.id,version.minecraftDirectory);
+  const repairable=report.issues.map(issue=>{
+    if(issue.role==='asset'){const hash=issue.expectedChecksum||issue.asset?.hash;return hash?{file:issue.file,hash,url:`https://resources.download.minecraft.net/${hash.slice(0,2)}/${hash}`}:null;}
+    if(issue.role==='library'){const item=issue.library?.download;return item?.url&&item?.sha1?{file:issue.file,hash:item.sha1,url:item.url}:null;}
+    return null;
+  }).filter(Boolean);
+  let cursor=0,completed=0;
+  async function worker(){
+    while(cursor<repairable.length){
+      const item=repairable[cursor++],temporary=`${item.file}.epsilon-repair`;
+      for(let attempt=1;attempt<=4;attempt++){
+        try{
+          const response=await fetch(item.url,{signal:AbortSignal.timeout(60000)});
+          if(!response.ok)throw new Error(`HTTP ${response.status}`);
+          const data=Buffer.from(await response.arrayBuffer()),actual=crypto.createHash('sha1').update(data).digest('hex');
+          if(actual!==item.hash)throw new Error('Empreinte SHA-1 incorrecte');
+          await fs.mkdir(path.dirname(item.file),{recursive:true});await fs.writeFile(temporary,data);await fs.rename(temporary,item.file);break;
+        }catch(error){await fs.unlink(temporary).catch(()=>{});if(attempt===4)throw error;await new Promise(resolve=>setTimeout(resolve,attempt*500));}
+      }
+      completed++;if(completed%25===0||completed===repairable.length)win.webContents.send('sync-progress',{percent:Math.min(94,72+Math.round(completed/Math.max(1,repairable.length)*22)),message:`Réparation Minecraft ${completed}/${repairable.length}`});
+    }
+  }
+  if(repairable.length)await Promise.all(Array.from({length:10},worker));
+  report=await diagnose(version.id,version.minecraftDirectory);
+  if(report.issues.length)throw new Error(`${report.issues.length} fichier(s) Minecraft restent incomplets. Relancez la réparation.`);
+}
 const scrypt = (password, salt) => new Promise((resolve, reject) => crypto.scrypt(password, salt, 64, (error, key) => error ? reject(error) : resolve(key.toString('hex'))));
 async function localAccounts() { try { return await readJson(path.join(app.getPath('userData'),'accounts.json')); } catch (_) { return {}; } }
 async function saveLocalAccounts(accounts) { await fs.mkdir(app.getPath('userData'),{recursive:true});await fs.writeFile(path.join(app.getPath('userData'),'accounts.json'),JSON.stringify(accounts,null,2)); }
@@ -163,8 +192,8 @@ async function installAndLaunch(win, profile) {
   await saveSettings({ ...settings, username, javaPath });
   win.webContents.send('sync-progress', { percent: 3, message: 'Synchronisation EPSILON…' });
   await synchronize(win);
-  const { getVersionList, install } = await import('@xmcl/installer');
-  const { launch } = await import('@xmcl/core');
+  const { getVersionList, install, installAssets } = await import('@xmcl/installer');
+  const { launch, Version } = await import('@xmcl/core');
   const versionJson = path.join(settings.instancePath, 'versions', settings.minecraftVersion, `${settings.minecraftVersion}.json`);
   if (!fsSync.existsSync(versionJson)) {
     win.webContents.send('sync-progress', { percent: 15, message: `Installation de Minecraft ${settings.minecraftVersion}…` });
@@ -172,6 +201,21 @@ async function installAndLaunch(win, profile) {
     if (!meta) throw new Error(`Minecraft ${settings.minecraftVersion} est introuvable.`);
     await install(meta, settings.instancePath);
   }
+  if(!(await validJsonFile(versionJson))){await fs.unlink(versionJson).catch(()=>{});throw new Error('Installation Minecraft incomplète. Relancez le jeu pour la réparer.');}
+  const resolvedVersion=await Version.parse(settings.instancePath,settings.minecraftVersion);
+  const assetIndex=path.join(settings.instancePath,'assets','indexes',`${resolvedVersion.assets}.json`);
+  if(!(await validJsonFile(assetIndex))){
+    win.webContents.send('sync-progress',{percent:72,message:'Réparation de l’index des assets Minecraft…'});
+    await fs.unlink(assetIndex).catch(()=>{});
+    for(let attempt=1;attempt<=3;attempt++){
+      await installAssets(resolvedVersion);
+      if(await validJsonFile(assetIndex))break;
+      await fs.unlink(assetIndex).catch(()=>{});
+      if(attempt===3)throw new Error('Impossible de réparer les assets Minecraft. Vérifiez votre connexion puis réessayez.');
+    }
+  }
+  win.webContents.send('sync-progress',{percent:70,message:'Vérification complète de Minecraft…'});
+  await repairMinecraftFiles(resolvedVersion,win);
   win.webContents.send('sync-progress', { percent: 96, message: 'Connexion directe au serveur…' });
   const child = await launch({ gamePath: settings.instancePath, javaPath, version: settings.minecraftVersion, versionName: 'EpsilonLauncher', versionType: 'EpsilonLauncher', gameName: 'EpsilonLauncher', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'EpsilonLauncher', launcherBrand: 'TomizeCorp', minMemory: 1024, maxMemory: 4096, quickPlayMultiplayer: `${settings.serverAddress}:${settings.serverPort}`, server: { ip: settings.serverAddress, port: settings.serverPort }, extraExecOption: { detached: true } });
   child.unref(); win.webContents.send('sync-progress', { percent: 100, message: 'Minecraft lancé sur EPSILON' });
