@@ -18,6 +18,13 @@ app.setAppUserModelId('fr.tomizecorp.launcher');
 
 async function readJson(file) { return JSON.parse(await fs.readFile(file, 'utf8')); }
 async function validJsonFile(file) { try { const content=await fs.readFile(file,'utf8');if(!content.trim())return false;JSON.parse(content);return true;} catch (_) { return false; } }
+async function runWithProgress(win, task, { start, end, message }) {
+  const startedAt=Date.now();let percent=start;
+  const update=()=>win.webContents.send('sync-progress',{percent,message:`${message} (${Math.max(1,Math.round((Date.now()-startedAt)/1000))} s)`});
+  update();
+  const timer=setInterval(()=>{percent=Math.min(end,percent+1);update();},5000);
+  try{return await task();}finally{clearInterval(timer);}
+}
 async function repairMinecraftFiles(version,win) {
   const { diagnose }=await import('@xmcl/core');
   let report=await diagnose(version.id,version.minecraftDirectory);
@@ -217,13 +224,14 @@ async function installAndLaunch(win, profile) {
   const fabricLoader='0.19.3',fabricVersion=`${settings.minecraftVersion}-fabric${fabricLoader}`;
   const fabricJson=path.join(settings.instancePath,'versions',fabricVersion,`${fabricVersion}.json`);
   if(!(await validJsonFile(fabricJson))){
-    win.webContents.send('sync-progress',{percent:66,message:'Installation du moteur EpsilonLauncher…'});
-    await installFabric({minecraftVersion:settings.minecraftVersion,version:fabricLoader,minecraft:settings.instancePath,side:'client'});
+    await fs.unlink(fabricJson).catch(()=>{});
+    await runWithProgress(win,()=>installFabric({minecraftVersion:settings.minecraftVersion,version:fabricLoader,minecraft:settings.instancePath,side:'client'}),{start:60,end:65,message:'Installation du moteur EpsilonLauncher…'});
+    if(!(await validJsonFile(fabricJson)))throw new Error('Le moteur EpsilonLauncher est incomplet. Vérifiez votre connexion puis réessayez.');
   }
   const resolvedVersion=await Version.parse(settings.instancePath,fabricVersion);
-  await installDependencies(resolvedVersion);
-  win.webContents.send('sync-progress',{percent:70,message:'Vérification complète de Minecraft…'});
+  win.webContents.send('sync-progress',{percent:66,message:'Vérification des bibliothèques du moteur…'});
   await repairMinecraftFiles(resolvedVersion,win);
+  await runWithProgress(win,()=>installDependencies(resolvedVersion),{start:94,end:95,message:'Finalisation du moteur EpsilonLauncher…'});
   win.webContents.send('sync-progress', { percent: 96, message: 'Connexion directe au serveur…' });
   const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'EpsilonLauncher', versionType: 'EpsilonLauncher', gameName: 'EpsilonLauncher', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'EpsilonLauncher', launcherBrand: 'TomizeCorp', minMemory: 1024, maxMemory: 4096, quickPlayMultiplayer: `${settings.serverAddress}:${settings.serverPort}`, server: { ip: settings.serverAddress, port: settings.serverPort }, extraExecOption: { detached: true } });
   child.unref(); win.webContents.send('sync-progress', { percent: 100, message: 'Minecraft lancé sur EPSILON' });
