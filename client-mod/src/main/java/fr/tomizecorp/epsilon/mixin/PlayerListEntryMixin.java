@@ -13,7 +13,7 @@ public abstract class PlayerListEntryMixin {
     @Inject(method = "getSkinTextures", at = @At("HEAD"), cancellable = true)
     private void epsilon$localSkin(CallbackInfoReturnable<SkinTextures> cir) {
         PlayerListEntry entry = (PlayerListEntry)(Object)this;
-        SkinTextures skin = EpsilonSkin.get(entry.getProfile().getName());
+        SkinTextures skin = EpsilonSkin.get(entry.getProfile().name());
         if (skin != null) cir.setReturnValue(skin);
     }
 }
