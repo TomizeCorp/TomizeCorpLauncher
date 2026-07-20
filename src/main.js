@@ -82,13 +82,38 @@ async function loadSettings() {
   const userPath = path.join(app.getPath('userData'), 'settings.json');
   let user = {};
   try { user = await readJson(userPath); } catch (_) {}
-  return { ...base, instancePath: defaultInstance, javaPath: '', username: '', authMode: '', displayName: '', rememberSession: true, ...user };
+  return { ...base, instancePath: defaultInstance, javaPath: '', username: '', authMode: '', displayName: '', profileId: '', rememberSession: true, ...user };
 }
 async function saveSettings(value) {
-  const clean = { instancePath: value.instancePath, javaPath: value.javaPath, username: value.username, authMode: value.authMode, displayName: value.displayName, rememberSession: value.rememberSession !== false };
+  const clean = { instancePath: value.instancePath, javaPath: value.javaPath, username: value.username, authMode: value.authMode, displayName: value.displayName, profileId: value.profileId || '', rememberSession: value.rememberSession !== false };
   await fs.mkdir(app.getPath('userData'), { recursive: true });
   await fs.writeFile(path.join(app.getPath('userData'), 'settings.json'), JSON.stringify(clean, null, 2));
   return loadSettings();
+}
+async function imageDataUrl(url) {
+  const response=await fetch(url,{signal:AbortSignal.timeout(10000)});
+  if(!response.ok)throw new Error(`HTTP ${response.status}`);
+  const type=(response.headers.get('content-type')||'').split(';')[0];
+  if(type!=='image/png')throw new Error('Format de skin officiel invalide.');
+  const data=Buffer.from(await response.arrayBuffer());
+  if(data.length>2*1024*1024)throw new Error('Skin officiel trop volumineux.');
+  return `data:image/png;base64,${data.toString('base64')}`;
+}
+async function officialSkinPreview(profileId,username) {
+  try {
+    let id=String(profileId||'').replaceAll('-','');
+    if(!/^[a-f0-9]{32}$/i.test(id)){
+      const profile=await fetch(`https://api.mojang.com/users/profiles/minecraft/${encodeURIComponent(username)}`,{signal:AbortSignal.timeout(10000)});
+      if(!profile.ok)return '';
+      id=String((await profile.json()).id||'');
+    }
+    const response=await fetch(`https://sessionserver.mojang.com/session/minecraft/profile/${id}`,{signal:AbortSignal.timeout(10000)});
+    if(!response.ok)return '';
+    const property=(await response.json()).properties?.find(item=>item.name==='textures')?.value;
+    if(!property)return '';
+    const texture=JSON.parse(Buffer.from(property,'base64').toString('utf8')).textures?.SKIN?.url;
+    return /^https:\/\/textures\.minecraft\.net\//i.test(texture||'')?await imageDataUrl(texture):'';
+  } catch (_) { return ''; }
 }
 function sha256(file) {
   return new Promise((resolve, reject) => {
@@ -268,7 +293,7 @@ async function authenticateMicrosoft(rememberSession=true) {
   const mc=await flow.getMinecraftJavaToken({fetchProfile:true,fetchEntitlements:true});
   if(!mc.profile?.name||!mc.profile?.id)throw new Error('Ce compte ne possède pas de profil Minecraft Java.');
   activeSession={name:mc.profile.name,id:mc.profile.id,accessToken:mc.token};
-  const s=await loadSettings();await saveSettings({...s,username:activeSession.name,displayName:activeSession.name,authMode:'microsoft',rememberSession});
+  const s=await loadSettings();await saveSettings({...s,username:activeSession.name,displayName:activeSession.name,profileId:activeSession.id,authMode:'microsoft',rememberSession});
   return{name:activeSession.name,mode:'microsoft'};
 }
 app.whenReady().then(() => {
@@ -280,9 +305,9 @@ app.whenReady().then(() => {
   ipcMain.handle('auth:register', async (_, value) => { const {username,password}=validateCredentials(value),accounts=await localAccounts(),key=username.toLowerCase();if(accounts[key])throw new Error('Ce pseudo existe déjà sur ce PC.');const salt=crypto.randomBytes(16).toString('hex');accounts[key]={username,salt,hash:await scrypt(password,salt),createdAt:new Date().toISOString()};await saveLocalAccounts(accounts);activeSession={type:'local',name:username};const s=await loadSettings();await saveSettings({...s,username,displayName:username,authMode:'epsilon',rememberSession:value?.rememberSession!==false});return{name:username,mode:'epsilon'}; });
   ipcMain.handle('auth:login', async (_, value) => { const {username,password}=validateCredentials(value),accounts=await localAccounts(),account=accounts[username.toLowerCase()];if(!account)throw new Error('Compte introuvable sur cet appareil. Utilisez Créer un compte.');const actual=Buffer.from(await scrypt(password,account.salt),'hex'),expected=Buffer.from(account.hash,'hex');if(actual.length!==expected.length||!crypto.timingSafeEqual(actual,expected))throw new Error('Pseudo ou mot de passe incorrect.');activeSession={type:'local',name:account.username};const s=await loadSettings();await saveSettings({...s,username:account.username,displayName:account.username,authMode:'epsilon',rememberSession:value?.rememberSession!==false});return{name:account.username,mode:'epsilon'}; });
   ipcMain.handle('auth:microsoft', (_, rememberSession) => authenticateMicrosoft(rememberSession!==false));
-  ipcMain.handle('auth:logout', async () => { activeSession=null;await fs.rm(path.join(app.getPath('userData'),'microsoft-auth'),{recursive:true,force:true});const s=await loadSettings();await saveSettings({...s,username:'',displayName:'',authMode:'',rememberSession:true});return true; });
-  ipcMain.handle('account:get', async () => {const s=await loadSettings();if(!s.authMode)return null;if(s.authMode==='microsoft')return{mode:'microsoft',username:s.displayName,officialSkin:true};const account=(await localAccounts())[s.username.toLowerCase()];return{mode:'epsilon',username:account?.username||s.username,hasSkin:Boolean(account?.skinPath&&fsSync.existsSync(account.skinPath))};});
-  ipcMain.handle('account:update', async (_,value) => {const s=await loadSettings();if(s.authMode!=='epsilon')throw new Error('Les profils Microsoft se modifient sur minecraft.net.');const accounts=await localAccounts(),oldKey=s.username.toLowerCase(),account=accounts[oldKey];if(!account)throw new Error('Compte EPSILON introuvable.');const oldPassword=String(value?.oldPassword||''),actual=Buffer.from(await scrypt(oldPassword,account.salt),'hex'),expected=Buffer.from(account.hash,'hex');if(actual.length!==expected.length||!crypto.timingSafeEqual(actual,expected))throw new Error('Ancien mot de passe incorrect.');const username=String(value?.username||'').trim(),newKey=username.toLowerCase();if(!/^[A-Za-z0-9_]{3,16}$/.test(username))throw new Error('Pseudo invalide (3 à 16 caractères).');if(newKey!==oldKey&&accounts[newKey])throw new Error('Ce pseudo est déjà utilisé sur cet appareil.');const newPassword=String(value?.newPassword||'');if(newPassword&&newPassword.length<8)throw new Error('Le nouveau mot de passe doit contenir au moins 8 caractères.');if(newPassword){account.salt=crypto.randomBytes(16).toString('hex');account.hash=await scrypt(newPassword,account.salt);}account.username=username;delete accounts[oldKey];accounts[newKey]=account;await saveLocalAccounts(accounts);activeSession={type:'local',name:username};await saveSettings({...s,username,displayName:username});return{username,hasSkin:Boolean(account.skinPath)};});
+  ipcMain.handle('auth:logout', async () => { activeSession=null;await fs.rm(path.join(app.getPath('userData'),'microsoft-auth'),{recursive:true,force:true});const s=await loadSettings();await saveSettings({...s,username:'',displayName:'',profileId:'',authMode:'',rememberSession:true});return true; });
+  ipcMain.handle('account:get', async () => {const s=await loadSettings();if(!s.authMode)return null;if(s.authMode==='microsoft'){if(!s.displayName)return null;return{mode:'microsoft',username:s.displayName,officialSkin:true,preview:await officialSkinPreview(s.profileId,s.displayName)}}const account=(await localAccounts())[s.username.toLowerCase()];if(!account)return null;const validSkin=Boolean(account.skinPath&&fsSync.existsSync(account.skinPath));return{mode:'epsilon',username:account.username,hasSkin:validSkin,preview:validSkin?`data:image/png;base64,${(await fs.readFile(account.skinPath)).toString('base64')}`:''};});
+  ipcMain.handle('account:update', async (_,value) => {const s=await loadSettings();if(s.authMode!=='epsilon')throw new Error('Les profils Microsoft se modifient sur minecraft.net.');const accounts=await localAccounts(),oldKey=s.username.toLowerCase(),account=accounts[oldKey];if(!account)throw new Error('Compte EPSILON introuvable.');const oldPassword=String(value?.oldPassword||''),actual=Buffer.from(await scrypt(oldPassword,account.salt),'hex'),expected=Buffer.from(account.hash,'hex');if(actual.length!==expected.length||!crypto.timingSafeEqual(actual,expected))throw new Error('Ancien mot de passe incorrect.');const username=String(value?.username||'').trim(),newKey=username.toLowerCase();if(!/^[A-Za-z0-9_]{3,16}$/.test(username))throw new Error('Pseudo invalide (3 à 16 caractères).');if(newKey!==oldKey&&accounts[newKey])throw new Error('Ce pseudo est déjà utilisé sur cet appareil.');const newPassword=String(value?.newPassword||''),confirmation=String(value?.newPasswordConfirm||'');if(newPassword!==confirmation)throw new Error('Les nouveaux mots de passe sont différents.');if(newPassword&&(newPassword.length<8||newPassword.length>128))throw new Error('Le nouveau mot de passe doit contenir 8 à 128 caractères.');if(newPassword){account.salt=crypto.randomBytes(16).toString('hex');account.hash=await scrypt(newPassword,account.salt);}account.username=username;delete accounts[oldKey];accounts[newKey]=account;await saveLocalAccounts(accounts);activeSession={type:'local',name:username};await saveSettings({...s,username,displayName:username});return{username,hasSkin:Boolean(account.skinPath)};});
   ipcMain.handle('account:skin', async () => {const s=await loadSettings();if(s.authMode!=='epsilon')throw new Error('Le skin Microsoft est géré par votre compte officiel.');const result=await dialog.showOpenDialog(hubWindow,{properties:['openFile'],filters:[{name:'Skin Minecraft PNG',extensions:['png']}]});if(result.canceled||!result.filePaths[0])return null;const source=result.filePaths[0],image=nativeImage.createFromPath(source),size=image.getSize();if(image.isEmpty()||size.width!==64||![32,64].includes(size.height))throw new Error('Le skin doit être un PNG de 64×64 ou 64×32 pixels.');if((await fs.stat(source)).size>2*1024*1024)throw new Error('Le fichier skin est trop volumineux.');const accounts=await localAccounts(),key=s.username.toLowerCase(),account=accounts[key];if(!account)throw new Error('Compte EPSILON introuvable.');const skinsDir=path.join(app.getPath('userData'),'skins');await fs.mkdir(skinsDir,{recursive:true});const target=path.join(skinsDir,`${key}.png`);await fs.copyFile(source,target);account.skinPath=target;await saveLocalAccounts(accounts);return{path:target,preview:`data:image/png;base64,${(await fs.readFile(target)).toString('base64')}`};});
   ipcMain.handle('game:launch', (event, profile) => installAndLaunch(BrowserWindow.fromWebContents(event.sender), profile));
   ipcMain.handle('folder:pick', async () => (await dialog.showOpenDialog({ properties: ['openDirectory', 'createDirectory'] })).filePaths[0] || null);
