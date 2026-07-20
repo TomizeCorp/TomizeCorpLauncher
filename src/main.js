@@ -79,10 +79,10 @@ async function loadSettings() {
   const userPath = path.join(app.getPath('userData'), 'settings.json');
   let user = {};
   try { user = await readJson(userPath); } catch (_) {}
-  return { ...base, instancePath: defaultInstance, javaPath: '', username: '', authMode: '', displayName: '', ...user };
+  return { ...base, instancePath: defaultInstance, javaPath: '', username: '', authMode: '', displayName: '', rememberSession: true, ...user };
 }
 async function saveSettings(value) {
-  const clean = { instancePath: value.instancePath, javaPath: value.javaPath, username: value.username, authMode: value.authMode, displayName: value.displayName };
+  const clean = { instancePath: value.instancePath, javaPath: value.javaPath, username: value.username, authMode: value.authMode, displayName: value.displayName, rememberSession: value.rememberSession !== false };
   await fs.mkdir(app.getPath('userData'), { recursive: true });
   await fs.writeFile(path.join(app.getPath('userData'), 'settings.json'), JSON.stringify(clean, null, 2));
   return loadSettings();
@@ -192,6 +192,7 @@ async function ensureJava(settings, win) {
 }
 async function installAndLaunch(win, profile) {
   const settings = await loadSettings();
+  if(settings.authMode==='microsoft'&&!activeSession)await authenticateMicrosoft(settings.rememberSession);
   const microsoft = settings.authMode === 'microsoft' && activeSession;
   const username = String(microsoft ? activeSession.name : (profile?.username || settings.username || '')).trim();
   if (!/^[A-Za-z0-9_]{3,16}$/.test(username)) throw new Error('Le pseudo doit contenir 3 à 16 lettres, chiffres ou _.');
@@ -249,30 +250,32 @@ function createEpsilonWindow() {
   const win = new BrowserWindow({ width: 1020, height: 680, minWidth: 820, minHeight: 580, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'epsilon-logo.png'), title: 'EpsilonLauncher', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true } });
   win.loadFile(path.join(__dirname, 'renderer', 'epsilon.html'));setDiscordMode('epsilon').catch(()=>{});return win;
 }
+async function authenticateMicrosoft(rememberSession=true) {
+  const { Authflow,Titles }=require('prismarine-auth');
+  const cacheDir=path.join(app.getPath('userData'),'microsoft-auth');
+  await fs.mkdir(cacheDir,{recursive:true});
+  const flow=new Authflow('epsilon-player',cacheDir,{flow:'sisu',authTitle:Titles.MinecraftJava,deviceType:'Win32'},code=>{
+    const verificationUrl=code.verification_uri_complete||code.verificationUriComplete||`https://microsoft.com/link?otc=${encodeURIComponent(code.user_code)}`;
+    require('electron').clipboard.writeText(code.user_code||'');
+    shell.openExternal(verificationUrl).catch(()=>{});
+    dialog.showMessageBox(hubWindow,{type:'info',title:'Connexion Microsoft — EpsilonLauncher',message:'Terminez la connexion dans votre navigateur.',detail:`Code Microsoft : ${code.user_code}\n\nLe code a été copié automatiquement. Revenez ensuite dans le launcher.`,buttons:['J’ai compris'],icon:path.join(__dirname,'renderer','assets','epsilon-logo.png'),noLink:true}).catch(()=>{});
+  });
+  const mc=await flow.getMinecraftJavaToken({fetchProfile:true,fetchEntitlements:true});
+  if(!mc.profile?.name||!mc.profile?.id)throw new Error('Ce compte ne possède pas de profil Minecraft Java.');
+  activeSession={name:mc.profile.name,id:mc.profile.id,accessToken:mc.token};
+  const s=await loadSettings();await saveSettings({...s,username:activeSession.name,displayName:activeSession.name,authMode:'microsoft',rememberSession});
+  return{name:activeSession.name,mode:'microsoft'};
+}
 app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
   ipcMain.handle('settings:get', loadSettings);
   ipcMain.handle('settings:save', (_, value) => saveSettings(value));
   ipcMain.handle('epsilon:open', () => { const epsilon=createEpsilonWindow();epsilon.once('ready-to-show',()=>{if(hubWindow&&!hubWindow.isDestroyed())hubWindow.close()});return true; });
   ipcMain.handle('auth:offline', async (_, username) => { const name=String(username||'').trim(); if(!/^[A-Za-z0-9_]{3,16}$/.test(name)) throw new Error('Pseudo invalide (3 à 16 caractères).'); activeSession=null; const s=await loadSettings(); await saveSettings({...s,username:name,displayName:name,authMode:'offline'}); return {name,mode:'offline'}; });
-  ipcMain.handle('auth:register', async (_, value) => { const {username,password}=validateCredentials(value),accounts=await localAccounts(),key=username.toLowerCase();if(accounts[key])throw new Error('Ce pseudo existe déjà sur ce PC.');const salt=crypto.randomBytes(16).toString('hex');accounts[key]={username,salt,hash:await scrypt(password,salt),createdAt:new Date().toISOString()};await saveLocalAccounts(accounts);activeSession={type:'local',name:username};const s=await loadSettings();await saveSettings({...s,username,displayName:username,authMode:'epsilon'});return{name:username,mode:'epsilon'}; });
-  ipcMain.handle('auth:login', async (_, value) => { const {username,password}=validateCredentials(value),accounts=await localAccounts(),account=accounts[username.toLowerCase()];if(!account)throw new Error('Compte introuvable sur cet appareil. Utilisez Créer un compte.');const actual=Buffer.from(await scrypt(password,account.salt),'hex'),expected=Buffer.from(account.hash,'hex');if(actual.length!==expected.length||!crypto.timingSafeEqual(actual,expected))throw new Error('Pseudo ou mot de passe incorrect.');activeSession={type:'local',name:account.username};const s=await loadSettings();await saveSettings({...s,username:account.username,displayName:account.username,authMode:'epsilon'});return{name:account.username,mode:'epsilon'}; });
-  ipcMain.handle('auth:microsoft', async () => {
-    const { Authflow,Titles }=require('prismarine-auth');
-    const cacheDir=path.join(app.getPath('userData'),'microsoft-auth');
-    await fs.mkdir(cacheDir,{recursive:true});
-    const flow=new Authflow('epsilon-player',cacheDir,{flow:'sisu',authTitle:Titles.MinecraftJava,deviceType:'Win32'},code=>{
-      const verificationUrl=code.verification_uri_complete||code.verificationUriComplete||`https://microsoft.com/link?otc=${encodeURIComponent(code.user_code)}`;
-      require('electron').clipboard.writeText(code.user_code||'');
-      shell.openExternal(verificationUrl).catch(()=>{});
-      dialog.showMessageBox(hubWindow,{type:'info',title:'Connexion Microsoft — EpsilonLauncher',message:'Terminez la connexion dans votre navigateur.',detail:`Code Microsoft : ${code.user_code}\n\nLe code a été copié automatiquement. Revenez ensuite dans le launcher.`,buttons:['J’ai compris'],icon:path.join(__dirname,'renderer','assets','epsilon-logo.png'),noLink:true}).catch(()=>{});
-    });
-    const mc=await flow.getMinecraftJavaToken({fetchProfile:true,fetchEntitlements:true});
-    if(!mc.profile?.name||!mc.profile?.id)throw new Error('Ce compte ne possède pas de profil Minecraft Java.');
-    activeSession={name:mc.profile.name,id:mc.profile.id,accessToken:mc.token};
-    const s=await loadSettings();await saveSettings({...s,username:activeSession.name,displayName:activeSession.name,authMode:'microsoft'});
-    return{name:activeSession.name,mode:'microsoft'};
-  });
+  ipcMain.handle('auth:register', async (_, value) => { const {username,password}=validateCredentials(value),accounts=await localAccounts(),key=username.toLowerCase();if(accounts[key])throw new Error('Ce pseudo existe déjà sur ce PC.');const salt=crypto.randomBytes(16).toString('hex');accounts[key]={username,salt,hash:await scrypt(password,salt),createdAt:new Date().toISOString()};await saveLocalAccounts(accounts);activeSession={type:'local',name:username};const s=await loadSettings();await saveSettings({...s,username,displayName:username,authMode:'epsilon',rememberSession:value?.rememberSession!==false});return{name:username,mode:'epsilon'}; });
+  ipcMain.handle('auth:login', async (_, value) => { const {username,password}=validateCredentials(value),accounts=await localAccounts(),account=accounts[username.toLowerCase()];if(!account)throw new Error('Compte introuvable sur cet appareil. Utilisez Créer un compte.');const actual=Buffer.from(await scrypt(password,account.salt),'hex'),expected=Buffer.from(account.hash,'hex');if(actual.length!==expected.length||!crypto.timingSafeEqual(actual,expected))throw new Error('Pseudo ou mot de passe incorrect.');activeSession={type:'local',name:account.username};const s=await loadSettings();await saveSettings({...s,username:account.username,displayName:account.username,authMode:'epsilon',rememberSession:value?.rememberSession!==false});return{name:account.username,mode:'epsilon'}; });
+  ipcMain.handle('auth:microsoft', (_, rememberSession) => authenticateMicrosoft(rememberSession!==false));
+  ipcMain.handle('auth:logout', async () => { activeSession=null;await fs.rm(path.join(app.getPath('userData'),'microsoft-auth'),{recursive:true,force:true});const s=await loadSettings();await saveSettings({...s,username:'',displayName:'',authMode:'',rememberSession:true});return true; });
   ipcMain.handle('game:launch', (event, profile) => installAndLaunch(BrowserWindow.fromWebContents(event.sender), profile));
   ipcMain.handle('folder:pick', async () => (await dialog.showOpenDialog({ properties: ['openDirectory', 'createDirectory'] })).filePaths[0] || null);
   ipcMain.handle('file:pick', async () => (await dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'Exécutable', extensions: ['exe'] }] })).filePaths[0] || null);
