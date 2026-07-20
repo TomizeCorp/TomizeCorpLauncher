@@ -1,6 +1,6 @@
 {
   "name": "epsilon-launcher",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Launcher Minecraft dédié au serveur EPSILON",
   "main": "src/main.js",
   "type": "commonjs",
@@ -12,7 +12,7 @@
     "dist": "electron-builder --win nsis",
     "release": "electron-builder --win nsis --publish always",
     "release:win": "electron-builder --win nsis --publish always",
-    "release:mac": "electron-builder --mac dmg zip --x64 --arm64 --publish always"
+    "release:mac": "electron-builder --mac dmg zip --universal --publish always"
   },
   "devDependencies": {
     "electron": "33.4.11",
@@ -46,7 +46,7 @@
       "target": ["dmg", "zip"],
       "icon": "build/icon.icns",
       "category": "public.app-category.games",
-      "artifactName": "TomizeCorpLauncher-${version}-mac-${arch}.${ext}"
+      "artifactName": "TomizeCorpLauncher-${version}-mac-universal.${ext}"
     },
     "nsis": {
       "oneClick": false,

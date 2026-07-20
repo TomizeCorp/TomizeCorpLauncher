@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
+import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.CookieStorage;
 import net.minecraft.client.network.ServerAddress;
@@ -26,7 +27,11 @@ public abstract class TitleScreenMixin extends Screen {
         int left = width / 2 - 100;
         int top = height / 2;
         addDrawableChild(ButtonWidget.builder(Text.literal("LANCER EPSILON"), button -> epsilon$connect()).dimensions(left, top, 200, 20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("QUITTER"), button -> MinecraftClient.getInstance().scheduleStop()).dimensions(left, top + 28, 200, 20).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("OPTIONS DE MINECRAFT"), button -> {
+            MinecraftClient client = MinecraftClient.getInstance();
+            client.setScreen(new OptionsScreen(this, client.options));
+        }).dimensions(left, top + 28, 200, 20).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("QUITTER"), button -> MinecraftClient.getInstance().scheduleStop()).dimensions(left, top + 56, 200, 20).build());
     }
 
     private void epsilon$connect() {

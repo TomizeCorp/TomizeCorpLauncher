@@ -61,6 +61,12 @@ jobs:
           name: epsilon-client-mod
           path: server-files/mods
 
+      - name: Ajouter Iris et Sodium
+        shell: pwsh
+        run: |
+          Invoke-WebRequest 'https://cdn.modrinth.com/data/YL57xq9U/versions/fDpuVzVr/iris-fabric-1.10.7%2Bmc1.21.11.jar' -OutFile 'server-files/mods/Iris-1.10.7.jar'
+          Invoke-WebRequest 'https://cdn.modrinth.com/data/AANobbMI/versions/UddlN6L4/sodium-fabric-0.8.7%2Bmc1.21.11.jar' -OutFile 'server-files/mods/Sodium-0.8.7.jar'
+
       - name: Générer le manifeste EPSILON
         run: npm run manifest
 
@@ -74,6 +80,8 @@ jobs:
         run: npm run release:win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CSC_PASSWORD }}
 
   release-macos:
     needs: [client-mod, release-windows]
@@ -96,6 +104,11 @@ jobs:
         with:
           name: epsilon-client-mod
           path: server-files/mods
+
+      - name: Ajouter Iris et Sodium
+        run: |
+          curl --fail --location 'https://cdn.modrinth.com/data/YL57xq9U/versions/fDpuVzVr/iris-fabric-1.10.7%2Bmc1.21.11.jar' --output 'server-files/mods/Iris-1.10.7.jar'
+          curl --fail --location 'https://cdn.modrinth.com/data/AANobbMI/versions/UddlN6L4/sodium-fabric-0.8.7%2Bmc1.21.11.jar' --output 'server-files/mods/Sodium-0.8.7.jar'
 
       - name: Générer le manifeste EPSILON
         run: npm run manifest
