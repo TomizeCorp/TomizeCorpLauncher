@@ -192,7 +192,7 @@ async function installAndLaunch(win, profile) {
   await saveSettings({ ...settings, username, javaPath });
   win.webContents.send('sync-progress', { percent: 3, message: 'Synchronisation EPSILON…' });
   await synchronize(win);
-  const { getVersionList, install, installAssets } = await import('@xmcl/installer');
+  const { getVersionList, install, installAssets, installFabric, installDependencies } = await import('@xmcl/installer');
   const { launch, Version } = await import('@xmcl/core');
   const versionJson = path.join(settings.instancePath, 'versions', settings.minecraftVersion, `${settings.minecraftVersion}.json`);
   if (!fsSync.existsSync(versionJson)) {
@@ -202,22 +202,30 @@ async function installAndLaunch(win, profile) {
     await install(meta, settings.instancePath);
   }
   if(!(await validJsonFile(versionJson))){await fs.unlink(versionJson).catch(()=>{});throw new Error('Installation Minecraft incomplète. Relancez le jeu pour la réparer.');}
-  const resolvedVersion=await Version.parse(settings.instancePath,settings.minecraftVersion);
-  const assetIndex=path.join(settings.instancePath,'assets','indexes',`${resolvedVersion.assets}.json`);
+  const vanillaVersion=await Version.parse(settings.instancePath,settings.minecraftVersion);
+  const assetIndex=path.join(settings.instancePath,'assets','indexes',`${vanillaVersion.assets}.json`);
   if(!(await validJsonFile(assetIndex))){
     win.webContents.send('sync-progress',{percent:72,message:'Réparation de l’index des assets Minecraft…'});
     await fs.unlink(assetIndex).catch(()=>{});
     for(let attempt=1;attempt<=3;attempt++){
-      await installAssets(resolvedVersion);
+      await installAssets(vanillaVersion);
       if(await validJsonFile(assetIndex))break;
       await fs.unlink(assetIndex).catch(()=>{});
       if(attempt===3)throw new Error('Impossible de réparer les assets Minecraft. Vérifiez votre connexion puis réessayez.');
     }
   }
+  const fabricLoader='0.19.3',fabricVersion=`${settings.minecraftVersion}-fabric${fabricLoader}`;
+  const fabricJson=path.join(settings.instancePath,'versions',fabricVersion,`${fabricVersion}.json`);
+  if(!(await validJsonFile(fabricJson))){
+    win.webContents.send('sync-progress',{percent:66,message:'Installation du moteur EpsilonLauncher…'});
+    await installFabric({minecraftVersion:settings.minecraftVersion,version:fabricLoader,minecraft:settings.instancePath,side:'client'});
+  }
+  const resolvedVersion=await Version.parse(settings.instancePath,fabricVersion);
+  await installDependencies(resolvedVersion);
   win.webContents.send('sync-progress',{percent:70,message:'Vérification complète de Minecraft…'});
   await repairMinecraftFiles(resolvedVersion,win);
   win.webContents.send('sync-progress', { percent: 96, message: 'Connexion directe au serveur…' });
-  const child = await launch({ gamePath: settings.instancePath, javaPath, version: settings.minecraftVersion, versionName: 'EpsilonLauncher', versionType: 'EpsilonLauncher', gameName: 'EpsilonLauncher', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'EpsilonLauncher', launcherBrand: 'TomizeCorp', minMemory: 1024, maxMemory: 4096, quickPlayMultiplayer: `${settings.serverAddress}:${settings.serverPort}`, server: { ip: settings.serverAddress, port: settings.serverPort }, extraExecOption: { detached: true } });
+  const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'EpsilonLauncher', versionType: 'EpsilonLauncher', gameName: 'EpsilonLauncher', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'EpsilonLauncher', launcherBrand: 'TomizeCorp', minMemory: 1024, maxMemory: 4096, quickPlayMultiplayer: `${settings.serverAddress}:${settings.serverPort}`, server: { ip: settings.serverAddress, port: settings.serverPort }, extraExecOption: { detached: true } });
   child.unref(); win.webContents.send('sync-progress', { percent: 100, message: 'Minecraft lancé sur EPSILON' });
   setTimeout(() => win.hide(), 1200); return { started: true };
 }

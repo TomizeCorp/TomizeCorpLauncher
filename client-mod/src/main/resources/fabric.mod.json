@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "epsilonclient",
+  "version": "${version}",
+  "name": "EpsilonLauncher Client",
+  "description": "Client verrouillé sur la survie EPSILON.",
+  "authors": ["TomizeCorp"],
+  "environment": "client",
+  "icon": "assets/epsilon/icon.png",
+  "mixins": ["epsilonclient.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "1.21.11",
+    "java": ">=21"
+  }
+}
