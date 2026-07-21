@@ -10,6 +10,8 @@ Le projet contient deux interfaces : **TomizeCorpLauncher**, la bibliothèque pr
 
 Le launcher ne collecte aucun identifiant Microsoft ou TLauncher. Le pseudo hors-ligne doit être protégé côté serveur par un plugin d'authentification.
 
+Les comptes TomizeCorp multi-appareils utilisent l’API HTTPS configurée par `accountApiUrl`. Le service Docker/PostgreSQL se trouve dans `account-api/` et son déploiement est expliqué dans `account-api/DEPLOY.md`.
+
 ## Configuration obligatoire
 
 Modifier `config/launcher.json` avec la véritable adresse et le port du serveur avant distribution. Pour retirer réellement Solo, Multijoueur et Realms après une déconnexion, placer le mod client de verrouillage `epsilon-lock.jar` dans `server-files/mods`, puis régénérer le manifeste. Le lancement direct fonctionne sans ce mod, mais Minecraft ne permet pas au launcher externe de supprimer ses menus à lui seul.

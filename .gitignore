@@ -6,3 +6,6 @@ auth-server/
 paper-plugin/
 *.log
 *.download
+account-api/.env
+account-api/*.sql
+account-api/*.sql.gz

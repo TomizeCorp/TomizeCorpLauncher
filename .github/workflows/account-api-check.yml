@@ -1,0 +1,49 @@
+name: Vérifier Account API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "account-api/**"
+      - ".github/workflows/account-api-check.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: tomize_accounts
+          POSTGRES_USER: tomize
+          POSTGRES_PASSWORD: integration-password
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U tomize -d tomize_accounts"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Installer les dépendances
+        working-directory: account-api
+        run: npm install
+      - name: Vérifier la syntaxe
+        working-directory: account-api
+        run: npm run check
+      - name: Démarrer et tester l’API
+        working-directory: account-api
+        env:
+          DATABASE_URL: postgres://tomize:integration-password@127.0.0.1:5432/tomize_accounts
+          SESSION_PEPPER: integration-session-pepper-at-least-32-characters
+        run: |
+          node server.js &
+          for attempt in {1..20}; do curl --fail --silent http://127.0.0.1:3000/health && break; sleep 1; done
+          node integration-test.js
+      - name: Vérifier l’image Docker
+        working-directory: account-api
+        run: docker build .

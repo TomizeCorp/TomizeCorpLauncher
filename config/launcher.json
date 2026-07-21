@@ -2,6 +2,7 @@
   "serverName": "EPSILON",
   "serverAddress": "play.minecraft.epsilon.tomize.fr",
   "serverPort": 25568,
+  "accountApiUrl": "https://api.tomize.fr",
   "minecraftVersion": "1.21.11",
   "loader": "Paper",
   "discord": {

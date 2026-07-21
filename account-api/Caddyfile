@@ -1,0 +1,4 @@
+{$API_DOMAIN:api.tomize.fr} {
+  encode zstd gzip
+  reverse_proxy api:3000
+}
