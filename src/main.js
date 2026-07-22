@@ -27,7 +27,15 @@ function hardwareProfile() {
   const totalMemory=Math.round(os.totalmem()/1024/1024),cpuCount=Math.max(1,os.cpus()?.length||1);
   const lowEnd=totalMemory<=6144||cpuCount<=2;
   const maxMemory=totalMemory<=4096?1536:totalMemory<=6144?2048:totalMemory<=8192?2560:totalMemory<=12288?3072:4096;
-  return{lowEnd,minMemory:lowEnd?512:1024,maxMemory,workers:lowEnd?3:Math.min(8,Math.max(4,Math.floor(cpuCount/2)))};
+  return{lowEnd,veryLowEnd:totalMemory<=4608,minMemory:lowEnd?512:1024,maxMemory,workers:totalMemory<=4608?2:lowEnd?3:Math.min(8,Math.max(4,Math.floor(cpuCount/2)))};
+}
+
+async function prepareLowEndOptions(instancePath,resources) {
+  if(!resources.veryLowEnd)return;
+  const optionsPath=path.join(instancePath,'options.txt');
+  if(fsSync.existsSync(optionsPath))return;
+  const options=['renderDistance:6','simulationDistance:4','entityDistanceScaling:0.5','particles:2','mipmapLevels:0','biomeBlendRadius:0','maxFps:60','enableVsync:true'].join(os.EOL)+os.EOL;
+  await fs.mkdir(instancePath,{recursive:true});await fs.writeFile(optionsPath,options,'utf8');
 }
 
 async function readJson(file) { return JSON.parse(await fs.readFile(file, 'utf8')); }
@@ -327,6 +335,7 @@ async function installAndLaunch(win, profile) {
   const remoteSkin=activeSession?.type==='remote'?activeSession.skinPath:'';
   const skinPath=remoteSkin&&fsSync.existsSync(remoteSkin)?remoteSkin:(account?.skinPath&&fsSync.existsSync(account.skinPath)?account.skinPath:'');
   const resources=hardwareProfile();
+  await prepareLowEndOptions(settings.instancePath,resources);
   const jvmArgs=['-XX:+UseG1GC','-XX:MaxGCPauseMillis=100','-XX:+UseStringDeduplication','-XX:+DisableExplicitGC',...(resources.lowEnd?['-XX:G1HeapRegionSize=4M']:[]),...(skinPath?[`-Depsilon.skin=${skinPath}`,`-Depsilon.username=${username}`]:[])];
   const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'TomizeCorp', versionType: 'TomizeCorp', gameName: 'TomizeCorp', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'TomizeCorpLauncher', launcherBrand: 'TomizeCorp', minMemory: resources.minMemory, maxMemory: resources.maxMemory, extraJVMArgs:jvmArgs, quickPlayMultiplayer: `${settings.serverAddress}:${settings.serverPort}`, server: { ip: settings.serverAddress, port: settings.serverPort }, extraExecOption: { detached: true } });
   setDiscordMode('epsilon').catch(()=>{});
