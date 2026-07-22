@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('launcher', {
   settings: () => ipcRenderer.invoke('settings:get'),
   updateState: () => ipcRenderer.invoke('update:get-state'),
+  startUpdate: () => ipcRenderer.invoke('update:start'),
   installUpdate: () => ipcRenderer.invoke('update:install'),
   retryUpdate: () => ipcRenderer.invoke('update:retry'),
   onUpdateState: callback => ipcRenderer.on('update-state', (_, value) => callback(value)),

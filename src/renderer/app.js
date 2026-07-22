@@ -28,7 +28,7 @@ async function openServer() {
 
 function applyUpdateState(update) {
   const dialog = $('updateDialog');
-  const blocking = ['checking','available','downloading','ready','failed'].includes(update?.state);
+  const blocking = ['checking','available','downloading','ready','failed','installing'].includes(update?.state);
   if (!blocking) {
     if (dialog.open) dialog.close();
     if (config && !config.authMode && !$('loginDialog').open) $('loginDialog').showModal();
@@ -41,10 +41,10 @@ function applyUpdateState(update) {
   $('updateProgressBar').style.width = `${percent}%`;
   $('updatePercent').textContent = update.state === 'checking' ? '…' : `${percent}%`;
   $('updateMessage').textContent = update.message || 'Préparation de la mise à jour…';
-  $('updateStatus').textContent = ({checking:'VÉRIFICATION',available:'MISE À JOUR TROUVÉE',downloading:'TÉLÉCHARGEMENT',ready:'INSTALLATION REQUISE',failed:'NOUVELLE TENTATIVE REQUISE'})[update.state];
-  $('updateTitle').textContent = update.state === 'ready' ? `Version ${update.version} prête` : update.state === 'failed' ? 'Mise à jour obligatoire' : update.state === 'downloading' ? `Téléchargement ${update.version || ''}` : update.state === 'available' ? `Nouvelle version ${update.version}` : 'Recherche d’une mise à jour';
-  $('installUpdate').hidden = !['ready','failed'].includes(update.state);
-  $('installUpdate').innerHTML = update.state === 'failed' ? 'RÉESSAYER <b>↻</b>' : 'REDÉMARRER ET INSTALLER <b>→</b>';
+  $('updateStatus').textContent = ({checking:'VÉRIFICATION',available:'NOUVELLE VERSION',downloading:'TÉLÉCHARGEMENT',ready:'INSTALLATION',installing:'REDÉMARRAGE AUTOMATIQUE',failed:'NOUVELLE TENTATIVE REQUISE'})[update.state];
+  $('updateTitle').textContent = update.state === 'installing' ? 'Installation de la mise à jour' : update.state === 'failed' ? 'Mise à jour obligatoire' : update.state === 'downloading' ? `Téléchargement ${update.version || ''}` : update.state === 'available' ? `TomizeCorpLauncher ${update.version}` : 'Recherche d’une mise à jour';
+  $('installUpdate').hidden = !['available','failed'].includes(update.state);
+  $('installUpdate').innerHTML = update.state === 'failed' ? 'RÉESSAYER <b>↻</b>' : 'METTRE À JOUR <b>↓</b>';
   $('installUpdate').dataset.action = update.state;
 }
 
@@ -55,8 +55,8 @@ $('installUpdate').onclick = async () => {
     await window.launcher.retryUpdate();
     $('installUpdate').disabled = false;
   } else {
-    $('installUpdate').textContent = 'REDÉMARRAGE…';
-    await window.launcher.installUpdate();
+    $('installUpdate').textContent = 'DÉMARRAGE…';
+    await window.launcher.startUpdate();
   }
 };
 
@@ -114,24 +114,27 @@ function drawSkin() {
 }
 
 function drawSkinVertical(context, fromTop) {
-  const parts = fromTop ? {
-    head:[8,0,8,8],hat:[40,0,8,8],body:[20,16,8,4],jacket:[20,32,8,4],rightArm:[44,16,4,4],rightSleeve:[44,32,4,4],leftArm:[36,48,4,4],leftSleeve:[52,48,4,4],rightLeg:[4,16,4,4],rightPants:[4,32,4,4],leftLeg:[20,48,4,4],leftPants:[4,48,4,4]
-  } : {
-    head:[16,0,8,8],hat:[48,0,8,8],body:[28,16,8,4],jacket:[28,32,8,4],rightArm:[48,16,4,4],rightSleeve:[48,32,4,4],leftArm:[40,48,4,4],leftSleeve:[56,48,4,4],rightLeg:[8,16,4,4],rightPants:[8,32,4,4],leftLeg:[24,48,4,4],leftPants:[8,48,4,4]
-  };
+  const surfaces = fromTop ? {head:[8,0,8,8],hat:[40,0,8,8],body:[20,16,8,4],jacket:[20,32,8,4],rightArm:[44,16,4,4],rightSleeve:[44,32,4,4],leftArm:[36,48,4,4],leftSleeve:[52,48,4,4],rightLeg:[4,16,4,4],rightPants:[4,32,4,4],leftLeg:[20,48,4,4],leftPants:[4,48,4,4]} : {head:[16,0,8,8],hat:[48,0,8,8],body:[28,16,8,4],jacket:[28,32,8,4],rightArm:[48,16,4,4],rightSleeve:[48,32,4,4],leftArm:[40,48,4,4],leftSleeve:[56,48,4,4],rightLeg:[8,16,4,4],rightPants:[8,32,4,4],leftLeg:[24,48,4,4],leftPants:[8,48,4,4]};
+  const views = ['front','right','back','left'];
+  const face = skinFaces[views[Math.round(((skinRotation % 360) + 360) % 360 / 90) % 4]];
   const legacy = skinImage.height < 64;
-  drawSkinRegion(context, parts.head, 78, 22, 64, 64);
-  drawSkinRegion(context, parts.hat, 78, 22, 64, 64);
-  drawSkinRegion(context, parts.body, 78, 105, 64, 32);
-  drawSkinRegion(context, parts.jacket, 78, 105, 64, 32);
-  drawSkinRegion(context, parts.rightArm, 38, 105, 32, 32);
-  drawSkinRegion(context, parts.rightSleeve, 38, 105, 32, 32);
-  drawSkinRegion(context, legacy ? parts.rightArm : parts.leftArm, 150, 105, 32, 32);
-  drawSkinRegion(context, parts.leftSleeve, 150, 105, 32, 32);
-  drawSkinRegion(context, parts.rightLeg, 74, 163, 32, 32);
-  drawSkinRegion(context, parts.rightPants, 74, 163, 32, 32);
-  drawSkinRegion(context, legacy ? parts.rightLeg : parts.leftLeg, 114, 163, 32, 32);
-  drawSkinRegion(context, parts.leftPants, 114, 163, 32, 32);
+  if (fromTop) {
+    drawSkinRegion(context, surfaces.head, 78, 8, 64, 36); drawSkinRegion(context, surfaces.hat, 78, 8, 64, 36);
+    drawSkinRegion(context, face.head, 78, 44, 64, 48); drawSkinRegion(context, face.hat, 78, 44, 64, 48);
+    drawSkinRegion(context, surfaces.body, 82, 96, 56, 18); drawSkinRegion(context, surfaces.jacket, 82, 96, 56, 18);
+    drawSkinRegion(context, face.body, 82, 114, 56, 62); drawSkinRegion(context, face.jacket, 82, 114, 56, 62);
+    drawSkinRegion(context, surfaces.rightArm, 50, 96, 24, 18); drawSkinRegion(context, face.rightArm, 50, 114, 24, 62);
+    drawSkinRegion(context, legacy ? surfaces.rightArm : surfaces.leftArm, 146, 96, 24, 18); drawSkinRegion(context, legacy ? face.rightArm : face.leftArm, 146, 114, 24, 62);
+    drawSkinRegion(context, surfaces.rightLeg, 82, 180, 26, 16); drawSkinRegion(context, face.rightLeg, 82, 196, 26, 62);
+    drawSkinRegion(context, legacy ? surfaces.rightLeg : surfaces.leftLeg, 112, 180, 26, 16); drawSkinRegion(context, legacy ? face.rightLeg : face.leftLeg, 112, 196, 26, 62);
+  } else {
+    drawSkinRegion(context, face.head, 90, 18, 40, 40); drawSkinRegion(context, face.hat, 90, 18, 40, 40);
+    drawSkinRegion(context, face.body, 84, 58, 52, 58); drawSkinRegion(context, face.jacket, 84, 58, 52, 58);
+    drawSkinRegion(context, face.rightArm, 56, 58, 24, 58); drawSkinRegion(context, legacy ? face.rightArm : face.leftArm, 140, 58, 24, 58);
+    drawSkinRegion(context, face.rightLeg, 78, 116, 30, 70); drawSkinRegion(context, legacy ? face.rightLeg : face.leftLeg, 112, 116, 30, 70);
+    drawSkinRegion(context, surfaces.rightLeg, 68, 186, 42, 42); drawSkinRegion(context, surfaces.rightPants, 68, 186, 42, 42);
+    drawSkinRegion(context, legacy ? surfaces.rightLeg : surfaces.leftLeg, 110, 186, 42, 42); drawSkinRegion(context, surfaces.leftPants, 110, 186, 42, 42);
+  }
   context.fillStyle = '#aaa'; context.font = '11px sans-serif'; context.textAlign = 'center';
   context.fillText(fromTop ? 'VUE DU DESSUS' : 'VUE DU DESSOUS', 110, 302);
 }

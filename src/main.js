@@ -17,7 +17,7 @@ let discordClient = null;
 let autoUpdaterRef = null;
 let updateAvailable = false;
 let updateState = { state: 'checking', message: 'Recherche des mises à jour…', percent: 0 };
-function assertUpdateComplete(){if(['checking','available','downloading','ready','failed'].includes(updateState.state))throw new Error('Installez la mise à jour TomizeCorpLauncher avant de continuer.');}
+function assertUpdateComplete(){if(['checking','available','downloading','ready','failed','installing'].includes(updateState.state))throw new Error('Installez la mise à jour TomizeCorpLauncher avant de continuer.');}
 app.setAppUserModelId('fr.tomizecorp.launcher');
 
 async function readJson(file) { return JSON.parse(await fs.readFile(file, 'utf8')); }
@@ -106,9 +106,9 @@ function configureAutoUpdater() {
   autoUpdaterRef=autoUpdater;autoUpdater.autoDownload=false;autoUpdater.autoInstallOnAppQuit=true;autoUpdater.allowPrerelease=false;
   const publish=value=>{updateState=value;if(hubWindow&&!hubWindow.isDestroyed()&&!hubWindow.webContents.isDestroyed())hubWindow.webContents.send('update-state',value);};
   autoUpdater.on('checking-for-update',()=>publish({state:'checking',message:'Recherche des mises à jour…',percent:0}));
-  autoUpdater.on('update-available',info=>{updateAvailable=true;publish({state:'available',version:info.version,message:`Mise à jour ${info.version} disponible`,percent:0});autoUpdater.downloadUpdate().catch(error=>publish({state:'failed',message:error.message,percent:0}));});
-  autoUpdater.on('download-progress',progress=>publish({state:'downloading',message:'Téléchargement de la mise à jour…',version:progress.version,percent:Math.max(0,Math.min(100,Math.round(progress.percent||0))),transferred:progress.transferred,total:progress.total}));
-  autoUpdater.on('update-downloaded',info=>publish({state:'ready',version:info.version,message:`TomizeCorpLauncher ${info.version} est prêt`,percent:100}));
+  autoUpdater.on('update-available',info=>{updateAvailable=true;publish({state:'available',version:info.version,message:'Une nouvelle version de TomizeCorpLauncher est disponible.',percent:0});});
+  autoUpdater.on('download-progress',progress=>publish({state:'downloading',message:'Téléchargement de la mise à jour…',version:updateState.version,percent:Math.max(0,Math.min(100,Math.round(progress.percent||0))),transferred:progress.transferred,total:progress.total}));
+  autoUpdater.on('update-downloaded',info=>{publish({state:'installing',version:info.version,message:'Installation en cours…',percent:100});setTimeout(()=>autoUpdater.quitAndInstall(false,true),700);});
   autoUpdater.on('update-not-available',()=>publish({state:'none'}));
   autoUpdater.on('error',error=>{console.warn('Auto-update:',error.message);publish(updateAvailable?{state:'failed',message:'Le téléchargement a échoué. Réessayez pour continuer.',percent:0}:{state:'error',message:'Vérification impossible. Le launcher démarre en mode hors ligne.'});});
   publish({state:'checking',message:'Recherche des mises à jour…',percent:0});
@@ -341,6 +341,7 @@ app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
   ipcMain.handle('settings:get', loadSettings);
   ipcMain.handle('update:get-state',()=>updateState);
+  ipcMain.handle('update:start',()=>{if(!autoUpdaterRef||updateState.state!=='available')return false;updateState={...updateState,state:'downloading',message:'Téléchargement de la mise à jour…',percent:0};hubWindow?.webContents.send('update-state',updateState);autoUpdaterRef.downloadUpdate().catch(error=>{updateState={state:'failed',message:error.message,percent:0};hubWindow?.webContents.send('update-state',updateState);});return true;});
   ipcMain.handle('update:install',()=>{if(autoUpdaterRef&&updateState.state==='ready'){setImmediate(()=>autoUpdaterRef.quitAndInstall(false,true));return true;}return false;});
   ipcMain.handle('update:retry',()=>{if(!autoUpdaterRef)return false;updateState={state:'checking',message:'Nouvelle tentative…',percent:0};hubWindow?.webContents.send('update-state',updateState);(updateAvailable?autoUpdaterRef.downloadUpdate():autoUpdaterRef.checkForUpdates()).catch(error=>{updateState={state:updateAvailable?'failed':'error',message:error.message,percent:0};hubWindow?.webContents.send('update-state',updateState);});return true;});
   ipcMain.handle('settings:save', (_, value) => saveSettings(value));
