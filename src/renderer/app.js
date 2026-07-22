@@ -25,6 +25,40 @@ async function openServer() {
   await window.launcher.openEpsilon();
 }
 
+function applyUpdateState(update) {
+  const dialog = $('updateDialog');
+  const blocking = ['checking','available','downloading','ready','failed'].includes(update?.state);
+  if (!blocking) {
+    if (dialog.open) dialog.close();
+    if (config && !config.authMode && !$('loginDialog').open) $('loginDialog').showModal();
+    if (update?.state === 'error') toast(update.message || 'La vérification des mises à jour est indisponible.');
+    return;
+  }
+  if ($('loginDialog').open) $('loginDialog').close();
+  if (!dialog.open) dialog.showModal();
+  const percent = update.state === 'checking' ? 8 : Math.max(0, Math.min(100, Number(update.percent || 0)));
+  $('updateProgressBar').style.width = `${percent}%`;
+  $('updatePercent').textContent = update.state === 'checking' ? '…' : `${percent}%`;
+  $('updateMessage').textContent = update.message || 'Préparation de la mise à jour…';
+  $('updateStatus').textContent = ({checking:'VÉRIFICATION',available:'MISE À JOUR TROUVÉE',downloading:'TÉLÉCHARGEMENT',ready:'INSTALLATION REQUISE',failed:'NOUVELLE TENTATIVE REQUISE'})[update.state];
+  $('updateTitle').textContent = update.state === 'ready' ? `Version ${update.version} prête` : update.state === 'failed' ? 'Mise à jour obligatoire' : update.state === 'downloading' ? `Téléchargement ${update.version || ''}` : update.state === 'available' ? `Nouvelle version ${update.version}` : 'Recherche d’une mise à jour';
+  $('installUpdate').hidden = !['ready','failed'].includes(update.state);
+  $('installUpdate').innerHTML = update.state === 'failed' ? 'RÉESSAYER <b>↻</b>' : 'REDÉMARRER ET INSTALLER <b>→</b>';
+  $('installUpdate').dataset.action = update.state;
+}
+
+window.launcher.onUpdateState(applyUpdateState);
+$('installUpdate').onclick = async () => {
+  $('installUpdate').disabled = true;
+  if ($('installUpdate').dataset.action === 'failed') {
+    await window.launcher.retryUpdate();
+    $('installUpdate').disabled = false;
+  } else {
+    $('installUpdate').textContent = 'REDÉMARRAGE…';
+    await window.launcher.installUpdate();
+  }
+};
+
 let skinImage = null;
 let skinRotation = 0;
 let skinDrag = null;
@@ -131,9 +165,10 @@ async function toggleFavorite(game) {
 async function init() {
   const dialog = $('loginDialog');
   dialog.addEventListener('cancel', event => event.preventDefault());
+  $('updateDialog').addEventListener('cancel', event => event.preventDefault());
   config = await window.launcher.settings();
   showUser(config.authMode ? (config.displayName || config.username) : '');
-  if (!config.authMode && !dialog.open) dialog.showModal();
+  applyUpdateState(await window.launcher.updateState());
   renderFavorites();
 
   document.querySelectorAll('.game[data-server-id]').forEach(game => {

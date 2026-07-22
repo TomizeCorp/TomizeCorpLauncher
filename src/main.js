@@ -14,6 +14,10 @@ const defaultInstance = path.join(app.getPath('appData'), '.epsilon');
 let activeSession = null;
 let hubWindow = null;
 let discordClient = null;
+let autoUpdaterRef = null;
+let updateAvailable = false;
+let updateState = { state: 'checking', message: 'Recherche des mises à jour…', percent: 0 };
+function assertUpdateComplete(){if(['checking','available','downloading','ready','failed'].includes(updateState.state))throw new Error('Installez la mise à jour TomizeCorpLauncher avant de continuer.');}
 app.setAppUserModelId('fr.tomizecorp.launcher');
 
 async function readJson(file) { return JSON.parse(await fs.readFile(file, 'utf8')); }
@@ -97,15 +101,18 @@ async function setDiscordMode(mode) {
   client.login({clientId}).catch(()=>{if(discordClient===client)discordClient=null;});
 }
 function configureAutoUpdater() {
-  if(!app.isPackaged)return;
+  if(!app.isPackaged){updateState={state:'disabled'};return;}
   const { autoUpdater } = require('electron-updater');
-  autoUpdater.autoDownload=true;autoUpdater.autoInstallOnAppQuit=true;autoUpdater.allowPrerelease=false;
-  const updaterCaches=[path.join(app.getPath('cache'),'epsilon-launcher-updater')];
-  if(process.platform==='win32'&&process.env.LOCALAPPDATA)updaterCaches.push(path.join(process.env.LOCALAPPDATA,'epsilon-launcher-updater'));
-  for(const updaterCache of updaterCaches){fs.rm(path.join(updaterCache,'pending'),{recursive:true,force:true}).catch(()=>{});fs.unlink(path.join(updaterCache,'installer.exe')).catch(()=>{});}
-  autoUpdater.on('update-downloaded',async info=>{const result=await dialog.showMessageBox({type:'info',title:'Mise à jour TomizeCorpLauncher',message:`La version ${info.version} est prête.`,detail:'Redémarrer maintenant pour terminer la mise à jour ?',buttons:['Redémarrer maintenant','Plus tard'],defaultId:0,cancelId:1,noLink:true});if(result.response===0)autoUpdater.quitAndInstall(false,true);});
-  autoUpdater.on('error',error=>console.warn('Auto-update:',error.message));
-  setTimeout(()=>autoUpdater.checkForUpdatesAndNotify().catch(()=>{}),4000);
+  autoUpdaterRef=autoUpdater;autoUpdater.autoDownload=false;autoUpdater.autoInstallOnAppQuit=true;autoUpdater.allowPrerelease=false;
+  const publish=value=>{updateState=value;if(hubWindow&&!hubWindow.isDestroyed()&&!hubWindow.webContents.isDestroyed())hubWindow.webContents.send('update-state',value);};
+  autoUpdater.on('checking-for-update',()=>publish({state:'checking',message:'Recherche des mises à jour…',percent:0}));
+  autoUpdater.on('update-available',info=>{updateAvailable=true;publish({state:'available',version:info.version,message:`Mise à jour ${info.version} disponible`,percent:0});autoUpdater.downloadUpdate().catch(error=>publish({state:'failed',message:error.message,percent:0}));});
+  autoUpdater.on('download-progress',progress=>publish({state:'downloading',message:'Téléchargement de la mise à jour…',version:progress.version,percent:Math.max(0,Math.min(100,Math.round(progress.percent||0))),transferred:progress.transferred,total:progress.total}));
+  autoUpdater.on('update-downloaded',info=>publish({state:'ready',version:info.version,message:`TomizeCorpLauncher ${info.version} est prêt`,percent:100}));
+  autoUpdater.on('update-not-available',()=>publish({state:'none'}));
+  autoUpdater.on('error',error=>{console.warn('Auto-update:',error.message);publish(updateAvailable?{state:'failed',message:'Le téléchargement a échoué. Réessayez pour continuer.',percent:0}:{state:'error',message:'Vérification impossible. Le launcher démarre en mode hors ligne.'});});
+  publish({state:'checking',message:'Recherche des mises à jour…',percent:0});
+  autoUpdater.checkForUpdates().catch(error=>publish({state:'error',message:error.message}));
 }
 async function loadSettings() {
   const base = await readJson(configPath);
@@ -333,8 +340,11 @@ async function authenticateMicrosoft(rememberSession=true) {
 app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
   ipcMain.handle('settings:get', loadSettings);
+  ipcMain.handle('update:get-state',()=>updateState);
+  ipcMain.handle('update:install',()=>{if(autoUpdaterRef&&updateState.state==='ready'){setImmediate(()=>autoUpdaterRef.quitAndInstall(false,true));return true;}return false;});
+  ipcMain.handle('update:retry',()=>{if(!autoUpdaterRef)return false;updateState={state:'checking',message:'Nouvelle tentative…',percent:0};hubWindow?.webContents.send('update-state',updateState);(updateAvailable?autoUpdaterRef.downloadUpdate():autoUpdaterRef.checkForUpdates()).catch(error=>{updateState={state:updateAvailable?'failed':'error',message:error.message,percent:0};hubWindow?.webContents.send('update-state',updateState);});return true;});
   ipcMain.handle('settings:save', (_, value) => saveSettings(value));
-  ipcMain.handle('epsilon:open', () => { const epsilon=createEpsilonWindow();epsilon.once('ready-to-show',()=>{if(hubWindow&&!hubWindow.isDestroyed())hubWindow.close()});return true; });
+  ipcMain.handle('epsilon:open', () => {assertUpdateComplete();const epsilon=createEpsilonWindow();epsilon.once('ready-to-show',()=>{if(hubWindow&&!hubWindow.isDestroyed())hubWindow.close()});return true; });
   ipcMain.handle('auth:offline', async (_, username) => { const name=String(username||'').trim(); if(!/^[A-Za-z0-9_]{3,16}$/.test(name)) throw new Error('Pseudo invalide (3 à 16 caractères).'); activeSession=null; const s=await loadSettings(); await saveSettings({...s,username:name,displayName:name,authMode:'offline'}); return {name,mode:'offline'}; });
   ipcMain.handle('auth:register', async (_, value) => {const credentials=validateCredentials(value);return setRemoteSession(await accountApi('/v1/register',{method:'POST',body:credentials}),value?.rememberSession!==false);});
   ipcMain.handle('auth:login', async (_, value) => {const credentials=validateCredentials(value);let result;try{result=await accountApi('/v1/login',{method:'POST',body:credentials});}catch(error){if(error.status!==401)throw error;const local=(await localAccounts())[credentials.username.toLowerCase()];if(!local)throw error;const actual=Buffer.from(await scrypt(credentials.password,local.salt),'hex'),expected=Buffer.from(local.hash,'hex');if(actual.length!==expected.length||!crypto.timingSafeEqual(actual,expected))throw error;result=await accountApi('/v1/register',{method:'POST',body:{username:local.username,password:credentials.password}});}return setRemoteSession(result,value?.rememberSession!==false);});
@@ -343,7 +353,7 @@ app.whenReady().then(() => {
   ipcMain.handle('account:get', async () => {const s=await loadSettings();if(!s.authMode)return null;if(s.authMode==='microsoft'){if(!s.displayName)return null;return{mode:'microsoft',username:s.displayName,officialSkin:true,preview:await officialSkinPreview(s.profileId,s.displayName)}}const session=await remoteSession(),account=session.account;let preview='';if(account.skin){const data=Buffer.from(account.skin,'base64'),skinsDir=path.join(app.getPath('userData'),'skins');await fs.mkdir(skinsDir,{recursive:true});const target=path.join(skinsDir,`${account.id}.png`);await fs.writeFile(target,data);activeSession.skinPath=target;preview=`data:image/png;base64,${account.skin}`;}return{mode:'epsilon',username:account.username,hasSkin:account.hasSkin,preview};});
   ipcMain.handle('account:update', async (_,value) => {const s=await loadSettings();if(s.authMode!=='epsilon')throw new Error('Les profils Microsoft se modifient sur minecraft.net.');const session=await remoteSession(),result=await accountApi('/v1/account',{method:'PATCH',token:session.token,body:value});activeSession.name=result.account.username;await saveSettings({...s,username:result.account.username,displayName:result.account.username});return{username:result.account.username,hasSkin:result.account.hasSkin};});
   ipcMain.handle('account:skin', async () => {const s=await loadSettings();if(s.authMode!=='epsilon')throw new Error('Le skin Microsoft est géré par votre compte officiel.');const result=await dialog.showOpenDialog(hubWindow,{properties:['openFile'],filters:[{name:'Skin Minecraft PNG',extensions:['png']}]});if(result.canceled||!result.filePaths[0])return null;const source=result.filePaths[0],image=nativeImage.createFromPath(source),size=image.getSize();if(image.isEmpty()||size.width!==64||![32,64].includes(size.height))throw new Error('Le skin doit être un PNG de 64×64 ou 64×32 pixels.');if((await fs.stat(source)).size>2*1024*1024)throw new Error('Le fichier skin est trop volumineux.');const session=await remoteSession(),data=await fs.readFile(source);await accountApi('/v1/skin',{method:'PUT',token:session.token,body:{skin:data.toString('base64')}});const skinsDir=path.join(app.getPath('userData'),'skins');await fs.mkdir(skinsDir,{recursive:true});const target=path.join(skinsDir,`${session.account.id}.png`);await fs.copyFile(source,target);activeSession.skinPath=target;return{path:target,preview:`data:image/png;base64,${data.toString('base64')}`};});
-  ipcMain.handle('game:launch', (event, profile) => installAndLaunch(BrowserWindow.fromWebContents(event.sender), profile));
+  ipcMain.handle('game:launch', (event, profile) => {assertUpdateComplete();return installAndLaunch(BrowserWindow.fromWebContents(event.sender), profile);});
   ipcMain.handle('folder:pick', async () => (await dialog.showOpenDialog({ properties: ['openDirectory', 'createDirectory'] })).filePaths[0] || null);
   ipcMain.handle('file:pick', async () => (await dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'Exécutable', extensions: ['exe'] }] })).filePaths[0] || null);
   ipcMain.handle('instance:open', async () => shell.openPath((await loadSettings()).instancePath));

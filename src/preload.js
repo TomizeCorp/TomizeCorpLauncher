@@ -1,6 +1,10 @@
 const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('launcher', {
   settings: () => ipcRenderer.invoke('settings:get'),
+  updateState: () => ipcRenderer.invoke('update:get-state'),
+  installUpdate: () => ipcRenderer.invoke('update:install'),
+  retryUpdate: () => ipcRenderer.invoke('update:retry'),
+  onUpdateState: callback => ipcRenderer.on('update-state', (_, value) => callback(value)),
   saveSettings: value => ipcRenderer.invoke('settings:save', value),
   pickFolder: () => ipcRenderer.invoke('folder:pick'),
   pickFile: () => ipcRenderer.invoke('file:pick'),
