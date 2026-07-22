@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Microsoft">
+  <rect width="64" height="64" rx="8" fill="#f5f5f5"/>
+  <path fill="#f25022" d="M9 9h21v21H9z"/>
+  <path fill="#7fba00" d="M34 9h21v21H34z"/>
+  <path fill="#00a4ef" d="M9 34h21v21H9z"/>
+  <path fill="#ffb900" d="M34 34h21v21H34z"/>
+</svg>

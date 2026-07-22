@@ -185,7 +185,8 @@ $('serverSearch').addEventListener('input', event => {
   $('featuredServer').hidden = Boolean(query);
   $('availableTitle').textContent = query ? `Résultats pour « ${event.target.value.trim()} »` : 'Serveur disponible';
   document.querySelectorAll('.game[data-server-id]').forEach(game => {
-    const matches = !query || game.dataset.search.toLocaleLowerCase('fr').includes(query);
+    const serverName = (game.querySelector('h3')?.textContent || '').trim().toLocaleLowerCase('fr');
+    const matches = !query || serverName.includes(query);
     game.hidden = !matches;
     if (matches) visible++;
   });
@@ -200,11 +201,14 @@ $('account').onclick = async () => {
     const account = await window.launcher.account();
     const official = account.mode === 'microsoft';
     $('accountMode').textContent = official ? 'COMPTE MICROSOFT' : 'COMPTE TOMIZECORP';
+    $('accountLogo').src = official ? 'assets/microsoft-logo.svg' : 'assets/tomizecorp-logo.png';
+    $('accountLogo').alt = official ? 'Microsoft' : 'TomizeCorp';
     $('accountUsername').value = account.username || '';
     $('accountUsername').disabled = official;
     $('passwordFields').hidden = official;
     $('saveAccount').hidden = official;
     $('chooseSkin').hidden = official;
+    $('accountSkinNote').hidden = official;
     $('officialSkin').hidden = !official;
     $('skinFields').hidden = false;
     renderSkinPreview(account.preview || '');
