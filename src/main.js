@@ -14,6 +14,8 @@ const defaultInstance = path.join(app.getPath('appData'), '.epsilon');
 let activeSession = null;
 let hubWindow = null;
 let discordClient = null;
+let discordMode = 'tomize';
+let discordRetryTimer = null;
 let autoUpdaterRef = null;
 let updateAvailable = false;
 let updateState = { state: 'checking', message: 'Recherche des mises à jour…', percent: 0 };
@@ -91,14 +93,25 @@ async function remoteSession(required=true) {
   if(!token){if(required)throw new Error('Reconnectez-vous à votre compte TomizeCorp.');return null;}
   try{const result=await accountApi('/v1/me',{token});activeSession={type:'remote',name:result.account.username,id:result.account.id,token};await cacheRemoteSkin(result.account);return{token,...result};}catch(error){if(error.status===401){await clearAccountToken();activeSession=null;}throw error;}
 }
-async function setDiscordMode(mode) {
+function retryDiscordActivity() {
+  clearTimeout(discordRetryTimer);
+  if (!app.isQuitting) discordRetryTimer=setTimeout(()=>connectDiscordActivity(discordMode).catch(()=>{}),10000);
+}
+async function connectDiscordActivity(mode) {
   const settings=await loadSettings(),discord=settings.discord||{};
   const epsilon=mode==='epsilon',clientId=epsilon?discord.epsilonApplicationId:discord.tomizeCorpApplicationId;
-  if(discordClient){try{discordClient.destroy()}catch(_){}discordClient=null;}
-  if(!/^\d{17,20}$/.test(clientId||''))return;
+  if(mode!==discordMode)return;
+  if(discordClient){const previous=discordClient;discordClient=null;try{previous.destroy()}catch(_){}}
+  if(!/^\d{17,20}$/.test(clientId||'')){retryDiscordActivity();return;}
   DiscordRPC.register(clientId);const client=new DiscordRPC.Client({transport:'ipc'});discordClient=client;
-  client.on('ready',()=>client.setActivity({details:epsilon?'Survie EPSILON':'TomizeCorp',state:epsilon?'Connecté à EPSILON':'Dans le launcher',startTimestamp:new Date(),largeImageKey:epsilon?discord.epsilonLargeImageKey:discord.tomizeCorpLargeImageKey,largeImageText:epsilon?'EPSILON':'TomizeCorp',instance:false}).catch(()=>{}));
-  client.login({clientId}).catch(()=>{if(discordClient===client)discordClient=null;});
+  const basicActivity={details:epsilon?'Survie EPSILON':'TomizeCorp',state:epsilon?'Connecté à EPSILON':'Dans le launcher',startTimestamp:new Date(),instance:false};
+  client.once('ready',async()=>{if(client!==discordClient||mode!==discordMode)return;clearTimeout(discordRetryTimer);try{await client.setActivity({...basicActivity,largeImageKey:epsilon?discord.epsilonLargeImageKey:discord.tomizeCorpLargeImageKey,largeImageText:epsilon?'EPSILON':'TomizeCorp'});}catch(_){try{await client.setActivity(basicActivity);}catch(_){retryDiscordActivity();}}});
+  client.on('disconnected',()=>{if(client===discordClient){discordClient=null;retryDiscordActivity();}});
+  client.on('error',()=>{if(client===discordClient){discordClient=null;retryDiscordActivity();}});
+  try{await client.login({clientId});}catch(_){if(discordClient===client)discordClient=null;retryDiscordActivity();}
+}
+async function setDiscordMode(mode) {
+  discordMode=mode;clearTimeout(discordRetryTimer);return connectDiscordActivity(mode);
 }
 function configureAutoUpdater() {
   if(!app.isPackaged){updateState={state:'disabled'};return;}
@@ -366,3 +379,4 @@ app.whenReady().then(() => {
   app.on('activate', () => { if (!BrowserWindow.getAllWindows().length) createWindow(); });
 });
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
+app.on('before-quit',()=>{app.isQuitting=true;clearTimeout(discordRetryTimer);if(discordClient){try{discordClient.destroy()}catch(_){}discordClient=null;}});
