@@ -11,4 +11,6 @@
 .poster { cursor:pointer; }
 .poster:focus-visible { outline:2px solid #fff; outline-offset:3px; }
 .empty-search { grid-column:1/-1; color:#777; font-size:11px; }
-.skin-settings canvas { width:96px; height:96px; image-rendering:pixelated; margin:auto; background:#050505; }
+.skin-settings canvas { width:220px; height:320px; max-width:100%; image-rendering:pixelated; margin:auto; background:radial-gradient(circle,#181818,#050505 70%); border-radius:10px; cursor:grab; touch-action:none; }
+.skin-settings canvas:active { cursor:grabbing; }
+.featured[hidden] { display:none; }
