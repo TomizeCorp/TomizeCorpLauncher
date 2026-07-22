@@ -319,6 +319,7 @@ async function installAndLaunch(win, profile) {
   const remoteSkin=activeSession?.type==='remote'?activeSession.skinPath:'';
   const skinPath=remoteSkin&&fsSync.existsSync(remoteSkin)?remoteSkin:(account?.skinPath&&fsSync.existsSync(account.skinPath)?account.skinPath:'');
   const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'TomizeCorp', versionType: 'TomizeCorp', gameName: 'TomizeCorp', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'TomizeCorpLauncher', launcherBrand: 'TomizeCorp', minMemory: 1024, maxMemory: 4096, extraJVMArgs:skinPath?[`-Depsilon.skin=${skinPath}`,`-Depsilon.username=${username}`]:[], quickPlayMultiplayer: `${settings.serverAddress}:${settings.serverPort}`, server: { ip: settings.serverAddress, port: settings.serverPort }, extraExecOption: { detached: true } });
+  setDiscordMode('epsilon').catch(()=>{});
   child.unref(); win.webContents.send('sync-progress', { percent: 100, message: 'Minecraft lancé sur EPSILON' });
   setTimeout(() => win.hide(), 1200); return { started: true };
 }
