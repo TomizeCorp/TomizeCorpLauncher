@@ -93,7 +93,7 @@ async function setDiscordMode(mode) {
   if(discordClient){try{discordClient.destroy()}catch(_){}discordClient=null;}
   if(!/^\d{17,20}$/.test(clientId||''))return;
   DiscordRPC.register(clientId);const client=new DiscordRPC.Client({transport:'ipc'});discordClient=client;
-  client.on('ready',()=>client.setActivity({details:epsilon?'Survie EPSILON':'TomizeCorpLauncher',state:epsilon?'Connecté à EPSILON':'Dans le launcher',startTimestamp:new Date(),largeImageKey:epsilon?discord.epsilonLargeImageKey:discord.tomizeCorpLargeImageKey,largeImageText:epsilon?'EPSILON':'TomizeCorpLauncher',instance:false}).catch(()=>{}));
+  client.on('ready',()=>client.setActivity({details:epsilon?'Survie EPSILON':'TomizeCorp',state:epsilon?'Connecté à EPSILON':'Dans le launcher',startTimestamp:new Date(),largeImageKey:epsilon?discord.epsilonLargeImageKey:discord.tomizeCorpLargeImageKey,largeImageText:epsilon?'EPSILON':'TomizeCorp',instance:false}).catch(()=>{}));
   client.login({clientId}).catch(()=>{if(discordClient===client)discordClient=null;});
 }
 function configureAutoUpdater() {
@@ -287,18 +287,18 @@ async function installAndLaunch(win, profile) {
   const fabricJson=path.join(settings.instancePath,'versions',fabricVersion,`${fabricVersion}.json`);
   if(!(await validJsonFile(fabricJson))){
     await fs.unlink(fabricJson).catch(()=>{});
-    await runWithProgress(win,()=>installFabric({minecraftVersion:settings.minecraftVersion,version:fabricLoader,minecraft:settings.instancePath,side:'client'}),{start:60,end:65,message:'Installation du moteur TomizeCorpLauncher…'});
-    if(!(await validJsonFile(fabricJson)))throw new Error('Le moteur TomizeCorpLauncher est incomplet. Vérifiez votre connexion puis réessayez.');
+    await runWithProgress(win,()=>installFabric({minecraftVersion:settings.minecraftVersion,version:fabricLoader,minecraft:settings.instancePath,side:'client'}),{start:60,end:65,message:'Installation du moteur TomizeCorp…'});
+    if(!(await validJsonFile(fabricJson)))throw new Error('Le moteur TomizeCorp est incomplet. Vérifiez votre connexion puis réessayez.');
   }
   const resolvedVersion=await Version.parse(settings.instancePath,fabricVersion);
   win.webContents.send('sync-progress',{percent:66,message:'Vérification des bibliothèques du moteur…'});
   await repairMinecraftFiles(resolvedVersion,win);
-  await runWithProgress(win,()=>installDependencies(resolvedVersion),{start:94,end:95,message:'Finalisation du moteur TomizeCorpLauncher…'});
+  await runWithProgress(win,()=>installDependencies(resolvedVersion),{start:94,end:95,message:'Finalisation du moteur TomizeCorp…'});
   win.webContents.send('sync-progress', { percent: 96, message: 'Connexion directe au serveur…' });
   const account=microsoft?null:(await localAccounts())[username.toLowerCase()];
   const remoteSkin=activeSession?.type==='remote'?activeSession.skinPath:'';
   const skinPath=remoteSkin&&fsSync.existsSync(remoteSkin)?remoteSkin:(account?.skinPath&&fsSync.existsSync(account.skinPath)?account.skinPath:'');
-  const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'TomizeCorpLauncher', versionType: 'TomizeCorpLauncher', gameName: 'TomizeCorpLauncher', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'TomizeCorpLauncher', launcherBrand: 'TomizeCorp', minMemory: 1024, maxMemory: 4096, extraJVMArgs:skinPath?[`-Depsilon.skin=${skinPath}`,`-Depsilon.username=${username}`]:[], quickPlayMultiplayer: `${settings.serverAddress}:${settings.serverPort}`, server: { ip: settings.serverAddress, port: settings.serverPort }, extraExecOption: { detached: true } });
+  const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'TomizeCorp', versionType: 'TomizeCorp', gameName: 'TomizeCorp', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'TomizeCorpLauncher', launcherBrand: 'TomizeCorp', minMemory: 1024, maxMemory: 4096, extraJVMArgs:skinPath?[`-Depsilon.skin=${skinPath}`,`-Depsilon.username=${username}`]:[], quickPlayMultiplayer: `${settings.serverAddress}:${settings.serverPort}`, server: { ip: settings.serverAddress, port: settings.serverPort }, extraExecOption: { detached: true } });
   child.unref(); win.webContents.send('sync-progress', { percent: 100, message: 'Minecraft lancé sur EPSILON' });
   setTimeout(() => win.hide(), 1200); return { started: true };
 }
@@ -309,9 +309,9 @@ function createWindow() {
   setDiscordMode('tomize').catch(()=>{});
 }
 function createEpsilonWindow() {
-  const existing = BrowserWindow.getAllWindows().find(w => w.getTitle() === 'EPSILON — TomizeCorpLauncher');
+  const existing = BrowserWindow.getAllWindows().find(w => w.getTitle() === 'EPSILON — TomizeCorp');
   if (existing) { existing.show(); existing.focus(); return existing; }
-  const win = new BrowserWindow({ width: 1020, height: 680, minWidth: 820, minHeight: 580, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'tomizecorp-logo.png'), title: 'EPSILON — TomizeCorpLauncher', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true } });
+  const win = new BrowserWindow({ width: 1020, height: 680, minWidth: 820, minHeight: 580, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'tomizecorp-logo.png'), title: 'EPSILON — TomizeCorp', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true } });
   win.loadFile(path.join(__dirname, 'renderer', 'epsilon.html'));setDiscordMode('epsilon').catch(()=>{});return win;
 }
 async function authenticateMicrosoft(rememberSession=true) {
@@ -322,7 +322,7 @@ async function authenticateMicrosoft(rememberSession=true) {
     const verificationUrl=code.verification_uri_complete||code.verificationUriComplete||`https://microsoft.com/link?otc=${encodeURIComponent(code.user_code)}`;
     require('electron').clipboard.writeText(code.user_code||'');
     shell.openExternal(verificationUrl).catch(()=>{});
-    dialog.showMessageBox(hubWindow,{type:'info',title:'Connexion Microsoft — TomizeCorpLauncher',message:'Terminez la connexion dans votre navigateur.',detail:`Code Microsoft : ${code.user_code}\n\nLe code a été copié automatiquement. Revenez ensuite dans le launcher.`,buttons:['J’ai compris'],icon:path.join(__dirname,'renderer','assets','tomizecorp-logo.png'),noLink:true}).catch(()=>{});
+    dialog.showMessageBox(hubWindow,{type:'info',title:'Connexion Microsoft — TomizeCorp',message:'Terminez la connexion dans votre navigateur.',detail:`Code Microsoft : ${code.user_code}\n\nLe code a été copié automatiquement. Revenez ensuite dans le launcher.`,buttons:['J’ai compris'],icon:path.join(__dirname,'renderer','assets','tomizecorp-logo.png'),noLink:true}).catch(()=>{});
   });
   const mc=await flow.getMinecraftJavaToken({fetchProfile:true,fetchEntitlements:true});
   if(!mc.profile?.name||!mc.profile?.id)throw new Error('Ce compte ne possède pas de profil Minecraft Java.');

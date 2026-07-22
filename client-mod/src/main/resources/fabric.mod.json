@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "epsilonclient",
   "version": "${version}",
-  "name": "TomizeCorpLauncher Client",
+  "name": "TomizeCorp Client",
   "description": "Client verrouillé sur la survie EPSILON.",
   "authors": ["TomizeCorp"],
   "environment": "client",
