@@ -1,6 +1,6 @@
 {
   "name": "epsilon-launcher",
-  "version": "1.10.5",
+  "version": "1.10.6",
   "description": "Launcher Minecraft dédié au serveur EPSILON",
   "main": "src/main.js",
   "type": "commonjs",
@@ -49,9 +49,9 @@
       "artifactName": "TomizeCorpLauncher-${version}-mac-universal.${ext}"
     },
     "nsis": {
-      "oneClick": false,
+      "oneClick": true,
       "perMachine": false,
-      "allowToChangeInstallationDirectory": true,
+      "runAfterFinish": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "TomizeCorpLauncher",
