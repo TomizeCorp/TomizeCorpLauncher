@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs/promises');
 const fsSync = require('fs');
 const crypto = require('crypto');
+const os = require('os');
 const https = require('https');
 const { spawn } = require('child_process');
 const { pipeline } = require('stream/promises');
@@ -21,6 +22,13 @@ let updateAvailable = false;
 let updateState = { state: 'checking', message: 'Recherche des mises à jour…', percent: 0 };
 function assertUpdateComplete(){if(['checking','available','downloading','ready','failed','installing'].includes(updateState.state))throw new Error('Installez la mise à jour TomizeCorpLauncher avant de continuer.');}
 app.setAppUserModelId('fr.tomizecorp.launcher');
+
+function hardwareProfile() {
+  const totalMemory=Math.round(os.totalmem()/1024/1024),cpuCount=Math.max(1,os.cpus()?.length||1);
+  const lowEnd=totalMemory<=6144||cpuCount<=2;
+  const maxMemory=totalMemory<=4096?1536:totalMemory<=6144?2048:totalMemory<=8192?2560:totalMemory<=12288?3072:4096;
+  return{lowEnd,minMemory:lowEnd?512:1024,maxMemory,workers:lowEnd?3:Math.min(8,Math.max(4,Math.floor(cpuCount/2)))};
+}
 
 async function readJson(file) { return JSON.parse(await fs.readFile(file, 'utf8')); }
 async function validJsonFile(file) { try { const content=await fs.readFile(file,'utf8');if(!content.trim())return false;JSON.parse(content);return true;} catch (_) { return false; } }
@@ -55,7 +63,7 @@ async function repairMinecraftFiles(version,win) {
       completed++;if(completed%25===0||completed===repairable.length)win.webContents.send('sync-progress',{percent:Math.min(94,72+Math.round(completed/Math.max(1,repairable.length)*22)),message:`Réparation Minecraft ${completed}/${repairable.length}`});
     }
   }
-  if(repairable.length)await Promise.all(Array.from({length:10},worker));
+  if(repairable.length)await Promise.all(Array.from({length:hardwareProfile().workers},worker));
   report=await diagnose(version.id,version.minecraftDirectory);
   if(report.issues.length)throw new Error(`${report.issues.length} fichier(s) Minecraft restent incomplets. Relancez la réparation.`);
 }
@@ -318,13 +326,22 @@ async function installAndLaunch(win, profile) {
   const account=microsoft?null:(await localAccounts())[username.toLowerCase()];
   const remoteSkin=activeSession?.type==='remote'?activeSession.skinPath:'';
   const skinPath=remoteSkin&&fsSync.existsSync(remoteSkin)?remoteSkin:(account?.skinPath&&fsSync.existsSync(account.skinPath)?account.skinPath:'');
-  const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'TomizeCorp', versionType: 'TomizeCorp', gameName: 'TomizeCorp', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'TomizeCorpLauncher', launcherBrand: 'TomizeCorp', minMemory: 1024, maxMemory: 4096, extraJVMArgs:skinPath?[`-Depsilon.skin=${skinPath}`,`-Depsilon.username=${username}`]:[], quickPlayMultiplayer: `${settings.serverAddress}:${settings.serverPort}`, server: { ip: settings.serverAddress, port: settings.serverPort }, extraExecOption: { detached: true } });
+  const resources=hardwareProfile();
+  const jvmArgs=['-XX:+UseG1GC','-XX:MaxGCPauseMillis=100','-XX:+UseStringDeduplication','-XX:+DisableExplicitGC',...(resources.lowEnd?['-XX:G1HeapRegionSize=4M']:[]),...(skinPath?[`-Depsilon.skin=${skinPath}`,`-Depsilon.username=${username}`]:[])];
+  const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'TomizeCorp', versionType: 'TomizeCorp', gameName: 'TomizeCorp', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'TomizeCorpLauncher', launcherBrand: 'TomizeCorp', minMemory: resources.minMemory, maxMemory: resources.maxMemory, extraJVMArgs:jvmArgs, quickPlayMultiplayer: `${settings.serverAddress}:${settings.serverPort}`, server: { ip: settings.serverAddress, port: settings.serverPort }, extraExecOption: { detached: true } });
   setDiscordMode('epsilon').catch(()=>{});
+  child.once('error',error=>{if(!win.isDestroyed()){win.show();dialog.showMessageBox(win,{type:'error',title:'Minecraft ne peut pas démarrer',message:'Le jeu n’a pas pu être lancé.',detail:error.message}).catch(()=>{});}});
+  child.once('exit',code=>{setDiscordMode('tomize').catch(()=>{});if(code&&code!==0&&!win.isDestroyed()){win.show();win.focus();dialog.showMessageBox(win,{type:'error',title:'Minecraft s’est arrêté',message:'Minecraft a rencontré un problème.',detail:`Code de sortie : ${code}. Le launcher a été conservé pour permettre de réessayer.`}).catch(()=>{});}});
   child.unref(); win.webContents.send('sync-progress', { percent: 100, message: 'Minecraft lancé sur EPSILON' });
   setTimeout(() => win.hide(), 1200); return { started: true };
 }
+function protectWindow(win) {
+  let recovered=false;
+  win.webContents.on('render-process-gone',(_,details)=>{if(recovered||win.isDestroyed()||app.isQuitting)return;recovered=true;console.warn('Interface relancée après arrêt du moteur graphique :',details.reason);setTimeout(()=>{if(!win.isDestroyed())win.reload();},800);});
+  return win;
+}
 function createWindow() {
-  const win = new BrowserWindow({ width: 1180, height: 760, minWidth: 900, minHeight: 620, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'tomizecorp-logo.png'), titleBarStyle: 'hiddenInset', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true } });
+  const win = protectWindow(new BrowserWindow({ width: 1180, height: 760, minWidth: 760, minHeight: 540, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'tomizecorp-logo.png'), titleBarStyle: 'hiddenInset', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, spellcheck:false } }));
   hubWindow = win; win.on('closed',()=>{if(hubWindow===win)hubWindow=null});
   win.loadFile(path.join(__dirname, 'renderer', 'index.html'));
   setDiscordMode('tomize').catch(()=>{});
@@ -332,7 +349,7 @@ function createWindow() {
 function createEpsilonWindow() {
   const existing = BrowserWindow.getAllWindows().find(w => w.getTitle() === 'EPSILON — TomizeCorp');
   if (existing) { existing.show(); existing.focus(); return existing; }
-  const win = new BrowserWindow({ width: 1020, height: 680, minWidth: 820, minHeight: 580, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'tomizecorp-logo.png'), title: 'EPSILON — TomizeCorp', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true } });
+  const win = protectWindow(new BrowserWindow({ width: 1020, height: 680, minWidth: 720, minHeight: 520, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'tomizecorp-logo.png'), title: 'EPSILON — TomizeCorp', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, spellcheck:false } }));
   win.loadFile(path.join(__dirname, 'renderer', 'epsilon.html'));setDiscordMode('epsilon').catch(()=>{});return win;
 }
 async function authenticateMicrosoft(rememberSession=true) {
