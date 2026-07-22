@@ -75,7 +75,7 @@ async function repairMinecraftFiles(version,win) {
   }
   if(repairable.length)await Promise.all(Array.from({length:hardwareProfile().workers},worker));
   report=await diagnose(version.id,version.minecraftDirectory);
-  if(report.issues.length)throw new Error(`${report.issues.length} fichier(s) Minecraft restent incomplets. Relancez la réparation.`);
+  return report;
 }
 const scrypt = (password, salt) => new Promise((resolve, reject) => crypto.scrypt(password, salt, 64, (error, key) => error ? reject(error) : resolve(key.toString('hex'))));
 async function localAccounts() { try { return await readJson(path.join(app.getPath('userData'),'accounts.json')); } catch (_) { return {}; } }
@@ -299,7 +299,7 @@ async function installAndLaunch(win, profile) {
   await saveSettings({ ...settings, username, javaPath });
   win.webContents.send('sync-progress', { percent: 3, message: 'Synchronisation EPSILON…' });
   await synchronize(win);
-  const { getVersionList, install, installAssets, installFabric } = await import('@xmcl/installer');
+  const { getVersionList, install, installVersion, installAssets, installFabric, installDependencies } = await import('@xmcl/installer');
   const { launch, Version } = await import('@xmcl/core');
   const versionJson = path.join(settings.instancePath, 'versions', settings.minecraftVersion, `${settings.minecraftVersion}.json`);
   if (!fsSync.existsSync(versionJson)) {
@@ -328,9 +328,23 @@ async function installAndLaunch(win, profile) {
     await runWithProgress(win,()=>installFabric({minecraftVersion:settings.minecraftVersion,version:fabricLoader,minecraft:settings.instancePath,side:'client'}),{start:60,end:65,message:'Installation du moteur TomizeCorp…'});
     if(!(await validJsonFile(fabricJson)))throw new Error('Le moteur TomizeCorp est incomplet. Vérifiez votre connexion puis réessayez.');
   }
-  const resolvedVersion=await Version.parse(settings.instancePath,fabricVersion);
+  let resolvedVersion=await Version.parse(settings.instancePath,fabricVersion);
   win.webContents.send('sync-progress',{percent:66,message:'Vérification des bibliothèques du moteur…'});
-  await repairMinecraftFiles(resolvedVersion,win);
+  let repairReport=await repairMinecraftFiles(resolvedVersion,win);
+  if(repairReport.issues.length){
+    win.webContents.send('sync-progress',{percent:88,message:`Réparation approfondie de ${repairReport.issues.length} fichier(s)…`});
+    if(repairReport.issues.some(issue=>issue.role==='minecraftJar')){
+      const list=await getVersionList(),versions=[...new Set(repairReport.issues.filter(issue=>issue.role==='minecraftJar').map(issue=>issue.version||settings.minecraftVersion))];
+      for(const versionId of versions){const meta=list.versions.find(item=>item.id===versionId);if(meta)await installVersion(meta,settings.instancePath);}
+    }
+    if(repairReport.issues.some(issue=>issue.role==='versionJson')){
+      await fs.unlink(fabricJson).catch(()=>{});await installFabric({minecraftVersion:settings.minecraftVersion,version:fabricLoader,minecraft:settings.instancePath,side:'client'});
+    }
+    resolvedVersion=await Version.parse(settings.instancePath,fabricVersion);
+    await installDependencies(resolvedVersion);
+    repairReport=await repairMinecraftFiles(resolvedVersion,win);
+  }
+  if(repairReport.issues.length){const roles=repairReport.issues.reduce((result,issue)=>{result[issue.role]=(result[issue.role]||0)+1;return result;},{});throw new Error(`${repairReport.issues.length} fichier(s) Minecraft restent incomplets (${Object.entries(roles).map(([role,count])=>`${role}: ${count}`).join(', ')}). Vérifiez l’espace disque et la connexion, puis réessayez.`);}
   win.webContents.send('sync-progress',{percent:95,message:'Fichiers Minecraft vérifiés'});
   win.webContents.send('sync-progress', { percent: 96, message: 'Connexion directe au serveur…' });
   const account=microsoft?null:(await localAccounts())[username.toLowerCase()];
