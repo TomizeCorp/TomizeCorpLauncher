@@ -31,7 +31,7 @@ jobs:
         run: gradle -p client-mod build --no-daemon
 
       - name: Préparer le mod
-        run: cp client-mod/build/libs/EpsilonClient-1.0.0.jar EpsilonClient.jar
+        run: cp client-mod/build/libs/EpsilonClient-1.1.0.jar EpsilonClient.jar
 
       - name: Conserver le mod compilé
         uses: actions/upload-artifact@v4

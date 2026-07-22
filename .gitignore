@@ -1,4 +1,6 @@
 node_modules/
+client-mod/.gradle/
+client-mod/build/
 dist/
 .tools/
 node-portable.zip

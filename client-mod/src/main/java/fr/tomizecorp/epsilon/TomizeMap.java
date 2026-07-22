@@ -1,0 +1,174 @@
+package fr.tomizecorp.epsilon;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import java.io.Reader;
+import java.io.Writer;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.MapColor;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Heightmap;
+
+public final class TomizeMap {
+    public static final int MAP_SIZE = 96;
+    public static final int MAP_RADIUS = 24;
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Type WAYPOINT_LIST = new TypeToken<ArrayList<Waypoint>>() {}.getType();
+    private static final Path FILE = FabricLoader.getInstance().getConfigDir().resolve("tomizecorp-waypoints.json");
+    private static final List<Waypoint> WAYPOINTS = new ArrayList<>();
+    private static boolean loaded;
+    private static final int[] SURFACE = new int[MAP_RADIUS * 2 * MAP_RADIUS * 2];
+    private static int cachedX = Integer.MIN_VALUE;
+    private static int cachedZ = Integer.MIN_VALUE;
+    private static String cachedDimension = "";
+    private static long cachedAt;
+
+    private TomizeMap() {}
+
+    public static final class Waypoint {
+        public String name;
+        public int x;
+        public int y;
+        public int z;
+        public String dimension;
+
+        public Waypoint(String name, int x, int y, int z, String dimension) {
+            this.name = name; this.x = x; this.y = y; this.z = z; this.dimension = dimension;
+        }
+    }
+
+    public static List<Waypoint> waypoints() { load(); return WAYPOINTS; }
+    public static String dimension(MinecraftClient client) { return client.world == null ? "" : client.world.getRegistryKey().getValue().toString(); }
+
+    public static void addCurrent(MinecraftClient client, String name) {
+        load();
+        if (client.player == null || client.world == null || WAYPOINTS.size() >= 50) return;
+        String clean = cleanName(name, "Ping " + (WAYPOINTS.size() + 1));
+        WAYPOINTS.add(new Waypoint(clean, client.player.getBlockX(), client.player.getBlockY(), client.player.getBlockZ(), dimension(client)));
+        save();
+    }
+
+    public static void rename(int index, String name) {
+        load();
+        if (index < 0 || index >= WAYPOINTS.size()) return;
+        WAYPOINTS.get(index).name = cleanName(name, WAYPOINTS.get(index).name);
+        save();
+    }
+
+    public static void remove(int index) {
+        load();
+        if (index < 0 || index >= WAYPOINTS.size()) return;
+        WAYPOINTS.remove(index);
+        save();
+    }
+
+    private static String cleanName(String value, String fallback) {
+        String clean = value == null ? "" : value.strip().replaceAll("[\\r\\n\\t]", " ");
+        if (clean.isEmpty()) clean = fallback;
+        return clean.substring(0, Math.min(24, clean.length()));
+    }
+
+    public static void render(DrawContext context) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player == null || client.world == null || client.options.hudHidden) return;
+        load();
+        int mapX = context.getScaledWindowWidth() - MAP_SIZE - 10;
+        int mapY = 10;
+        context.fill(mapX - 3, mapY - 3, mapX + MAP_SIZE + 3, mapY + MAP_SIZE + 3, 0xCC050505);
+        int playerX = client.player.getBlockX();
+        int playerZ = client.player.getBlockZ();
+        int cell = 2;
+        updateSurface(client, playerX, playerZ);
+        for (int dz = -MAP_RADIUS; dz < MAP_RADIUS; dz++) {
+            for (int dx = -MAP_RADIUS; dx < MAP_RADIUS; dx++) {
+                int color = SURFACE[(dz + MAP_RADIUS) * (MAP_RADIUS * 2) + dx + MAP_RADIUS];
+                int x = mapX + (dx + MAP_RADIUS) * cell;
+                int y = mapY + (dz + MAP_RADIUS) * cell;
+                context.fill(x, y, x + cell, y + cell, color);
+            }
+        }
+        int centerX = mapX + MAP_SIZE / 2;
+        int centerY = mapY + MAP_SIZE / 2;
+        context.fill(centerX - 2, centerY - 2, centerX + 3, centerY + 3, 0xFFFFFFFF);
+        context.drawCenteredTextWithShadow(client.textRenderer, "N", centerX, mapY + 2, 0xFFFFFFFF);
+
+        String currentDimension = dimension(client);
+        for (Waypoint waypoint : WAYPOINTS) {
+            if (!currentDimension.equals(waypoint.dimension)) continue;
+            int dx = waypoint.x - playerX;
+            int dz = waypoint.z - playerZ;
+            if (Math.abs(dx) >= MAP_RADIUS || Math.abs(dz) >= MAP_RADIUS) continue;
+            int x = mapX + (dx + MAP_RADIUS) * cell;
+            int y = mapY + (dz + MAP_RADIUS) * cell;
+            context.fill(x - 2, y - 2, x + 3, y + 3, 0xFFFF3BD4);
+        }
+
+        String coordinates = "X " + client.player.getBlockX() + "  Y " + client.player.getBlockY() + "  Z " + client.player.getBlockZ();
+        int coordinateWidth = client.textRenderer.getWidth(coordinates);
+        context.fill(mapX + MAP_SIZE - coordinateWidth - 6, mapY + MAP_SIZE + 6, mapX + MAP_SIZE + 3, mapY + MAP_SIZE + 19, 0xCC050505);
+        context.drawTextWithShadow(client.textRenderer, coordinates, mapX + MAP_SIZE - coordinateWidth, mapY + MAP_SIZE + 8, 0xFFFFFFFF);
+
+        List<Waypoint> nearest = WAYPOINTS.stream().filter(point -> currentDimension.equals(point.dimension))
+                .sorted(Comparator.comparingDouble(point -> distance(client, point))).limit(4).toList();
+        int lineY = mapY + MAP_SIZE + 23;
+        for (Waypoint waypoint : nearest) {
+            String label = "◆ " + waypoint.name + "  " + Math.round(distance(client, waypoint)) + " m";
+            int width = client.textRenderer.getWidth(label);
+            context.fill(mapX + MAP_SIZE - width - 6, lineY - 2, mapX + MAP_SIZE + 3, lineY + 10, 0xAA050505);
+            context.drawTextWithShadow(client.textRenderer, label, mapX + MAP_SIZE - width, lineY, 0xFFFF7BE1);
+            lineY += 12;
+        }
+        context.drawTextWithShadow(client.textRenderer, "B : GÉRER LES PINGS", mapX, mapY + MAP_SIZE - 11, 0xFFFFFFFF);
+    }
+
+    private static void updateSurface(MinecraftClient client, int playerX, int playerZ) {
+        String currentDimension = dimension(client);
+        long now = System.currentTimeMillis();
+        if (currentDimension.equals(cachedDimension) && playerX == cachedX && playerZ == cachedZ && now - cachedAt < 1000) return;
+        cachedX = playerX; cachedZ = playerZ; cachedDimension = currentDimension; cachedAt = now;
+        for (int dz = -MAP_RADIUS; dz < MAP_RADIUS; dz++) {
+            for (int dx = -MAP_RADIUS; dx < MAP_RADIUS; dx++) {
+                int color = 0xFF202020;
+                try {
+                    int worldX = playerX + dx, worldZ = playerZ + dz;
+                    int top = client.world.getTopY(Heightmap.Type.WORLD_SURFACE, worldX, worldZ);
+                    BlockPos pos = new BlockPos(worldX, top - 1, worldZ);
+                    MapColor mapColor = client.world.getBlockState(pos).getMapColor(client.world, pos);
+                    color = 0xFF000000 | mapColor.color;
+                } catch (RuntimeException ignored) { }
+                SURFACE[(dz + MAP_RADIUS) * (MAP_RADIUS * 2) + dx + MAP_RADIUS] = color;
+            }
+        }
+    }
+
+    private static double distance(MinecraftClient client, Waypoint point) {
+        double dx = client.player.getX() - point.x, dy = client.player.getY() - point.y, dz = client.player.getZ() - point.z;
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    private static void load() {
+        if (loaded) return;
+        loaded = true;
+        if (!Files.isRegularFile(FILE)) return;
+        try (Reader reader = Files.newBufferedReader(FILE)) {
+            List<Waypoint> saved = GSON.fromJson(reader, WAYPOINT_LIST);
+            if (saved != null) WAYPOINTS.addAll(saved.stream().limit(50).toList());
+        } catch (Exception ignored) { }
+    }
+
+    public static void save() {
+        try {
+            Files.createDirectories(FILE.getParent());
+            try (Writer writer = Files.newBufferedWriter(FILE)) { GSON.toJson(WAYPOINTS, WAYPOINT_LIST, writer); }
+        } catch (Exception ignored) { }
+    }
+}

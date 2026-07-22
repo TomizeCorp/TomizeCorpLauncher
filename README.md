@@ -2,6 +2,8 @@
 
 **TomizeCorpLauncher** est le launcher principal. Il présente les serveurs hébergés par TomizeCorp, dont **EPSILON**, installe Minecraft 1.21.11, synchronise les fichiers et rejoint directement la survie.
 
+Le client EPSILON inclut une mini-carte de surface et les coordonnées permanentes. La touche `B` ouvre la gestion des pings personnels : ajout à la position actuelle, renommage et suppression. La mini-carte n'affiche volontairement aucune information sur les joueurs, les mobs ou les grottes.
+
 ## Démarrage
 
 1. Installer Node.js 20 ou plus récent.
