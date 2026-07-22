@@ -112,10 +112,10 @@ async function loadSettings() {
   const userPath = path.join(app.getPath('userData'), 'settings.json');
   let user = {};
   try { user = await readJson(userPath); } catch (_) {}
-  return { ...base, instancePath: defaultInstance, javaPath: '', username: '', authMode: '', displayName: '', profileId: '', rememberSession: true, ...user };
+  return { ...base, instancePath: defaultInstance, javaPath: '', username: '', authMode: '', displayName: '', profileId: '', rememberSession: true, favorites: [], ...user };
 }
 async function saveSettings(value) {
-  const clean = { instancePath: value.instancePath, javaPath: value.javaPath, username: value.username, authMode: value.authMode, displayName: value.displayName, profileId: value.profileId || '', rememberSession: value.rememberSession !== false };
+  const clean = { instancePath: value.instancePath, javaPath: value.javaPath, username: value.username, authMode: value.authMode, displayName: value.displayName, profileId: value.profileId || '', rememberSession: value.rememberSession !== false, favorites: Array.isArray(value.favorites) ? [...new Set(value.favorites.map(String))] : [] };
   await fs.mkdir(app.getPath('userData'), { recursive: true });
   await fs.writeFile(path.join(app.getPath('userData'), 'settings.json'), JSON.stringify(clean, null, 2));
   return loadSettings();
@@ -187,16 +187,18 @@ async function synchronize(win) {
   win.webContents.send('sync-progress', { phase: 'scan', percent: 4, message: 'Lecture du manifeste…' });
   const manifest = await obtainManifest(settings);
   if (!Array.isArray(manifest.files)) throw new Error('Le manifeste ne contient pas de liste de fichiers.');
+  // Les shaderpacks appartiennent au joueur : la verification ne doit ni les modifier ni les supprimer.
+  const managedFiles = manifest.files.filter(entry => !String(entry.path || '').replace(/\\/g, '/').toLowerCase().startsWith('shaderpacks/'));
   const previousPath = path.join(root, '.epsilon-managed.json');
   let previous = [];
   try { previous = (await readJson(previousPath)).files || []; } catch (_) {}
-  const wanted = new Set(manifest.files.map(f => f.path));
+  const wanted = new Set(managedFiles.map(f => f.path));
   for (const old of previous) {
-    if (!wanted.has(old)) await fs.unlink(safeTarget(root, old)).catch(() => {});
+    if (!String(old).replace(/\\/g, '/').toLowerCase().startsWith('shaderpacks/') && !wanted.has(old)) await fs.unlink(safeTarget(root, old)).catch(() => {});
   }
   let changed = 0;
-  for (let i = 0; i < manifest.files.length; i++) {
-    const entry = manifest.files[i];
+  for (let i = 0; i < managedFiles.length; i++) {
+    const entry = managedFiles[i];
     if (!/^[a-f0-9]{64}$/i.test(entry.sha256)) throw new Error(`Empreinte invalide : ${entry.path}`);
     const target = safeTarget(root, entry.path);
     await fs.mkdir(path.dirname(target), { recursive: true });
@@ -208,11 +210,11 @@ async function synchronize(win) {
       if ((await sha256(temporary)).toLowerCase() !== entry.sha256.toLowerCase()) { await fs.unlink(temporary).catch(() => {}); throw new Error(`Fichier corrompu : ${entry.path}`); }
       await fs.rename(temporary, target); changed++;
     }
-    win.webContents.send('sync-progress', { phase: 'files', percent: Math.round(8 + ((i + 1) / Math.max(1, manifest.files.length)) * 88), message: `Vérification ${i + 1}/${manifest.files.length}` });
+    win.webContents.send('sync-progress', { phase: 'files', percent: Math.round(8 + ((i + 1) / Math.max(1, managedFiles.length)) * 88), message: `Vérification ${i + 1}/${managedFiles.length}` });
   }
   await fs.writeFile(previousPath, JSON.stringify({ version: manifest.version, files: [...wanted] }, null, 2));
   win.webContents.send('sync-progress', { phase: 'done', percent: 100, message: changed ? `${changed} fichier(s) mis à jour` : 'Instance déjà à jour' });
-  return { changed, total: manifest.files.length };
+  return { changed, total: managedFiles.length };
 }
 function offlineUuid(name) {
   const bytes = crypto.createHash('md5').update(`OfflinePlayer:${name}`).digest();

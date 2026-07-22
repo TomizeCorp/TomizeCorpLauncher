@@ -1,6 +1,7 @@
 const fs = require('fs'); const fsp = fs.promises; const path = require('path'); const crypto = require('crypto');
 const root = path.resolve(process.argv[2] || 'server-files'); const output = path.resolve(process.argv[3] || path.join(root,'manifest.json'));
-const allowed = new Set(['mods','resourcepacks','config','shaderpacks','defaultconfigs']);
+// Les shaders sont personnels et ne doivent jamais entrer dans la verification automatique.
+const allowed = new Set(['mods','resourcepacks','config','defaultconfigs']);
 async function walk(dir){let out=[];for(const e of await fsp.readdir(dir,{withFileTypes:true})){if(e.name.startsWith('.'))continue;const p=path.join(dir,e.name);if(e.isDirectory())out=out.concat(await walk(p));else out.push(p);}return out;}
 function hash(file){return new Promise((ok,no)=>{const h=crypto.createHash('sha256'),s=fs.createReadStream(file);s.on('error',no);s.on('data',d=>h.update(d));s.on('end',()=>ok(h.digest('hex')));});}
 (async()=>{await fsp.mkdir(root,{recursive:true});let files=[];for(const folder of allowed){const dir=path.join(root,folder);if(fs.existsSync(dir))files.push(...await walk(dir));}const entries=[];for(const file of files){const rel=path.relative(root,file).replace(/\\/g,'/');entries.push({path:rel,sha256:await hash(file),size:(await fsp.stat(file)).size,url:`../server-files/${rel}`});}const manifest={version:new Date().toISOString(),files:entries};await fsp.writeFile(output,JSON.stringify(manifest,null,2));console.log(`${entries.length} fichier(s) indexé(s) dans ${output}`);})().catch(e=>{console.error(e);process.exit(1)});

@@ -1,0 +1,14 @@
+.favorite-servers { width:58px; margin-top:9px; padding-top:10px; border-top:1px solid #34343b; display:grid; gap:8px; }
+.favorite-servers:empty { display:none; }
+.favorite-server img { width:38px; height:38px; object-fit:cover; margin:auto; border-radius:8px; }
+.search { padding:8px 18px; display:flex; align-items:center; gap:8px; }
+.search input { width:100%; border:0; outline:0; background:transparent; color:#eee; font:inherit; }
+.search input::placeholder { color:#72727a; }
+.game { cursor:default !important; position:relative; }
+.game[hidden] { display:none; }
+.favorite-toggle { position:absolute; right:9px; top:9px; z-index:3; width:34px; height:34px; border:1px solid #ffffff35; border-radius:8px; background:#050505cc; color:#fff; font-size:22px; cursor:pointer; }
+.favorite-toggle.active { color:#ffd54a; }
+.poster { cursor:pointer; }
+.poster:focus-visible { outline:2px solid #fff; outline-offset:3px; }
+.empty-search { grid-column:1/-1; color:#777; font-size:11px; }
+.skin-settings canvas { width:96px; height:96px; image-rendering:pixelated; margin:auto; background:#050505; }
