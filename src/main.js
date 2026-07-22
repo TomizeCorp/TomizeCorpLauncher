@@ -142,7 +142,8 @@ async function officialSkinPreview(profileId,username) {
     const property=(await response.json()).properties?.find(item=>item.name==='textures')?.value;
     if(!property)return '';
     const texture=JSON.parse(Buffer.from(property,'base64').toString('utf8')).textures?.SKIN?.url;
-    return /^https:\/\/textures\.minecraft\.net\//i.test(texture||'')?await imageDataUrl(texture):'';
+    const secureTexture=String(texture||'').replace(/^http:\/\/textures\.minecraft\.net\//i,'https://textures.minecraft.net/');
+    return /^https:\/\/textures\.minecraft\.net\//i.test(secureTexture)?await imageDataUrl(secureTexture):'';
   } catch (_) { return ''; }
 }
 function sha256(file) {
