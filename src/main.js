@@ -27,8 +27,10 @@ function hardwareProfile() {
   const totalMemory=Math.round(os.totalmem()/1024/1024),cpuCount=Math.max(1,os.cpus()?.length||1);
   const lowEnd=totalMemory<=6144||cpuCount<=2;
   const maxMemory=totalMemory<=4096?1536:totalMemory<=6144?2048:totalMemory<=8192?2560:totalMemory<=12288?3072:4096;
-  return{lowEnd,veryLowEnd:totalMemory<=4608,minMemory:lowEnd?512:1024,maxMemory,workers:totalMemory<=4608?2:lowEnd?3:Math.min(8,Math.max(4,Math.floor(cpuCount/2)))};
+  return{lowEnd,veryLowEnd:totalMemory<=4608,minMemory:lowEnd?512:1024,maxMemory,workers:lowEnd?4:Math.min(10,Math.max(6,Math.floor(cpuCount/2)))};
 }
+
+const downloadAgent=new https.Agent({keepAlive:true,maxSockets:8,maxFreeSockets:4,timeout:30000});
 
 async function prepareLowEndOptions(instancePath,resources) {
   if(!resources.veryLowEnd)return;
@@ -198,7 +200,7 @@ function safeTarget(root, relative) {
 }
 function download(url, destination, onProgress) {
   return new Promise((resolve, reject) => {
-    const request = https.get(url, response => {
+    const request = https.get(url,{agent:downloadAgent},response => {
       if ([301,302,307,308].includes(response.statusCode)) return resolve(download(new URL(response.headers.location, url).href, destination, onProgress));
       if (response.statusCode !== 200) return reject(new Error(`Téléchargement impossible (${response.statusCode})`));
       const total = Number(response.headers['content-length'] || 0); let received = 0;
@@ -297,7 +299,7 @@ async function installAndLaunch(win, profile) {
   await saveSettings({ ...settings, username, javaPath });
   win.webContents.send('sync-progress', { percent: 3, message: 'Synchronisation EPSILON…' });
   await synchronize(win);
-  const { getVersionList, install, installAssets, installFabric, installDependencies } = await import('@xmcl/installer');
+  const { getVersionList, install, installAssets, installFabric } = await import('@xmcl/installer');
   const { launch, Version } = await import('@xmcl/core');
   const versionJson = path.join(settings.instancePath, 'versions', settings.minecraftVersion, `${settings.minecraftVersion}.json`);
   if (!fsSync.existsSync(versionJson)) {
@@ -329,7 +331,7 @@ async function installAndLaunch(win, profile) {
   const resolvedVersion=await Version.parse(settings.instancePath,fabricVersion);
   win.webContents.send('sync-progress',{percent:66,message:'Vérification des bibliothèques du moteur…'});
   await repairMinecraftFiles(resolvedVersion,win);
-  await runWithProgress(win,()=>installDependencies(resolvedVersion),{start:94,end:95,message:'Finalisation du moteur TomizeCorp…'});
+  win.webContents.send('sync-progress',{percent:95,message:'Fichiers Minecraft vérifiés'});
   win.webContents.send('sync-progress', { percent: 96, message: 'Connexion directe au serveur…' });
   const account=microsoft?null:(await localAccounts())[username.toLowerCase()];
   const remoteSkin=activeSession?.type==='remote'?activeSession.skinPath:'';
