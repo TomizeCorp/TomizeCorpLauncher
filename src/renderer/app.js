@@ -164,6 +164,38 @@ $('skinPreview').addEventListener('pointerup', event => {
 });
 $('skinPreview').addEventListener('pointercancel', () => { skinDrag = null; });
 
+// Véritable modèle 3D : les vues du dessus et du dessous viennent de la caméra,
+// sans redimensionner ni déformer les différentes parties du skin.
+const skin3dUvs = {
+  head:{front:[8,8,8,8],back:[24,8,8,8],left:[16,8,8,8],right:[0,8,8,8],top:[8,0,8,8],bottom:[16,0,8,8]},
+  body:{front:[20,20,8,12],back:[32,20,8,12],left:[28,20,4,12],right:[16,20,4,12],top:[20,16,8,4],bottom:[28,16,8,4]},
+  rightArm:{front:[44,20,4,12],back:[52,20,4,12],left:[48,20,4,12],right:[40,20,4,12],top:[44,16,4,4],bottom:[48,16,4,4]},
+  leftArm:{front:[36,52,4,12],back:[44,52,4,12],left:[40,52,4,12],right:[32,52,4,12],top:[36,48,4,4],bottom:[40,48,4,4]},
+  rightLeg:{front:[4,20,4,12],back:[12,20,4,12],left:[8,20,4,12],right:[0,20,4,12],top:[4,16,4,4],bottom:[8,16,4,4]},
+  leftLeg:{front:[20,52,4,12],back:[28,52,4,12],left:[24,52,4,12],right:[16,52,4,12],top:[20,48,4,4],bottom:[24,48,4,4]}
+};
+function skin3dFace(region,width,height,transform){
+  const face=document.createElement('canvas'),scale=5;face.width=width*scale;face.height=height*scale;face.className='skin-face';
+  face.style.cssText=`width:${face.width}px;height:${face.height}px;margin-left:${-face.width/2}px;margin-top:${-face.height/2}px;transform:${transform}`;
+  const context=face.getContext('2d');context.imageSmoothingEnabled=false;context.drawImage(skinImage,...region,0,0,face.width,face.height);return face;
+}
+function skin3dPart(name,width,height,depth,x,y){
+  const scale=5,uv=skin3dUvs[name],part=document.createElement('div');part.className='skin-part';part.style.transform=`translate3d(${x*scale}px,${y*scale}px,0)`;
+  part.append(skin3dFace(uv.front,width,height,`translateZ(${depth*scale/2}px)`),skin3dFace(uv.back,width,height,`rotateY(180deg) translateZ(${depth*scale/2}px)`),skin3dFace(uv.left,depth,height,`rotateY(-90deg) translateZ(${width*scale/2}px)`),skin3dFace(uv.right,depth,height,`rotateY(90deg) translateZ(${width*scale/2}px)`),skin3dFace(uv.top,width,depth,`rotateX(90deg) translateZ(${height*scale/2}px)`),skin3dFace(uv.bottom,width,depth,`rotateX(-90deg) translateZ(${height*scale/2}px)`));return part;
+}
+function drawSkin(){const world=$('skinPreview').querySelector('.skin-world');if(world)world.style.transform=`rotateX(${skinPitch}deg) rotateY(${skinRotation}deg)`;}
+function bindSkin3d(){const preview=$('skinPreview');if(preview.dataset.controlsBound)return;preview.dataset.controlsBound='1';
+  preview.addEventListener('pointerdown',event=>{skinDrag={x:event.clientX,y:event.clientY,rotation:skinRotation,pitch:skinPitch};preview.setPointerCapture(event.pointerId);});
+  preview.addEventListener('pointermove',event=>{if(!skinDrag)return;skinRotation=skinDrag.rotation+(event.clientX-skinDrag.x)*.8;skinPitch=Math.max(-90,Math.min(90,skinDrag.pitch-(event.clientY-skinDrag.y)*.6));drawSkin();});
+  preview.addEventListener('pointerup',event=>{skinDrag=null;preview.releasePointerCapture(event.pointerId);});preview.addEventListener('pointercancel',()=>{skinDrag=null;});
+}
+function renderSkinPreview(source){
+  let preview=$('skinPreview');if(!source){skinImage=null;preview.hidden=true;return;}const image=new Image();
+  image.onload=()=>{skinImage=image;if(preview.tagName==='CANVAS'){const replacement=document.createElement('div');replacement.id='skinPreview';replacement.hidden=true;replacement.setAttribute('aria-label',preview.getAttribute('aria-label'));replacement.innerHTML='<div class="skin-world"></div>';preview.replaceWith(replacement);preview=replacement;}
+    const world=preview.querySelector('.skin-world'),legacy=image.height<64;world.replaceChildren(skin3dPart('head',8,8,8,0,-8),skin3dPart('body',8,12,4,0,2),skin3dPart('rightArm',4,12,4,-6,2),skin3dPart(legacy?'rightArm':'leftArm',4,12,4,6,2),skin3dPart('rightLeg',4,12,4,-2,14),skin3dPart(legacy?'rightLeg':'leftLeg',4,12,4,2,14));skinRotation=0;skinPitch=-8;drawSkin();bindSkin3d();preview.hidden=false;};
+  image.onerror=()=>{skinImage=null;preview.hidden=true;};image.src=source;
+}
+
 function renderFavorites() {
   const favorites = new Set(config.favorites || []);
   document.querySelectorAll('.game[data-server-id]').forEach(game => {
