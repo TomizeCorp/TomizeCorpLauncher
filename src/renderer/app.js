@@ -1,9 +1,10 @@
 const $ = id => document.getElementById(id);
 let config;
 
-function toast(message) {
+function toast(message, title = 'TOMIZECORP') {
   const element = $('toast');
-  element.textContent = message;
+  element.innerHTML = `<img src="assets/tomizecorp-logo.png" alt=""><div><b>${title}</b><span></span></div>`;
+  element.querySelector('span').textContent = message;
   element.classList.add('show');
   setTimeout(() => element.classList.remove('show'), 3800);
 }
@@ -61,6 +62,7 @@ $('installUpdate').onclick = async () => {
 
 let skinImage = null;
 let skinRotation = 0;
+let skinPitch = 0;
 let skinDrag = null;
 
 const skinFaces = {
@@ -81,6 +83,10 @@ function drawSkin() {
   const context = canvas.getContext('2d');
   context.imageSmoothingEnabled = false;
   context.clearRect(0, 0, canvas.width, canvas.height);
+  if (Math.abs(skinPitch) >= 42) {
+    drawSkinVertical(context, skinPitch > 0);
+    return;
+  }
   const views = ['front','right','back','left'];
   const view = views[Math.round(((skinRotation % 360) + 360) % 360 / 90) % 4];
   const face = skinFaces[view];
@@ -107,22 +113,46 @@ function drawSkin() {
   context.fillText({front:'AVANT',right:'CÔTÉ DROIT',back:'DOS',left:'CÔTÉ GAUCHE'}[view], 110, 302);
 }
 
+function drawSkinVertical(context, fromTop) {
+  const parts = fromTop ? {
+    head:[8,0,8,8],hat:[40,0,8,8],body:[20,16,8,4],jacket:[20,32,8,4],rightArm:[44,16,4,4],rightSleeve:[44,32,4,4],leftArm:[36,48,4,4],leftSleeve:[52,48,4,4],rightLeg:[4,16,4,4],rightPants:[4,32,4,4],leftLeg:[20,48,4,4],leftPants:[4,48,4,4]
+  } : {
+    head:[16,0,8,8],hat:[48,0,8,8],body:[28,16,8,4],jacket:[28,32,8,4],rightArm:[48,16,4,4],rightSleeve:[48,32,4,4],leftArm:[40,48,4,4],leftSleeve:[56,48,4,4],rightLeg:[8,16,4,4],rightPants:[8,32,4,4],leftLeg:[24,48,4,4],leftPants:[8,48,4,4]
+  };
+  const legacy = skinImage.height < 64;
+  drawSkinRegion(context, parts.head, 78, 22, 64, 64);
+  drawSkinRegion(context, parts.hat, 78, 22, 64, 64);
+  drawSkinRegion(context, parts.body, 78, 105, 64, 32);
+  drawSkinRegion(context, parts.jacket, 78, 105, 64, 32);
+  drawSkinRegion(context, parts.rightArm, 38, 105, 32, 32);
+  drawSkinRegion(context, parts.rightSleeve, 38, 105, 32, 32);
+  drawSkinRegion(context, legacy ? parts.rightArm : parts.leftArm, 150, 105, 32, 32);
+  drawSkinRegion(context, parts.leftSleeve, 150, 105, 32, 32);
+  drawSkinRegion(context, parts.rightLeg, 74, 163, 32, 32);
+  drawSkinRegion(context, parts.rightPants, 74, 163, 32, 32);
+  drawSkinRegion(context, legacy ? parts.rightLeg : parts.leftLeg, 114, 163, 32, 32);
+  drawSkinRegion(context, parts.leftPants, 114, 163, 32, 32);
+  context.fillStyle = '#aaa'; context.font = '11px sans-serif'; context.textAlign = 'center';
+  context.fillText(fromTop ? 'VUE DU DESSUS' : 'VUE DU DESSOUS', 110, 302);
+}
+
 function renderSkinPreview(source) {
   const canvas = $('skinPreview');
   if (!source) { skinImage = null; canvas.hidden = true; return; }
   const image = new Image();
-  image.onload = () => { skinImage = image; skinRotation = 0; drawSkin(); canvas.hidden = false; };
+  image.onload = () => { skinImage = image; skinRotation = 0; skinPitch = 0; drawSkin(); canvas.hidden = false; };
   image.onerror = () => { skinImage = null; canvas.hidden = true; };
   image.src = source;
 }
 
 $('skinPreview').addEventListener('pointerdown', event => {
-  skinDrag = { x:event.clientX, rotation:skinRotation };
+  skinDrag = { x:event.clientX, y:event.clientY, rotation:skinRotation, pitch:skinPitch };
   event.currentTarget.setPointerCapture(event.pointerId);
 });
 $('skinPreview').addEventListener('pointermove', event => {
   if (!skinDrag) return;
   skinRotation = skinDrag.rotation + (event.clientX - skinDrag.x) * 1.4;
+  skinPitch = Math.max(-90, Math.min(90, skinDrag.pitch + (event.clientY - skinDrag.y) * 1.2));
   drawSkin();
 });
 $('skinPreview').addEventListener('pointerup', event => {
@@ -211,6 +241,7 @@ $('account').onclick = async () => {
     $('accountSkinNote').hidden = official;
     $('officialSkin').hidden = !official;
     $('skinFields').hidden = false;
+    $('skinRotateHint').textContent = 'Glissez horizontalement pour tourner, verticalement pour voir le dessus et le dessous.';
     renderSkinPreview(account.preview || '');
     $('accountDialog').showModal();
   } catch (error) { toast(error.message); }

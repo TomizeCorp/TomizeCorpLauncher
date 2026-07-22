@@ -360,8 +360,8 @@ app.whenReady().then(() => {
   ipcMain.handle('server:copy', async (_, address) => require('electron').clipboard.writeText(address));
   ipcMain.handle('sync:start', async event => synchronize(BrowserWindow.fromWebContents(event.sender)));
   ipcMain.handle('play', () => { createEpsilonWindow(); return true; });
-  createWindow();
   configureAutoUpdater();
+  createWindow();
   app.on('activate', () => { if (!BrowserWindow.getAllWindows().length) createWindow(); });
 });
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
