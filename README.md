@@ -1,6 +1,6 @@
-# EPSILON Launcher
+# TomizeCorpLauncher
 
-Le projet contient deux interfaces : **TomizeCorpLauncher**, la bibliothèque principale, puis **EPSILON Launcher**, le client autonome ouvert par le bouton Jouer. EPSILON installe Minecraft 1.21.11, synchronise les fichiers et rejoint directement la survie avec un profil hors-ligne.
+**TomizeCorpLauncher** est le launcher principal. Il présente les serveurs hébergés par TomizeCorp, dont **EPSILON**, installe Minecraft 1.21.11, synchronise les fichiers et rejoint directement la survie.
 
 ## Démarrage
 

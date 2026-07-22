@@ -164,7 +164,7 @@ $('account').onclick = async () => {
     if (!config.authMode) { $('loginDialog').showModal(); return; }
     const account = await window.launcher.account();
     const official = account.mode === 'microsoft';
-    $('accountMode').textContent = official ? 'COMPTE MICROSOFT' : 'COMPTE EPSILON';
+    $('accountMode').textContent = official ? 'COMPTE MICROSOFT' : 'COMPTE TOMIZECORP';
     $('accountUsername').value = account.username || '';
     $('accountUsername').disabled = official;
     $('passwordFields').hidden = official;
@@ -182,7 +182,7 @@ $('epsilonRegister').onclick = async () => { try { if ($('registerPassword').val
 $('logoutButton').onclick = async () => { try { await window.launcher.logout(); config = await window.launcher.settings(); showUser(''); toast('Vous êtes déconnecté'); } catch (error) { toast(error.message); } };
 $('closeAccount').onclick = () => $('accountDialog').close();
 $('accountLogout').onclick = async () => { await window.launcher.logout(); config = await window.launcher.settings(); showUser(''); $('accountDialog').close(); $('loginDialog').showModal(); toast('Vous êtes déconnecté'); };
-$('chooseSkin').onclick = async () => { try { const skin = await window.launcher.chooseSkin(); if (skin) { renderSkinPreview(skin.preview); toast('Skin enregistré pour EpsilonLauncher'); } } catch (error) { toast(error.message); } };
+$('chooseSkin').onclick = async () => { try { const skin = await window.launcher.chooseSkin(); if (skin) { renderSkinPreview(skin.preview); toast('Skin enregistré pour TomizeCorpLauncher'); } } catch (error) { toast(error.message); } };
 $('saveAccount').onclick = async () => { try { if ($('newPassword').value !== $('newPasswordConfirm').value) throw new Error('Les nouveaux mots de passe sont différents.'); const result = await window.launcher.updateAccount({ username: $('accountUsername').value.trim(), oldPassword: $('oldPassword').value, newPassword: $('newPassword').value, newPasswordConfirm: $('newPasswordConfirm').value }); showUser(result.username); $('oldPassword').value = ''; $('newPassword').value = ''; $('newPasswordConfirm').value = ''; $('accountDialog').close(); toast('Compte mis à jour'); } catch (error) { toast(error.message); } };
 $('playButton').onclick = openServer;
 init().catch(error => toast(error.message));

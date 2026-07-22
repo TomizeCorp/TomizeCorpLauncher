@@ -9,7 +9,7 @@ import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
 public final class EpsilonBranding {
-    public static final String TITLE = "EpsilonLauncher";
+    public static final String TITLE = "EPSILON — TomizeCorpLauncher";
     public static final String SERVER = "play.minecraft.epsilon.tomize.fr:25568";
 
     private EpsilonBranding() {}

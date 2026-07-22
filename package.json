@@ -1,6 +1,6 @@
 {
   "name": "epsilon-launcher",
-  "version": "1.9.7",
+  "version": "1.9.8",
   "description": "Launcher Minecraft dédié au serveur EPSILON",
   "main": "src/main.js",
   "type": "commonjs",
