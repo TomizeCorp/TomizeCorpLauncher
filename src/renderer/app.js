@@ -175,12 +175,12 @@ const skin3dUvs = {
   leftLeg:{front:[20,52,4,12],back:[28,52,4,12],left:[24,52,4,12],right:[16,52,4,12],top:[20,48,4,4],bottom:[24,48,4,4]}
 };
 function skin3dFace(region,width,height,transform){
-  const face=document.createElement('canvas'),scale=5;face.width=width*scale;face.height=height*scale;face.className='skin-face';
+  const face=document.createElement('canvas'),scale=6;face.width=width*scale;face.height=height*scale;face.className='skin-face';
   face.style.cssText=`width:${face.width}px;height:${face.height}px;margin-left:${-face.width/2}px;margin-top:${-face.height/2}px;transform:${transform}`;
   const context=face.getContext('2d');context.imageSmoothingEnabled=false;context.drawImage(skinImage,...region,0,0,face.width,face.height);return face;
 }
 function skin3dPart(name,width,height,depth,x,y){
-  const scale=5,uv=skin3dUvs[name],part=document.createElement('div');part.className='skin-part';part.style.transform=`translate3d(${x*scale}px,${y*scale}px,0)`;
+  const scale=6,uv=skin3dUvs[name],part=document.createElement('div');part.className='skin-part';part.style.transform=`translate3d(${x*scale}px,${y*scale}px,0)`;
   part.append(skin3dFace(uv.front,width,height,`translateZ(${depth*scale/2}px)`),skin3dFace(uv.back,width,height,`rotateY(180deg) translateZ(${depth*scale/2}px)`),skin3dFace(uv.left,depth,height,`rotateY(-90deg) translateZ(${width*scale/2}px)`),skin3dFace(uv.right,depth,height,`rotateY(90deg) translateZ(${width*scale/2}px)`),skin3dFace(uv.top,width,depth,`rotateX(90deg) translateZ(${height*scale/2}px)`),skin3dFace(uv.bottom,width,depth,`rotateX(-90deg) translateZ(${height*scale/2}px)`));return part;
 }
 function drawSkin(){const world=$('skinPreview').querySelector('.skin-world');if(world)world.style.transform=`rotateX(${skinPitch}deg) rotateY(${skinRotation}deg)`;}
