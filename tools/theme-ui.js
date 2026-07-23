@@ -4,10 +4,7 @@ const sharp = require('sharp');
 
 const pack = path.resolve('server-files/resourcepacks/TomizeCorpUI');
 const source = path.join(pack, 'assets/tomizecorp/textures/gui/medieval-panel-source.png');
-const roots = [
-  path.join(pack, 'assets/minecraft/textures/gui/container'),
-  path.join(pack, 'assets/minecraft/textures/gui/sprites/widget')
-];
+const roots = [path.join(pack, 'assets/minecraft/textures/gui')];
 
 async function walk(directory) {
   const entries = await fs.readdir(directory, { withFileTypes: true });
@@ -40,7 +37,8 @@ async function theme(file, medieval) {
 
 (async () => {
   const medieval = await fs.readFile(source);
-  const files = (await Promise.all(roots.map(walk))).flat();
+  const files = (await Promise.all(roots.map(walk))).flat()
+    .filter(file => !file.endsWith(path.join('title', 'edition.png')));
   for (const file of files) await theme(file, medieval);
   console.log(`${files.length} textures d'interface médiévale/nature générées.`);
 })().catch(error => {
