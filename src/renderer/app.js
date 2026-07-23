@@ -18,8 +18,14 @@ const loginCredentials = () => ({ username: $('loginName').value.trim(), passwor
 const registerCredentials = () => ({ username: $('registerName').value.trim(), email: $('registerEmail').value.trim(), password: $('registerPassword').value, rememberSession: remember() });
 
 function installPasswordResetUi() {
+  const loginSection = document.querySelector('.login-dialog .auth-section:not(.create-section)');
+  const createSection = document.querySelector('.login-dialog .create-section');
+  loginSection.id = 'loginSection';
+  createSection.id = 'createSection';
   $('registerName').closest('label').insertAdjacentHTML('afterend', '<label>ADRESSE E-MAIL<input id="registerEmail" type="email" maxlength="254" autocomplete="email" placeholder="vous@exemple.fr" required></label>');
   $('epsilonLogin').insertAdjacentHTML('afterend', '<button class="forgot-auth" id="forgotPassword" type="button">MOT DE PASSE OUBLIÉ ?</button>');
+  loginSection.insertAdjacentHTML('beforeend', '<button class="auth-switch" id="showRegister" type="button">CRÉER UN COMPTE TOMIZECORP</button>');
+  createSection.insertAdjacentHTML('beforeend', '<button class="auth-switch" id="showLogin" type="button">SE CONNECTER</button>');
   document.body.insertAdjacentHTML('beforeend', `<dialog id="resetDialog" class="login-dialog reset-dialog">
     <button class="dialog-close" id="closeReset" type="button">×</button>
     <div class="login-brand"><div class="hub-logo"><img src="assets/tomizecorp-logo.png" alt="TomizeCorp"></div><h2>Réinitialiser le mot de passe</h2><p>Recevez un code valable 15 minutes.</p></div>
@@ -35,6 +41,23 @@ function installPasswordResetUi() {
     </div>
   </dialog>`);
   $('accountUsername').closest('label').insertAdjacentHTML('afterend', '<label id="accountEmailField">ADRESSE E-MAIL<input id="accountEmail" type="email" maxlength="254" autocomplete="email" placeholder="Requise pour récupérer le mot de passe"></label>');
+  const microsoftButton = $('microsoftLogin');
+  const rememberRow = document.querySelector('.remember-row');
+  const loginBrandTitle = $('loginDialog').querySelector('.login-brand h2');
+  const loginBrandText = $('loginDialog').querySelector('.login-brand p');
+  const showAuthView = view => {
+    const registering = view === 'register';
+    loginSection.hidden = registering;
+    createSection.hidden = !registering;
+    microsoftButton.hidden = registering;
+    rememberRow.hidden = registering;
+    loginBrandTitle.textContent = registering ? 'Créer un compte TomizeCorp' : 'Bienvenue sur TomizeCorp';
+    loginBrandText.textContent = registering ? 'Créez votre compte pour jouer sur les services TomizeCorp.' : 'Connectez-vous pour continuer.';
+  };
+  $('showRegister').onclick = () => showAuthView('register');
+  $('showLogin').onclick = () => showAuthView('login');
+  window.showTomizeLogin = () => showAuthView('login');
+  showAuthView('login');
   $('forgotPassword').onclick = () => {
     $('resetEmail').value = $('loginName').value.includes('@') ? $('loginName').value : '';
     $('loginDialog').close();
@@ -42,6 +65,7 @@ function installPasswordResetUi() {
   };
   $('closeReset').onclick = () => {
     $('resetDialog').close();
+    showAuthView('login');
     if (!$('loginDialog').open) $('loginDialog').showModal();
   };
   $('sendResetCode').onclick = async () => {
@@ -281,6 +305,7 @@ async function toggleFavorite(game) {
 async function init() {
   const dialog = $('loginDialog');
   dialog.addEventListener('cancel', event => event.preventDefault());
+  dialog.addEventListener('close', () => window.showTomizeLogin?.());
   $('updateDialog').addEventListener('cancel', event => event.preventDefault());
   config = await window.launcher.settings();
   showUser(config.authMode ? (config.displayName || config.username) : '');
