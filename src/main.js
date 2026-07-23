@@ -41,6 +41,22 @@ async function prepareLowEndOptions(instancePath,resources) {
   await fs.mkdir(instancePath,{recursive:true});await fs.writeFile(optionsPath,options,'utf8');
 }
 
+async function enableTomizeResourcePack(instancePath) {
+  const optionsPath=path.join(instancePath,'options.txt');
+  await fs.mkdir(instancePath,{recursive:true});
+  let options=fsSync.existsSync(optionsPath)?await fs.readFile(optionsPath,'utf8'):'';
+  const packName='file/TomizeCorpUI';
+  const linePattern=/^resourcePacks:(.*)$/m;
+  let packs=[];
+  const match=options.match(linePattern);
+  if(match){try{packs=JSON.parse(match[1]);}catch{}}
+  if(!Array.isArray(packs))packs=[];
+  if(!packs.includes(packName))packs.push(packName);
+  const newLine=`resourcePacks:${JSON.stringify(packs)}`;
+  options=match?options.replace(linePattern,newLine):`${options}${options&&!options.endsWith(os.EOL)?os.EOL:''}${newLine}${os.EOL}`;
+  await fs.writeFile(optionsPath,options,'utf8');
+}
+
 async function readJson(file) { return JSON.parse(await fs.readFile(file, 'utf8')); }
 async function validJsonFile(file) { try { const content=await fs.readFile(file,'utf8');if(!content.trim())return false;JSON.parse(content);return true;} catch (_) { return false; } }
 async function runWithProgress(win, task, { start, end, message }) {
@@ -353,6 +369,7 @@ async function installAndLaunch(win, profile) {
   const skinPath=remoteSkin&&fsSync.existsSync(remoteSkin)?remoteSkin:(account?.skinPath&&fsSync.existsSync(account.skinPath)?account.skinPath:'');
   const resources=hardwareProfile();
   await prepareLowEndOptions(settings.instancePath,resources);
+  await enableTomizeResourcePack(settings.instancePath);
   const jvmArgs=['-XX:+UseG1GC','-XX:MaxGCPauseMillis=100','-XX:+UseStringDeduplication','-XX:+DisableExplicitGC',...(resources.lowEnd?['-XX:G1HeapRegionSize=4M']:[]),...(skinPath?[`-Depsilon.skin=${skinPath}`,`-Depsilon.username=${username}`]:[])];
   const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'TomizeCorp', versionType: 'TomizeCorp', gameName: 'TomizeCorp', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'TomizeCorpLauncher', launcherBrand: 'TomizeCorp', minMemory: resources.minMemory, maxMemory: resources.maxMemory, extraJVMArgs:jvmArgs, quickPlayMultiplayer: `${settings.serverAddress}:${settings.serverPort}`, server: { ip: settings.serverAddress, port: settings.serverPort }, extraExecOption: { detached: true } });
   setDiscordMode('epsilon').catch(()=>{});

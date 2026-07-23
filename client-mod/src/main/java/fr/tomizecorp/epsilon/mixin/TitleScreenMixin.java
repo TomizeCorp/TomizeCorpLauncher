@@ -25,13 +25,13 @@ public abstract class TitleScreenMixin extends Screen {
     private void epsilon$lockMenu(CallbackInfo ci) {
         clearChildren();
         int left = width / 2 - 100;
-        int top = height / 2;
-        addDrawableChild(ButtonWidget.builder(Text.literal("LANCER EPSILON"), button -> epsilon$connect()).dimensions(left, top, 200, 20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("OPTIONS DE MINECRAFT"), button -> {
+        int top = height / 2 + 18;
+        addDrawableChild(ButtonWidget.builder(Text.literal("Lancer Epsilon"), button -> epsilon$connect()).dimensions(left, top, 200, 20).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("Option"), button -> {
             MinecraftClient client = MinecraftClient.getInstance();
             client.setScreen(new OptionsScreen(this, client.options));
         }).dimensions(left, top + 28, 200, 20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("QUITTER"), button -> MinecraftClient.getInstance().scheduleStop()).dimensions(left, top + 56, 200, 20).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("Quitter"), button -> MinecraftClient.getInstance().scheduleStop()).dimensions(left, top + 56, 200, 20).build());
     }
 
     private void epsilon$connect() {
