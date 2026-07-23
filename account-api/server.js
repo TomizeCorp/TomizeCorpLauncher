@@ -11,12 +11,15 @@ const pepper = process.env.SESSION_PEPPER || '';
 if (!process.env.DATABASE_URL || pepper.length < 32) throw new Error('DATABASE_URL et SESSION_PEPPER (32 caractères minimum) sont requis.');
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const attempts = new Map();
-const mailer = process.env.SMTP_USER && process.env.SMTP_PASSWORD ? nodemailer.createTransport({
+const mailer = process.env.SMTP_USER && (process.env.SMTP_PASSWORD || process.env.SMTP_PASSWORD_BASE64) ? nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.mail.ovh.net',
   port: Number(process.env.SMTP_PORT || 587),
   secure: false,
   requireTLS: true,
-  auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD_BASE64 ? Buffer.from(process.env.SMTP_PASSWORD_BASE64, 'base64').toString('utf8') : process.env.SMTP_PASSWORD
+  }
 }) : null;
 
 await pool.query(`

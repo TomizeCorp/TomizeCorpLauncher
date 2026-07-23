@@ -3,6 +3,8 @@ let config;
 
 function toast(message, title = 'TOMIZECORP') {
   const element = $('toast');
+  const openDialog = [...document.querySelectorAll('dialog[open]')].at(-1);
+  (openDialog || document.body).appendChild(element);
   element.innerHTML = `<img src="assets/tomizecorp-logo.png" alt=""><div><b>${title}</b><span></span></div>`;
   element.querySelector('span').textContent = message;
   element.classList.add('show');
