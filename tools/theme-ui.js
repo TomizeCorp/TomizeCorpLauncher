@@ -21,14 +21,15 @@ async function walk(directory) {
 function pristine(file) {
   if (!process.argv.includes('--from-git')) return null;
   const relative = path.relative(process.cwd(), file).replaceAll('\\', '/');
-  return execFileSync('git', ['show', `HEAD:${relative}`], { maxBuffer: 20 * 1024 * 1024 });
+  const refArgument = process.argv.find(argument => argument.startsWith('--git-ref='));
+  const ref = refArgument ? refArgument.slice('--git-ref='.length) : 'HEAD';
+  return execFileSync('git', ['show', `${ref}:${relative}`], { maxBuffer: 20 * 1024 * 1024 });
 }
 
 async function theme(file, medieval) {
   const input = pristine(file) || await fs.readFile(file);
   const metadata = await sharp(input).metadata();
   if (!metadata.width || !metadata.height) return;
-  const alpha = await sharp(input).ensureAlpha().extractChannel('alpha').raw().toBuffer();
   const corner = await sharp(input).ensureAlpha()
     .extract({ left: metadata.width - 1, top: metadata.height - 1, width: 1, height: 1 })
     .raw().toBuffer();
@@ -52,10 +53,11 @@ async function theme(file, medieval) {
     .toBuffer();
   const output = await sharp(input)
     .ensureAlpha()
-    .composite([{ input: texture, blend: 'screen', left: themedLeft, top: themedTop }])
+    .composite([
+      { input: texture, blend: 'screen', left: themedLeft, top: themedTop },
+      { input, blend: 'dest-in' }
+    ])
     .modulate({ brightness: 0.92, saturation: 1.25, hue: 18 })
-    .removeAlpha()
-    .joinChannel(alpha, { raw: { width: metadata.width, height: metadata.height, channels: 1 } })
     .png()
     .toBuffer();
   await fs.writeFile(file, output);
