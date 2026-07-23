@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell, dialog, Menu, nativeImage, safeStorage } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog, Menu, Tray, nativeImage, safeStorage } = require('electron');
 const path = require('path');
 const fs = require('fs/promises');
 const fsSync = require('fs');
@@ -14,6 +14,7 @@ const configPath = path.join(__dirname, '..', 'config', 'launcher.json');
 const defaultInstance = path.join(app.getPath('appData'), '.epsilon');
 let activeSession = null;
 let hubWindow = null;
+let tray = null;
 let discordClient = null;
 let discordMode = 'tomize';
 let discordRetryTimer = null;
@@ -363,7 +364,25 @@ async function installAndLaunch(win, profile) {
 function protectWindow(win) {
   let recovered=false;
   win.webContents.on('render-process-gone',(_,details)=>{if(recovered||win.isDestroyed()||app.isQuitting)return;recovered=true;console.warn('Interface relancée après arrêt du moteur graphique :',details.reason);setTimeout(()=>{if(!win.isDestroyed())win.reload();},800);});
+  win.on('close',event=>{if(!app.isQuitting){event.preventDefault();win.hide();}});
   return win;
+}
+function showLauncherWindow() {
+  const windows=BrowserWindow.getAllWindows();
+  const target=windows.find(window=>window.getTitle().startsWith('EPSILON'))||hubWindow||windows[0];
+  if(target&&!target.isDestroyed()){target.show();target.focus();if(process.platform==='darwin')app.dock?.show();}
+}
+function createTray() {
+  if(tray)return;
+  const source=nativeImage.createFromPath(path.join(__dirname,'renderer','assets','tomizecorp-logo.png'));
+  const icon=process.platform==='darwin'?source.resize({width:18,height:18}):source.resize({width:16,height:16});
+  tray=new Tray(icon);tray.setToolTip('TomizeCorpLauncher — activité Discord active');
+  tray.setContextMenu(Menu.buildFromTemplate([
+    {label:'Ouvrir TomizeCorpLauncher',click:showLauncherWindow},
+    {type:'separator'},
+    {label:'Quitter complètement',click:()=>{app.isQuitting=true;app.quit();}}
+  ]));
+  tray.on('click',showLauncherWindow);tray.on('double-click',showLauncherWindow);
 }
 function createWindow() {
   const win = protectWindow(new BrowserWindow({ width: 1180, height: 760, minWidth: 760, minHeight: 540, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'tomizecorp-logo.png'), titleBarStyle: 'hiddenInset', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, spellcheck:false } }));
@@ -419,7 +438,8 @@ app.whenReady().then(() => {
   ipcMain.handle('play', () => { createEpsilonWindow(); return true; });
   configureAutoUpdater();
   createWindow();
-  app.on('activate', () => { if (!BrowserWindow.getAllWindows().length) createWindow(); });
+  createTray();
+  app.on('activate', () => { if (!BrowserWindow.getAllWindows().length) createWindow(); else showLauncherWindow(); });
 });
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
 app.on('before-quit',()=>{app.isQuitting=true;clearTimeout(discordRetryTimer);if(discordClient){try{discordClient.destroy()}catch(_){}discordClient=null;}});
