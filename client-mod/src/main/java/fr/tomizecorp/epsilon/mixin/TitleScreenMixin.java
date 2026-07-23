@@ -45,10 +45,10 @@ public abstract class TitleScreenMixin extends Screen {
         ),
         require = 0
     )
-    private int epsilon$removeTechnicalVersion(DrawContext context, TextRenderer renderer, String text, int x, int y, int color) {
+    private void epsilon$removeTechnicalVersion(DrawContext context, TextRenderer renderer, String text, int x, int y, int color) {
         String normalized = text == null ? "" : text.toLowerCase();
-        if (normalized.contains("minecraft 1.21.11") || normalized.contains("fabric") || normalized.contains("version modd")) return 0;
-        return context.drawTextWithShadow(renderer, text, x, y, color);
+        if (normalized.contains("minecraft 1.21.11") || normalized.contains("fabric") || normalized.contains("version modd")) return;
+        context.drawTextWithShadow(renderer, text, x, y, color);
     }
 
     private void epsilon$connect() {
