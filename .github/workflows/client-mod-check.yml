@@ -17,6 +17,12 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run theme-ui
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.5.0'
