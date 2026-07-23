@@ -2,6 +2,7 @@ import http from 'node:http';
 import crypto from 'node:crypto';
 import { promisify } from 'node:util';
 import pg from 'pg';
+import nodemailer from 'nodemailer';
 
 const { Pool } = pg;
 const scrypt = promisify(crypto.scrypt);
@@ -10,6 +11,13 @@ const pepper = process.env.SESSION_PEPPER || '';
 if (!process.env.DATABASE_URL || pepper.length < 32) throw new Error('DATABASE_URL et SESSION_PEPPER (32 caractères minimum) sont requis.');
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const attempts = new Map();
+const mailer = process.env.SMTP_USER && process.env.SMTP_PASSWORD ? nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.mail.ovh.net',
+  port: Number(process.env.SMTP_PORT || 587),
+  secure: false,
+  requireTLS: true,
+  auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
+}) : null;
 
 await pool.query(`
   CREATE TABLE IF NOT EXISTS accounts (
@@ -31,6 +39,16 @@ await pool.query(`
   );
   CREATE INDEX IF NOT EXISTS sessions_account_id_idx ON sessions(account_id);
   CREATE INDEX IF NOT EXISTS sessions_expires_at_idx ON sessions(expires_at);
+  ALTER TABLE accounts ADD COLUMN IF NOT EXISTS email VARCHAR(254);
+  ALTER TABLE accounts ADD COLUMN IF NOT EXISTS email_key VARCHAR(254);
+  CREATE UNIQUE INDEX IF NOT EXISTS accounts_email_key_idx ON accounts(email_key) WHERE email_key IS NOT NULL;
+  CREATE TABLE IF NOT EXISTS password_resets (
+    account_id UUID PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
+    code_hash CHAR(64) NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    attempts SMALLINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  );
 `);
 
 function json(res, status, body) {
@@ -55,6 +73,12 @@ function credentials(value, allowEmptyPassword = false) {
   if ((!allowEmptyPassword || password) && (password.length < 8 || password.length > 128)) throw Object.assign(new Error('Le mot de passe doit contenir 8 à 128 caractères.'), { status: 400 });
   return { username, password };
 }
+function emailAddress(value, required = false) {
+  const email = String(value || '').trim().toLowerCase();
+  if (!email && !required) return '';
+  if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw Object.assign(new Error('Adresse e-mail invalide.'), { status: 400 });
+  return email;
+}
 async function passwordHash(password, salt) { return (await scrypt(password, Buffer.from(salt, 'hex'), 64)).toString('hex'); }
 function tokenHash(token) { return crypto.createHash('sha256').update(token).update(pepper).digest('hex'); }
 async function session(accountId) {
@@ -70,7 +94,7 @@ async function authenticated(req) {
   return { account: result.rows[0], token: match[1] };
 }
 function publicAccount(account, includeSkin = false) {
-  const result = { id: account.id, username: account.username, hasSkin: Boolean(account.skin) };
+  const result = { id: account.id, username: account.username, email: account.email || '', hasSkin: Boolean(account.skin) };
   if (includeSkin && account.skin) result.skin = account.skin.toString('base64');
   return result;
 }
@@ -101,10 +125,10 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && url.pathname === '/health') return json(res, 200, { ok: true });
     if (!throttle(req)) return json(res, 429, { error: 'Trop de tentatives. Réessayez dans une minute.' });
     if (req.method === 'POST' && url.pathname === '/v1/register') {
-      const { username, password } = credentials(await body(req));
+      const value = await body(req), { username, password } = credentials(value), email = emailAddress(value.email);
       const salt = crypto.randomBytes(16).toString('hex'), id = crypto.randomUUID();
-      try { await pool.query('INSERT INTO accounts(id,username,username_key,password_salt,password_hash) VALUES($1,$2,$3,$4,$5)', [id, username, username.toLowerCase(), salt, await passwordHash(password, salt)]); }
-      catch (error) { if (error.code === '23505') throw Object.assign(new Error('Ce pseudo est déjà utilisé.'), { status: 409 }); throw error; }
+      try { await pool.query('INSERT INTO accounts(id,username,username_key,password_salt,password_hash,email,email_key) VALUES($1,$2,$3,$4,$5,$6,$7)', [id, username, username.toLowerCase(), salt, await passwordHash(password, salt), email || null, email || null]); }
+      catch (error) { if (error.code === '23505') throw Object.assign(new Error(error.constraint === 'accounts_email_key_idx' ? 'Cette adresse e-mail est déjà utilisée.' : 'Ce pseudo est déjà utilisé.'), { status: 409 }); throw error; }
       return json(res, 201, { token: await session(id), account: { id, username, hasSkin: false } });
     }
     if (req.method === 'POST' && url.pathname === '/v1/login') {
@@ -122,15 +146,57 @@ const server = http.createServer(async (req, res) => {
       const { account } = await authenticated(req), value = await body(req), oldPassword = String(value.oldPassword || '');
       const actual = Buffer.from(await passwordHash(oldPassword, account.password_salt), 'hex'), expected = Buffer.from(account.password_hash, 'hex');
       if (actual.length !== expected.length || !crypto.timingSafeEqual(actual, expected)) throw Object.assign(new Error('Ancien mot de passe incorrect.'), { status: 401 });
-      const { username } = credentials({ username: value.username, password: '12345678' });
+      const { username } = credentials({ username: value.username, password: '12345678' }), email = emailAddress(value.email);
       const newPassword = String(value.newPassword || ''), confirmation = String(value.newPasswordConfirm || '');
       if (newPassword !== confirmation) throw Object.assign(new Error('Les nouveaux mots de passe sont différents.'), { status: 400 });
       if (newPassword && (newPassword.length < 8 || newPassword.length > 128)) throw Object.assign(new Error('Le nouveau mot de passe doit contenir 8 à 128 caractères.'), { status: 400 });
       let salt = account.password_salt, hash = account.password_hash;
       if (newPassword) { salt = crypto.randomBytes(16).toString('hex'); hash = await passwordHash(newPassword, salt); }
-      try { await pool.query('UPDATE accounts SET username=$1,username_key=$2,password_salt=$3,password_hash=$4,updated_at=NOW() WHERE id=$5', [username, username.toLowerCase(), salt, hash, account.id]); }
-      catch (error) { if (error.code === '23505') throw Object.assign(new Error('Ce pseudo est déjà utilisé.'), { status: 409 }); throw error; }
-      return json(res, 200, { account: { id: account.id, username, hasSkin: Boolean(account.skin) } });
+      try { await pool.query('UPDATE accounts SET username=$1,username_key=$2,password_salt=$3,password_hash=$4,email=$5,email_key=$6,updated_at=NOW() WHERE id=$7', [username, username.toLowerCase(), salt, hash, email || null, email || null, account.id]); }
+      catch (error) { if (error.code === '23505') throw Object.assign(new Error(error.constraint === 'accounts_email_key_idx' ? 'Cette adresse e-mail est déjà utilisée.' : 'Ce pseudo est déjà utilisé.'), { status: 409 }); throw error; }
+      return json(res, 200, { account: { id: account.id, username, email, hasSkin: Boolean(account.skin) } });
+    }
+    if (req.method === 'POST' && url.pathname === '/v1/password/forgot') {
+      const value = await body(req), email = emailAddress(value.email, true);
+      const result = await pool.query('SELECT id,username,email FROM accounts WHERE email_key=$1', [email]);
+      if (result.rowCount && mailer) {
+        const account = result.rows[0], code = String(crypto.randomInt(0, 100_000_000)).padStart(8, '0');
+        await pool.query(`INSERT INTO password_resets(account_id,code_hash,expires_at,attempts) VALUES($1,$2,NOW()+INTERVAL '15 minutes',0)
+          ON CONFLICT(account_id) DO UPDATE SET code_hash=EXCLUDED.code_hash,expires_at=EXCLUDED.expires_at,attempts=0,created_at=NOW()`,
+          [account.id, tokenHash(code)]);
+        await mailer.sendMail({
+          from: `TomizeCorp <${process.env.SMTP_USER}>`,
+          to: account.email,
+          subject: 'Code de réinitialisation TomizeCorp',
+          text: `Bonjour ${account.username},\n\nVotre code de réinitialisation est : ${code}\n\nIl expire dans 15 minutes. Si vous n'avez rien demandé, ignorez cet e-mail.\n\nTomizeCorp`
+        });
+      }
+      return json(res, 200, { ok: true, message: 'Si cette adresse existe, un code a été envoyé.' });
+    }
+    if (req.method === 'POST' && url.pathname === '/v1/password/reset') {
+      const value = await body(req), email = emailAddress(value.email, true), code = String(value.code || '').trim();
+      const password = String(value.newPassword || ''), confirmation = String(value.newPasswordConfirm || '');
+      if (!/^\d{8}$/.test(code)) throw Object.assign(new Error('Code invalide.'), { status: 400 });
+      if (password !== confirmation) throw Object.assign(new Error('Les mots de passe sont différents.'), { status: 400 });
+      if (password.length < 8 || password.length > 128) throw Object.assign(new Error('Le mot de passe doit contenir 8 à 128 caractères.'), { status: 400 });
+      const result = await pool.query(`SELECT a.id,r.code_hash,r.attempts FROM accounts a JOIN password_resets r ON r.account_id=a.id
+        WHERE a.email_key=$1 AND r.expires_at>NOW()`, [email]);
+      if (!result.rowCount || result.rows[0].attempts >= 5) throw Object.assign(new Error('Code invalide ou expiré.'), { status: 400 });
+      const reset = result.rows[0], actual = Buffer.from(tokenHash(code)), expected = Buffer.from(reset.code_hash);
+      if (actual.length !== expected.length || !crypto.timingSafeEqual(actual, expected)) {
+        await pool.query('UPDATE password_resets SET attempts=attempts+1 WHERE account_id=$1', [reset.id]);
+        throw Object.assign(new Error('Code invalide ou expiré.'), { status: 400 });
+      }
+      const salt = crypto.randomBytes(16).toString('hex'), client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+        await client.query('UPDATE accounts SET password_salt=$1,password_hash=$2,updated_at=NOW() WHERE id=$3', [salt, await passwordHash(password, salt), reset.id]);
+        await client.query('DELETE FROM sessions WHERE account_id=$1', [reset.id]);
+        await client.query('DELETE FROM password_resets WHERE account_id=$1', [reset.id]);
+        await client.query('COMMIT');
+      } catch (error) { await client.query('ROLLBACK'); throw error; }
+      finally { client.release(); }
+      return json(res, 200, { ok: true });
     }
     if (req.method === 'PUT' && url.pathname === '/v1/skin') {
       const { account } = await authenticated(req), value = await body(req), skin = Buffer.from(String(value.skin || ''), 'base64');
@@ -148,5 +214,8 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-setInterval(() => pool.query('DELETE FROM sessions WHERE expires_at<=NOW()').catch(console.error), 3600_000).unref();
+setInterval(() => Promise.all([
+  pool.query('DELETE FROM sessions WHERE expires_at<=NOW()'),
+  pool.query('DELETE FROM password_resets WHERE expires_at<=NOW()')
+]).catch(console.error), 3600_000).unref();
 server.listen(port, '0.0.0.0', () => console.log(`TomizeCorp Account API écoute sur ${port}`));

@@ -15,7 +15,58 @@ function showUser(name) {
 }
 const remember = () => $('rememberSession').checked;
 const loginCredentials = () => ({ username: $('loginName').value.trim(), password: $('loginPassword').value, rememberSession: remember() });
-const registerCredentials = () => ({ username: $('registerName').value.trim(), password: $('registerPassword').value, rememberSession: remember() });
+const registerCredentials = () => ({ username: $('registerName').value.trim(), email: $('registerEmail').value.trim(), password: $('registerPassword').value, rememberSession: remember() });
+
+function installPasswordResetUi() {
+  $('registerName').closest('label').insertAdjacentHTML('afterend', '<label>ADRESSE E-MAIL<input id="registerEmail" type="email" maxlength="254" autocomplete="email" placeholder="vous@exemple.fr" required></label>');
+  $('epsilonLogin').insertAdjacentHTML('afterend', '<button class="forgot-auth" id="forgotPassword" type="button">MOT DE PASSE OUBLIÉ ?</button>');
+  document.body.insertAdjacentHTML('beforeend', `<dialog id="resetDialog" class="login-dialog reset-dialog">
+    <button class="dialog-close" id="closeReset" type="button">×</button>
+    <div class="login-brand"><div class="hub-logo"><img src="assets/tomizecorp-logo.png" alt="TomizeCorp"></div><h2>Réinitialiser le mot de passe</h2><p>Recevez un code valable 15 minutes.</p></div>
+    <div class="auth-section">
+      <label>ADRESSE E-MAIL<input id="resetEmail" type="email" maxlength="254" autocomplete="email"></label>
+      <button class="primary-auth" id="sendResetCode" type="button">ENVOYER LE CODE <b>→</b></button>
+      <div id="resetCodeFields" hidden>
+        <label>CODE À 8 CHIFFRES<input id="resetCode" inputmode="numeric" maxlength="8" autocomplete="one-time-code"></label>
+        <label>NOUVEAU MOT DE PASSE<input id="resetNewPassword" type="password" minlength="8" autocomplete="new-password"></label>
+        <label>CONFIRMER<input id="resetNewPasswordConfirm" type="password" minlength="8" autocomplete="new-password"></label>
+        <button class="secondary-auth" id="confirmPasswordReset" type="button">MODIFIER LE MOT DE PASSE <b>✓</b></button>
+      </div>
+    </div>
+  </dialog>`);
+  $('accountUsername').closest('label').insertAdjacentHTML('afterend', '<label id="accountEmailField">ADRESSE E-MAIL<input id="accountEmail" type="email" maxlength="254" autocomplete="email" placeholder="Requise pour récupérer le mot de passe"></label>');
+  $('forgotPassword').onclick = () => {
+    $('resetEmail').value = $('loginName').value.includes('@') ? $('loginName').value : '';
+    $('loginDialog').close();
+    $('resetDialog').showModal();
+  };
+  $('closeReset').onclick = () => {
+    $('resetDialog').close();
+    if (!$('loginDialog').open) $('loginDialog').showModal();
+  };
+  $('sendResetCode').onclick = async () => {
+    try {
+      const result = await window.launcher.forgotPassword($('resetEmail').value.trim());
+      $('resetCodeFields').hidden = false;
+      toast(result.message || 'Si cette adresse existe, un code a été envoyé.');
+    } catch (error) { toast(error.message); }
+  };
+  $('confirmPasswordReset').onclick = async () => {
+    try {
+      await window.launcher.resetPassword({
+        email: $('resetEmail').value.trim(),
+        code: $('resetCode').value.trim(),
+        newPassword: $('resetNewPassword').value,
+        newPasswordConfirm: $('resetNewPasswordConfirm').value
+      });
+      $('resetDialog').close();
+      $('loginDialog').showModal();
+      toast('Mot de passe modifié. Vous pouvez vous connecter.');
+    } catch (error) { toast(error.message); }
+  };
+}
+
+installPasswordResetUi();
 
 async function openServer() {
   config = await window.launcher.settings();
@@ -269,6 +320,8 @@ $('account').onclick = async () => {
     $('accountLogo').src = official ? 'assets/microsoft-logo.svg' : 'assets/tomizecorp-logo.png';
     $('accountLogo').alt = official ? 'Microsoft' : 'TomizeCorp';
     $('accountUsername').value = account.username || '';
+    $('accountEmail').value = account.email || '';
+    $('accountEmailField').hidden = official;
     $('accountUsername').disabled = official;
     $('passwordFields').hidden = official;
     $('saveAccount').hidden = official;
@@ -288,6 +341,6 @@ $('logoutButton').onclick = async () => { try { await window.launcher.logout(); 
 $('closeAccount').onclick = () => $('accountDialog').close();
 $('accountLogout').onclick = async () => { await window.launcher.logout(); config = await window.launcher.settings(); showUser(''); $('accountDialog').close(); $('loginDialog').showModal(); toast('Vous êtes déconnecté'); };
 $('chooseSkin').onclick = async () => { try { const skin = await window.launcher.chooseSkin(); if (skin) { renderSkinPreview(skin.preview); toast('Skin enregistré pour TomizeCorp'); } } catch (error) { toast(error.message); } };
-$('saveAccount').onclick = async () => { try { if ($('newPassword').value !== $('newPasswordConfirm').value) throw new Error('Les nouveaux mots de passe sont différents.'); const result = await window.launcher.updateAccount({ username: $('accountUsername').value.trim(), oldPassword: $('oldPassword').value, newPassword: $('newPassword').value, newPasswordConfirm: $('newPasswordConfirm').value }); showUser(result.username); $('oldPassword').value = ''; $('newPassword').value = ''; $('newPasswordConfirm').value = ''; $('accountDialog').close(); toast('Compte mis à jour'); } catch (error) { toast(error.message); } };
+$('saveAccount').onclick = async () => { try { if ($('newPassword').value !== $('newPasswordConfirm').value) throw new Error('Les nouveaux mots de passe sont différents.'); const result = await window.launcher.updateAccount({ username: $('accountUsername').value.trim(), email: $('accountEmail').value.trim(), oldPassword: $('oldPassword').value, newPassword: $('newPassword').value, newPasswordConfirm: $('newPasswordConfirm').value }); showUser(result.username); $('oldPassword').value = ''; $('newPassword').value = ''; $('newPasswordConfirm').value = ''; $('accountDialog').close(); toast('Compte mis à jour'); } catch (error) { toast(error.message); } };
 $('playButton').onclick = openServer;
 init().catch(error => toast(error.message));

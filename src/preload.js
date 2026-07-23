@@ -22,6 +22,8 @@ contextBridge.exposeInMainWorld('launcher', {
   chooseSkin: () => ipcRenderer.invoke('account:skin'),
   registerEpsilon: credentials => ipcRenderer.invoke('auth:register', credentials),
   loginEpsilon: credentials => ipcRenderer.invoke('auth:login', credentials),
+  forgotPassword: email => ipcRenderer.invoke('auth:forgot-password', email),
+  resetPassword: value => ipcRenderer.invoke('auth:reset-password', value),
   launchGame: profile => ipcRenderer.invoke('game:launch', profile),
   onProgress: callback => ipcRenderer.on('sync-progress', (_, value) => callback(value))
 });
