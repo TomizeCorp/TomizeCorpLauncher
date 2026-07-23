@@ -148,6 +148,15 @@ async function connectDiscordActivity(mode) {
 async function setDiscordMode(mode) {
   discordMode=mode;clearTimeout(discordRetryTimer);return connectDiscordActivity(mode);
 }
+async function clearDiscordActivity() {
+  discordMode='off';
+  clearTimeout(discordRetryTimer);
+  const client=discordClient;
+  discordClient=null;
+  if(!client)return;
+  try{await client.clearActivity();}catch(_){}
+  try{client.destroy();}catch(_){}
+}
 function configureAutoUpdater() {
   if(!app.isPackaged){updateState={state:'disabled'};return;}
   const { autoUpdater } = require('electron-updater');
@@ -373,8 +382,11 @@ async function installAndLaunch(win, profile) {
   const jvmArgs=['-XX:+UseG1GC','-XX:MaxGCPauseMillis=100','-XX:+UseStringDeduplication','-XX:+DisableExplicitGC',...(resources.lowEnd?['-XX:G1HeapRegionSize=4M']:[]),...(skinPath?[`-Depsilon.skin=${skinPath}`,`-Depsilon.username=${username}`]:[])];
   const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'TomizeCorp', versionType: 'TomizeCorp', gameName: 'TomizeCorp', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'TomizeCorpLauncher', launcherBrand: 'TomizeCorp', minMemory: resources.minMemory, maxMemory: resources.maxMemory, extraJVMArgs:jvmArgs, extraExecOption: { detached: true } });
   setDiscordMode('epsilon').catch(()=>{});
-  child.once('error',error=>{if(!win.isDestroyed()){win.show();dialog.showMessageBox(win,{type:'error',title:'Minecraft ne peut pas démarrer',message:'Le jeu n’a pas pu être lancé.',detail:error.message}).catch(()=>{});}});
-  child.once('exit',code=>{setDiscordMode('tomize').catch(()=>{});if(code&&code!==0&&!win.isDestroyed()){win.show();win.focus();dialog.showMessageBox(win,{type:'error',title:'Minecraft s’est arrêté',message:'Minecraft a rencontré un problème.',detail:`Code de sortie : ${code}. Le launcher a été conservé pour permettre de réessayer.`}).catch(()=>{});}});
+  let gameFinished=false;
+  const finishGame=code=>{if(gameFinished)return;gameFinished=true;clearDiscordActivity().catch(()=>{});if(code&&code!==0&&!win.isDestroyed()){win.show();win.focus();dialog.showMessageBox(win,{type:'error',title:'Minecraft s’est arrêté',message:'Minecraft a rencontré un problème.',detail:`Code de sortie : ${code}. Le launcher a été conservé pour permettre de réessayer.`}).catch(()=>{});}};
+  child.once('error',error=>{if(!gameFinished){gameFinished=true;clearDiscordActivity().catch(()=>{});}if(!win.isDestroyed()){win.show();dialog.showMessageBox(win,{type:'error',title:'Minecraft ne peut pas démarrer',message:'Le jeu n’a pas pu être lancé.',detail:error.message}).catch(()=>{});}});
+  child.once('exit',finishGame);
+  child.once('close',finishGame);
   child.unref(); win.webContents.send('sync-progress', { percent: 100, message: 'Minecraft lancé sur EPSILON' });
   setTimeout(() => win.hide(), 1200); return { started: true };
 }
