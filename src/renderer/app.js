@@ -10,10 +10,19 @@ function toast(message, title = 'TOMIZECORP') {
   element.classList.add('show');
   setTimeout(() => element.classList.remove('show'), 3800);
 }
-function showUser(name) {
+function showUser(name, skin = '') {
   $('accountName').textContent = name || 'Se connecter';
-  document.querySelector('.avatar').textContent = (name || '?')[0].toUpperCase();
+  const avatar = document.querySelector('.avatar');
+  avatar.textContent = (name || '?')[0].toUpperCase();
+  avatar.classList.toggle('has-skin', Boolean(skin));
+  avatar.style.backgroundImage = skin ? `url("${skin}")` : '';
   $('logoutButton').hidden = !name;
+}
+async function refreshHeaderUser(name = '') {
+  try {
+    const account = await window.launcher.account();
+    showUser(account?.username || name, account?.preview || '');
+  } catch (_) { showUser(name); }
 }
 const remember = () => $('rememberSession').checked;
 const loginCredentials = () => ({ username: $('loginName').value.trim(), password: $('loginPassword').value, rememberSession: remember() });
@@ -310,7 +319,8 @@ async function init() {
   dialog.addEventListener('close', () => window.showTomizeLogin?.());
   $('updateDialog').addEventListener('cancel', event => event.preventDefault());
   config = await window.launcher.settings();
-  showUser(config.authMode ? (config.displayName || config.username) : '');
+  if (config.authMode) await refreshHeaderUser(config.displayName || config.username);
+  else showUser('');
   applyUpdateState(await window.launcher.updateState());
   renderFavorites();
 
@@ -361,13 +371,13 @@ $('account').onclick = async () => {
     $('accountDialog').showModal();
   } catch (error) { toast(error.message); }
 };
-$('microsoftLogin').onclick = async () => { try { toast('Ouverture de la connexion Microsoft…'); const result = await window.launcher.loginMicrosoft(remember()); showUser(result.name); $('loginDialog').close(); toast('Connexion Microsoft réussie'); } catch (error) { toast(`Connexion Microsoft : ${error.message}`); } };
-$('epsilonLogin').onclick = async () => { try { const result = await window.launcher.loginEpsilon(loginCredentials()); showUser(result.name); $('loginPassword').value = ''; $('loginDialog').close(); toast('Connexion EPSILON réussie'); } catch (error) { toast(error.message); } };
-$('epsilonRegister').onclick = async () => { try { if ($('registerPassword').value !== $('registerConfirm').value) throw new Error('Les mots de passe sont différents.'); const result = await window.launcher.registerEpsilon(registerCredentials()); showUser(result.name); $('registerPassword').value = ''; $('registerConfirm').value = ''; $('loginDialog').close(); toast('Compte EPSILON créé'); } catch (error) { toast(error.message); } };
+$('microsoftLogin').onclick = async () => { try { toast('Ouverture de la connexion Microsoft…'); const result = await window.launcher.loginMicrosoft(remember()); await refreshHeaderUser(result.name); $('loginDialog').close(); toast('Connexion Microsoft réussie'); } catch (error) { toast(`Connexion Microsoft : ${error.message}`); } };
+$('epsilonLogin').onclick = async () => { try { const result = await window.launcher.loginEpsilon(loginCredentials()); await refreshHeaderUser(result.name); $('loginPassword').value = ''; $('loginDialog').close(); toast('Connexion EPSILON réussie'); } catch (error) { toast(error.message); } };
+$('epsilonRegister').onclick = async () => { try { if ($('registerPassword').value !== $('registerConfirm').value) throw new Error('Les mots de passe sont différents.'); const result = await window.launcher.registerEpsilon(registerCredentials()); await refreshHeaderUser(result.name); $('registerPassword').value = ''; $('registerConfirm').value = ''; $('loginDialog').close(); toast('Compte EPSILON créé'); } catch (error) { toast(error.message); } };
 $('logoutButton').onclick = async () => { try { await window.launcher.logout(); config = await window.launcher.settings(); showUser(''); toast('Vous êtes déconnecté'); } catch (error) { toast(error.message); } };
 $('closeAccount').onclick = () => $('accountDialog').close();
 $('accountLogout').onclick = async () => { await window.launcher.logout(); config = await window.launcher.settings(); showUser(''); $('accountDialog').close(); $('loginDialog').showModal(); toast('Vous êtes déconnecté'); };
-$('chooseSkin').onclick = async () => { try { const skin = await window.launcher.chooseSkin(); if (skin) { renderSkinPreview(skin.preview); toast('Skin enregistré pour TomizeCorp'); } } catch (error) { toast(error.message); } };
+$('chooseSkin').onclick = async () => { try { const skin = await window.launcher.chooseSkin(); if (skin) { renderSkinPreview(skin.preview); showUser($('accountUsername').value.trim(), skin.preview); toast('Skin enregistré pour TomizeCorp'); } } catch (error) { toast(error.message); } };
 $('saveAccount').onclick = async () => { try { if ($('newPassword').value !== $('newPasswordConfirm').value) throw new Error('Les nouveaux mots de passe sont différents.'); const result = await window.launcher.updateAccount({ username: $('accountUsername').value.trim(), email: $('accountEmail').value.trim(), oldPassword: $('oldPassword').value, newPassword: $('newPassword').value, newPasswordConfirm: $('newPasswordConfirm').value }); showUser(result.username); $('oldPassword').value = ''; $('newPassword').value = ''; $('newPasswordConfirm').value = ''; $('accountDialog').close(); toast('Compte mis à jour'); } catch (error) { toast(error.message); } };
 $('playButton').onclick = openServer;
 init().catch(error => toast(error.message));

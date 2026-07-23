@@ -16,6 +16,7 @@
 .skin-world { position:absolute; left:50%; top:43%; width:0; height:0; transform-style:preserve-3d; transition:transform .04s linear; }
 .skin-part { position:absolute; left:0; top:0; width:0; height:0; transform-style:preserve-3d; }
 .skin-face { position:absolute; left:0; top:0; image-rendering:pixelated; backface-visibility:hidden; }
+.avatar.has-skin { color:transparent!important; background-repeat:no-repeat!important; background-size:800% 800%!important; background-position:14.285% 14.285%!important; image-rendering:pixelated; }
 .featured[hidden] { display:none; }
 .update-dialog { width:min(860px,92vw); padding:0; overflow:hidden; border:1px solid #38383f; background:#070708; color:#fff; border-radius:16px; box-shadow:0 40px 140px #000; }
 .update-dialog::backdrop { background:#000; backdrop-filter:blur(12px); }

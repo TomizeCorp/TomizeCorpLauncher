@@ -31,7 +31,7 @@ jobs:
         run: gradle -p client-mod build --no-daemon
 
       - name: Préparer le mod
-        run: cp client-mod/build/libs/EpsilonClient-1.1.0.jar EpsilonClient.jar
+        run: cp client-mod/build/libs/EpsilonClient-1.2.0.jar EpsilonClient.jar
 
       - name: Conserver le mod compilé
         uses: actions/upload-artifact@v4
@@ -68,7 +68,7 @@ jobs:
           Invoke-WebRequest 'https://cdn.modrinth.com/data/AANobbMI/versions/UddlN6L4/sodium-fabric-0.8.7%2Bmc1.21.11.jar' -OutFile 'server-files/mods/Sodium-0.8.7.jar'
 
       - name: Générer le manifeste EPSILON
-        run: npm run manifest
+        run: npm run theme-ui && npm run manifest
 
       - name: Vérifier les sources
         run: |
@@ -111,7 +111,7 @@ jobs:
           curl --fail --location 'https://cdn.modrinth.com/data/AANobbMI/versions/UddlN6L4/sodium-fabric-0.8.7%2Bmc1.21.11.jar' --output 'server-files/mods/Sodium-0.8.7.jar'
 
       - name: Générer le manifeste EPSILON
-        run: npm run manifest
+        run: npm run theme-ui && npm run manifest
 
       - name: Vérifier les sources
         run: |
