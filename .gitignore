@@ -1,5 +1,6 @@
 node_modules/
 .tmp-minecraft-client/
+.tools-node/
 client-mod/.gradle/
 client-mod/build/
 dist/
