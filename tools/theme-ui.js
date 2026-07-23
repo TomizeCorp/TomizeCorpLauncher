@@ -66,7 +66,8 @@ async function theme(file, medieval) {
 (async () => {
   const medieval = await fs.readFile(source);
   const files = (await Promise.all(roots.map(walk))).flat()
-    .filter(file => !file.endsWith(path.join('title', 'edition.png')));
+    .filter(file => !file.endsWith(path.join('title', 'edition.png')))
+    .filter(file => !file.endsWith(path.join('container', 'gamemode_switcher.png')));
   for (const file of files) await theme(file, medieval);
   console.log(`${files.length} textures d'interface médiévale/nature générées.`);
 })().catch(error => {
