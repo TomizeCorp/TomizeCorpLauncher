@@ -19,8 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
-    private static boolean epsilon$autoJoinAttempted;
-
     protected TitleScreenMixin(Text title) { super(title); }
 
     @Inject(method = "init", at = @At("TAIL"))
@@ -34,10 +32,6 @@ public abstract class TitleScreenMixin extends Screen {
             client.setScreen(new OptionsScreen(this, client.options));
         }).dimensions(left, top + 28, 200, 20).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("Quitter"), button -> MinecraftClient.getInstance().scheduleStop()).dimensions(left, top + 56, 200, 20).build());
-        if (!epsilon$autoJoinAttempted) {
-            epsilon$autoJoinAttempted = true;
-            MinecraftClient.getInstance().execute(this::epsilon$connect);
-        }
     }
 
     private void epsilon$connect() {
