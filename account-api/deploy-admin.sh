@@ -52,6 +52,13 @@ CADDY
 fi
 caddy validate --config /etc/caddy/Caddyfile
 systemctl reload caddy
-sleep 3
-curl --fail --silent --show-error -H 'Host: admin-launcher.tomize.fr' http://127.0.0.1/ | grep -q 'Administration TomizeCorp'
-echo "ADMINISTRATION_TOMIZECORP_DEPLOYEE"
+for attempt in {1..15}; do
+  if curl --fail --silent --show-error -H 'Host: admin-launcher.tomize.fr' http://127.0.0.1:3000/ | grep -q 'Administration TomizeCorp'; then
+    echo "ADMINISTRATION_TOMIZECORP_DEPLOYEE"
+    exit 0
+  fi
+  sleep 2
+done
+echo "L'API a démarré, mais l'interface n'a pas répondu au contrôle local." >&2
+docker compose -f compose.yaml -f compose.override.yaml logs --tail=50 api >&2
+exit 1
