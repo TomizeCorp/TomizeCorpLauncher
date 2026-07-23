@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Administration TomizeCorp</title>
+  <link rel="stylesheet" href="/admin/app.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div class="brand"><span>T</span><div><strong>TomizeCorp</strong><small>Administration des comptes</small></div></div>
+      <button id="logout" class="ghost hidden">Déconnexion</button>
+    </header>
+
+    <section id="login" class="card auth">
+      <p class="eyebrow">ACCÈS PROTÉGÉ</p>
+      <h1>Connexion administrateur</h1>
+      <p class="muted">Un code de sécurité sera envoyé à l’adresse e-mail administrateur.</p>
+      <form id="password-form">
+        <label>Mot de passe administrateur<input id="admin-password" type="password" minlength="16" autocomplete="current-password" required></label>
+        <button>Recevoir le code</button>
+      </form>
+      <form id="code-form" class="hidden">
+        <label>Code reçu par e-mail<input id="admin-code" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" autocomplete="one-time-code" required></label>
+        <button>Ouvrir l’administration</button>
+      </form>
+      <p id="auth-message" class="message"></p>
+    </section>
+
+    <section id="dashboard" class="hidden">
+      <div class="hero">
+        <div><p class="eyebrow">COMPTES TOMIZECORP</p><h1>Joueurs</h1></div>
+        <label class="search">Rechercher<input id="search" type="search" placeholder="Pseudo ou adresse e-mail" autocomplete="off"></label>
+      </div>
+      <p class="notice">Les mots de passe existants ne sont jamais visibles. Définir un nouveau mot de passe déconnecte automatiquement le joueur de tous ses appareils.</p>
+      <div id="results" class="accounts"></div>
+      <p id="empty" class="empty">Commencez à écrire pour rechercher un joueur.</p>
+    </section>
+  </main>
+
+  <dialog id="editor">
+    <form id="account-form" method="dialog">
+      <div class="dialog-title"><div><p class="eyebrow">MODIFIER LE COMPTE</p><h2 id="editor-title">Joueur</h2></div><button type="button" id="close" class="icon">×</button></div>
+      <input id="account-id" type="hidden">
+      <label>Pseudo<input id="username" minlength="3" maxlength="16" pattern="[A-Za-z0-9_]+" required></label>
+      <label>Adresse e-mail<input id="email" type="email" maxlength="254"></label>
+      <label>Nouveau mot de passe <small>(facultatif)</small><input id="new-password" type="password" minlength="8" maxlength="128" autocomplete="new-password"></label>
+      <label>Confirmer le nouveau mot de passe<input id="confirm-password" type="password" minlength="8" maxlength="128" autocomplete="new-password"></label>
+      <label class="check"><input id="invalidate" type="checkbox" checked> Déconnecter le joueur de tous ses appareils</label>
+      <p id="edit-message" class="message"></p>
+      <button id="save" value="default">Enregistrer les modifications</button>
+    </form>
+  </dialog>
+  <script src="/admin/app.js" defer></script>
+</body>
+</html>

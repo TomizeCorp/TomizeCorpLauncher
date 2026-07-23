@@ -1,5 +1,8 @@
 import http from 'node:http';
 import crypto from 'node:crypto';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import pg from 'pg';
 import nodemailer from 'nodemailer';
@@ -8,6 +11,10 @@ const { Pool } = pg;
 const scrypt = promisify(crypto.scrypt);
 const port = Number(process.env.PORT || 3000);
 const pepper = process.env.SESSION_PEPPER || '';
+const adminDomain = String(process.env.ADMIN_DOMAIN || 'admin-launcher.tomize.fr').toLowerCase();
+const adminEmail = String(process.env.ADMIN_EMAIL || '').trim().toLowerCase();
+const adminPasswordHash = String(process.env.ADMIN_PASSWORD_HASH || '');
+const adminDirectory = path.join(path.dirname(fileURLToPath(import.meta.url)), 'admin');
 if (!process.env.DATABASE_URL || pepper.length < 32) throw new Error('DATABASE_URL et SESSION_PEPPER (32 caractères minimum) sont requis.');
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const attempts = new Map();
@@ -52,11 +59,43 @@ await pool.query(`
     attempts SMALLINT NOT NULL DEFAULT 0,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
   );
+  CREATE TABLE IF NOT EXISTS admin_login_codes (
+    request_hash CHAR(64) PRIMARY KEY,
+    code_hash CHAR(64) NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    attempts SMALLINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  );
+  CREATE TABLE IF NOT EXISTS admin_sessions (
+    token_hash CHAR(64) PRIMARY KEY,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  );
+  CREATE TABLE IF NOT EXISTS admin_audit_log (
+    id BIGSERIAL PRIMARY KEY,
+    account_id UUID REFERENCES accounts(id) ON DELETE SET NULL,
+    action VARCHAR(80) NOT NULL,
+    details JSONB NOT NULL DEFAULT '{}'::jsonb,
+    ip VARCHAR(80),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  );
 `);
 
 function json(res, status, body) {
   const data = Buffer.from(JSON.stringify(body));
   res.writeHead(status, { 'content-type': 'application/json; charset=utf-8', 'content-length': data.length, 'cache-control': 'no-store', 'x-content-type-options': 'nosniff' });
+  res.end(data);
+}
+function securityHeaders(res) {
+  res.setHeader('x-content-type-options', 'nosniff');
+  res.setHeader('x-frame-options', 'DENY');
+  res.setHeader('referrer-policy', 'no-referrer');
+  res.setHeader('content-security-policy', "default-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
+}
+async function staticAdmin(res, filename, type) {
+  securityHeaders(res);
+  const data = await fs.readFile(path.join(adminDirectory, filename));
+  res.writeHead(200, { 'content-type': type, 'content-length': data.length, 'cache-control': filename === 'index.html' ? 'no-store' : 'public, max-age=3600' });
   res.end(data);
 }
 function clientIp(req) { return String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim(); }
@@ -96,6 +135,28 @@ async function authenticated(req) {
   if (!result.rowCount) throw Object.assign(new Error('Session expirée.'), { status: 401 });
   return { account: result.rows[0], token: match[1] };
 }
+function safeEqualText(left, right) {
+  const a = Buffer.from(String(left)), b = Buffer.from(String(right));
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+async function verifyAdminPassword(password) {
+  const [saltHex, expectedHex] = adminPasswordHash.split(':');
+  if (!/^[a-f0-9]{32}$/i.test(saltHex || '') || !/^[a-f0-9]{128}$/i.test(expectedHex || '')) return false;
+  const actual = await passwordHash(String(password || ''), saltHex);
+  return safeEqualText(actual, expectedHex);
+}
+async function authenticatedAdmin(req) {
+  const match = String(req.headers.authorization || '').match(/^Bearer ([A-Za-z0-9_-]{40,})$/);
+  if (!match) throw Object.assign(new Error('Session administrateur requise.'), { status: 401 });
+  const result = await pool.query('SELECT 1 FROM admin_sessions WHERE token_hash=$1 AND expires_at>NOW()', [tokenHash(match[1])]);
+  if (!result.rowCount) throw Object.assign(new Error('Session administrateur expirée.'), { status: 401 });
+  return match[1];
+}
+async function adminSession() {
+  const token = crypto.randomBytes(32).toString('base64url');
+  await pool.query(`INSERT INTO admin_sessions(token_hash,expires_at) VALUES($1,NOW()+INTERVAL '2 hours')`, [tokenHash(token)]);
+  return token;
+}
 function publicAccount(account, includeSkin = false) {
   const result = { id: account.id, username: account.username, email: account.email || '', hasSkin: Boolean(account.skin) };
   if (includeSkin && account.skin) result.skin = account.skin.toString('base64');
@@ -125,8 +186,94 @@ function validPng(data) {
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
+    const hostname = String(req.headers.host || '').split(':')[0].toLowerCase();
+    const adminHost = hostname === adminDomain || hostname === 'localhost' || hostname === '127.0.0.1';
+    if (adminHost && req.method === 'GET' && (url.pathname === '/' || url.pathname === '/admin' || url.pathname === '/admin/')) return staticAdmin(res, 'index.html', 'text/html; charset=utf-8');
+    if (adminHost && req.method === 'GET' && url.pathname === '/admin/app.css') return staticAdmin(res, 'app.css', 'text/css; charset=utf-8');
+    if (adminHost && req.method === 'GET' && url.pathname === '/admin/app.js') return staticAdmin(res, 'app.js', 'text/javascript; charset=utf-8');
     if (req.method === 'GET' && url.pathname === '/health') return json(res, 200, { ok: true });
     if (!throttle(req)) return json(res, 429, { error: 'Trop de tentatives. Réessayez dans une minute.' });
+    if (url.pathname.startsWith('/admin/api/') && !adminHost) return json(res, 404, { error: 'Route introuvable.' });
+    if (req.method === 'POST' && url.pathname === '/admin/api/auth/request') {
+      if (!adminEmail || !mailer || !adminPasswordHash) throw Object.assign(new Error('Administration non configurée.'), { status: 503 });
+      const value = await body(req, 20_000);
+      if (!await verifyAdminPassword(value.password)) throw Object.assign(new Error('Identifiants incorrects.'), { status: 401 });
+      const requestToken = crypto.randomBytes(32).toString('base64url');
+      const code = String(crypto.randomInt(0, 100_000_000)).padStart(8, '0');
+      await pool.query(`INSERT INTO admin_login_codes(request_hash,code_hash,expires_at) VALUES($1,$2,NOW()+INTERVAL '10 minutes')`, [tokenHash(requestToken), tokenHash(code)]);
+      await mailer.sendMail({
+        from: `TomizeCorp <${process.env.SMTP_USER}>`, to: adminEmail,
+        subject: 'Code de connexion administration TomizeCorp',
+        text: `Votre code de connexion administrateur est : ${code}\n\nIl expire dans 10 minutes. Si vous n'êtes pas à l'origine de cette demande, changez immédiatement votre mot de passe administrateur.`
+      });
+      return json(res, 200, { requestToken });
+    }
+    if (req.method === 'POST' && url.pathname === '/admin/api/auth/verify') {
+      const value = await body(req, 20_000), requestToken = String(value.requestToken || ''), code = String(value.code || '').trim();
+      const result = await pool.query('SELECT * FROM admin_login_codes WHERE request_hash=$1 AND expires_at>NOW()', [tokenHash(requestToken)]);
+      if (!result.rowCount || result.rows[0].attempts >= 5 || !/^\d{8}$/.test(code)) throw Object.assign(new Error('Code invalide ou expiré.'), { status: 401 });
+      if (!safeEqualText(tokenHash(code), result.rows[0].code_hash)) {
+        await pool.query('UPDATE admin_login_codes SET attempts=attempts+1 WHERE request_hash=$1', [tokenHash(requestToken)]);
+        throw Object.assign(new Error('Code invalide ou expiré.'), { status: 401 });
+      }
+      await pool.query('DELETE FROM admin_login_codes WHERE request_hash=$1', [tokenHash(requestToken)]);
+      await pool.query('INSERT INTO admin_audit_log(action,details,ip) VALUES($1,$2,$3)', ['admin.login', '{}', clientIp(req)]);
+      return json(res, 200, { token: await adminSession() });
+    }
+    if (req.method === 'GET' && url.pathname === '/admin/api/me') {
+      await authenticatedAdmin(req);
+      return json(res, 200, { ok: true });
+    }
+    if (req.method === 'GET' && url.pathname === '/admin/api/accounts') {
+      await authenticatedAdmin(req);
+      const query = String(url.searchParams.get('q') || '').trim().toLowerCase();
+      if (query.length < 2) return json(res, 200, { accounts: [] });
+      const result = await pool.query(`SELECT id,username,email,created_at,updated_at FROM accounts
+        WHERE username_key LIKE $1 OR email_key LIKE $1 ORDER BY username_key LIMIT 30`, [`%${query}%`]);
+      return json(res, 200, { accounts: result.rows });
+    }
+    const adminAccountMatch = url.pathname.match(/^\/admin\/api\/accounts\/([0-9a-f-]{36})$/i);
+    if (req.method === 'PATCH' && adminAccountMatch) {
+      await authenticatedAdmin(req);
+      const value = await body(req, 30_000);
+      const { username } = credentials({ username: value.username, password: '12345678' });
+      const email = emailAddress(value.email), newPassword = String(value.newPassword || '');
+      if (newPassword && (newPassword.length < 8 || newPassword.length > 128)) throw Object.assign(new Error('Le nouveau mot de passe doit contenir 8 à 128 caractères.'), { status: 400 });
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+        const currentResult = await client.query('SELECT id,username,email,password_salt,password_hash FROM accounts WHERE id=$1 FOR UPDATE', [adminAccountMatch[1]]);
+        if (!currentResult.rowCount) throw Object.assign(new Error('Compte introuvable.'), { status: 404 });
+        const current = currentResult.rows[0];
+        let salt = current.password_salt, hash = current.password_hash;
+        if (newPassword) { salt = crypto.randomBytes(16).toString('hex'); hash = await passwordHash(newPassword, salt); }
+        await client.query(`UPDATE accounts SET username=$1,username_key=$2,email=$3,email_key=$4,password_salt=$5,password_hash=$6,updated_at=NOW() WHERE id=$7`,
+          [username, username.toLowerCase(), email || null, email || null, salt, hash, current.id]);
+        if (value.invalidateSessions !== false || newPassword) await client.query('DELETE FROM sessions WHERE account_id=$1', [current.id]);
+        await client.query('DELETE FROM password_resets WHERE account_id=$1', [current.id]);
+        await client.query('INSERT INTO admin_audit_log(account_id,action,details,ip) VALUES($1,$2,$3,$4)', [
+          current.id, 'account.updated',
+          JSON.stringify({ usernameChanged: current.username !== username, emailChanged: (current.email || '') !== email, passwordReset: Boolean(newPassword), sessionsInvalidated: value.invalidateSessions !== false || Boolean(newPassword) }),
+          clientIp(req)
+        ]);
+        await client.query('COMMIT');
+        if (mailer && (email || current.email)) mailer.sendMail({
+          from: `TomizeCorp <${process.env.SMTP_USER}>`, to: email || current.email,
+          subject: 'Votre compte TomizeCorp a été modifié',
+          text: `Bonjour ${username},\n\nUn administrateur a modifié les informations de votre compte TomizeCorp. Si vous n'avez pas demandé cette intervention, contactez immédiatement TomizeCorp.`
+        }).catch(console.error);
+        return json(res, 200, { account: { id: current.id, username, email } });
+      } catch (error) {
+        await client.query('ROLLBACK');
+        if (error.code === '23505') throw Object.assign(new Error(error.constraint === 'accounts_email_key_idx' ? 'Cette adresse e-mail est déjà utilisée.' : 'Ce pseudo est déjà utilisé.'), { status: 409 });
+        throw error;
+      } finally { client.release(); }
+    }
+    if (req.method === 'POST' && url.pathname === '/admin/api/logout') {
+      const token = await authenticatedAdmin(req);
+      await pool.query('DELETE FROM admin_sessions WHERE token_hash=$1', [tokenHash(token)]);
+      return json(res, 200, { ok: true });
+    }
     if (req.method === 'POST' && url.pathname === '/v1/register') {
       const value = await body(req), { username, password } = credentials(value), email = emailAddress(value.email);
       const salt = crypto.randomBytes(16).toString('hex'), id = crypto.randomUUID();
@@ -219,6 +366,8 @@ const server = http.createServer(async (req, res) => {
 
 setInterval(() => Promise.all([
   pool.query('DELETE FROM sessions WHERE expires_at<=NOW()'),
-  pool.query('DELETE FROM password_resets WHERE expires_at<=NOW()')
+  pool.query('DELETE FROM password_resets WHERE expires_at<=NOW()'),
+  pool.query('DELETE FROM admin_login_codes WHERE expires_at<=NOW()'),
+  pool.query('DELETE FROM admin_sessions WHERE expires_at<=NOW()')
 ]).catch(console.error), 3600_000).unref();
 server.listen(port, '0.0.0.0', () => console.log(`TomizeCorp Account API écoute sur ${port}`));

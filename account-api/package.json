@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "scripts": { "start": "node server.js", "check": "node --check server.js" },
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js",
+    "admin-password": "node admin-password.js"
+  },
   "dependencies": {
     "nodemailer": "^7.0.5",
     "pg": "^8.16.3"
