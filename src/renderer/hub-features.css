@@ -44,3 +44,4 @@
 #toast b { color:#fff; font-size:9px; letter-spacing:1.5px; }
 #toast span { color:#aaaab2; font-size:10px; line-height:1.4; }
 body{padding-top:36px}aside{top:36px!important}.hub-header{-webkit-app-region:drag;padding-right:150px!important}.hub-header button,.hub-header input,.hub-header label,.hub-header .account{-webkit-app-region:no-drag}
+html,*{scrollbar-width:none!important}*::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}

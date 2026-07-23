@@ -21,18 +21,12 @@ function Convert-ToTomizeTexture {
             $pixel = $source.GetPixel($x, $y)
             if ($pixel.A -eq 0) { continue }
             $luma = [int](0.2126 * $pixel.R + 0.7152 * $pixel.G + 0.0722 * $pixel.B)
-            $spread = [Math]::Max($pixel.R, [Math]::Max($pixel.G, $pixel.B)) - [Math]::Min($pixel.R, [Math]::Min($pixel.G, $pixel.B))
-            if ($spread -gt 36 -and $luma -gt 45) {
-                $red = [Math]::Min(255, 72 + [int]($luma * 0.78))
-                $green = [Math]::Min(205, 38 + [int]($luma * 0.56))
-                $blue = [Math]::Min(54, 5 + [int]($luma * 0.12))
-            } else {
-                $shade = [Math]::Min(62, 5 + [int]($luma * 0.22))
-                $red = $shade
-                $green = $shade
-                $blue = [Math]::Min(68, $shade + 3)
-            }
-            $bitmap.SetPixel($x, $y, [System.Drawing.Color]::FromArgb($pixel.A, $red, $green, $blue))
+            # Palette noire unie : quatre niveaux nets, sans bruit ni couleur.
+            if ($luma -ge 210) { $shade = 48 }
+            elseif ($luma -ge 145) { $shade = 34 }
+            elseif ($luma -ge 75) { $shade = 22 }
+            else { $shade = 7 }
+            $bitmap.SetPixel($x, $y, [System.Drawing.Color]::FromArgb($pixel.A, $shade, $shade, $shade))
         }
     }
     $directory = Split-Path -Parent $OutputPath
