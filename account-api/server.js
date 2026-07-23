@@ -190,7 +190,9 @@ const server = http.createServer(async (req, res) => {
     const adminHost = hostname === adminDomain || hostname === 'localhost' || hostname === '127.0.0.1';
     if (adminHost && req.method === 'GET' && (url.pathname === '/' || url.pathname === '/admin' || url.pathname === '/admin/')) return staticAdmin(res, 'index.html', 'text/html; charset=utf-8');
     if (adminHost && req.method === 'GET' && url.pathname === '/admin/app.css') return staticAdmin(res, 'app.css', 'text/css; charset=utf-8');
+    if (adminHost && req.method === 'GET' && url.pathname === '/admin/logo.css') return staticAdmin(res, 'logo.css', 'text/css; charset=utf-8');
     if (adminHost && req.method === 'GET' && url.pathname === '/admin/app.js') return staticAdmin(res, 'app.js', 'text/javascript; charset=utf-8');
+    if (adminHost && req.method === 'GET' && url.pathname === '/admin/tomizecorp-logo.png') return staticAdmin(res, 'tomizecorp-logo.png', 'image/png');
     if (req.method === 'GET' && url.pathname === '/health') return json(res, 200, { ok: true });
     if (!throttle(req)) return json(res, 429, { error: 'Trop de tentatives. Réessayez dans une minute.' });
     if (url.pathname.startsWith('/admin/api/') && !adminHost) return json(res, 404, { error: 'Route introuvable.' });
