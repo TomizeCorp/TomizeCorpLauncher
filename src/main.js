@@ -385,7 +385,7 @@ function createTray() {
   tray.on('click',showLauncherWindow);tray.on('double-click',showLauncherWindow);
 }
 function createWindow() {
-  const win = protectWindow(new BrowserWindow({ width: 1180, height: 760, minWidth: 760, minHeight: 540, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'tomizecorp-logo.png'), titleBarStyle: 'hiddenInset', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, spellcheck:false } }));
+  const win = protectWindow(new BrowserWindow({ width: 1180, height: 760, minWidth: 760, minHeight: 540, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'tomizecorp-logo.png'), titleBarStyle:'hidden',titleBarOverlay:{color:'#000000',symbolColor:'#ffffff',height:36}, webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, spellcheck:false } }));
   hubWindow = win; win.on('closed',()=>{if(hubWindow===win)hubWindow=null});
   win.loadFile(path.join(__dirname, 'renderer', 'index.html'));
   setDiscordMode('tomize').catch(()=>{});
@@ -393,7 +393,7 @@ function createWindow() {
 function createEpsilonWindow() {
   const existing = BrowserWindow.getAllWindows().find(w => w.getTitle() === 'EPSILON — TomizeCorp');
   if (existing) { existing.show(); existing.focus(); return existing; }
-  const win = protectWindow(new BrowserWindow({ width: 1020, height: 680, minWidth: 720, minHeight: 520, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'tomizecorp-logo.png'), title: 'EPSILON — TomizeCorp', webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, spellcheck:false } }));
+  const win = protectWindow(new BrowserWindow({ width: 1020, height: 680, minWidth: 720, minHeight: 520, backgroundColor: '#000000', icon: path.join(__dirname, 'renderer', 'assets', 'tomizecorp-logo.png'), title: 'EPSILON — TomizeCorp',titleBarStyle:'hidden',titleBarOverlay:{color:'#000000',symbolColor:'#ffffff',height:36}, webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, spellcheck:false } }));
   win.loadFile(path.join(__dirname, 'renderer', 'epsilon.html'));setDiscordMode('epsilon').catch(()=>{});return win;
 }
 async function authenticateMicrosoft(rememberSession=true) {
