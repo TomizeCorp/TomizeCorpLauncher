@@ -27,10 +27,10 @@ public final class EpsilonBranding {
                 var width = stack.mallocInt(1); var height = stack.mallocInt(1); var channels = stack.mallocInt(1);
                 ByteBuffer pixels = STBImage.stbi_load_from_memory(encoded, width, height, channels, 4);
                 if (pixels == null) return;
-                try (GLFWImage.Buffer icons = GLFWImage.malloc(1, stack)) {
-                    icons.position(0).width(width.get(0)).height(height.get(0)).pixels(pixels);
-                    GLFW.glfwSetWindowIcon(handle, icons);
-                } finally { STBImage.stbi_image_free(pixels); }
+                GLFWImage.Buffer icons = GLFWImage.malloc(1, stack);
+                icons.position(0).width(width.get(0)).height(height.get(0)).pixels(pixels);
+                GLFW.glfwSetWindowIcon(handle, icons);
+                STBImage.stbi_image_free(pixels);
             } finally { MemoryUtil.memFree(encoded); }
         } catch (Exception ignored) { }
     }
