@@ -15,7 +15,8 @@ function showUser(name, skin = '') {
   const avatar = document.querySelector('.avatar');
   avatar.textContent = (name || '?')[0].toUpperCase();
   avatar.classList.toggle('has-skin', Boolean(skin));
-  avatar.style.backgroundImage = skin ? `url("${skin}")` : '';
+  if (skin) avatar.style.setProperty('background-image', `url("${skin}")`, 'important');
+  else avatar.style.removeProperty('background-image');
   $('logoutButton').hidden = !name;
 }
 async function refreshHeaderUser(name = '') {
