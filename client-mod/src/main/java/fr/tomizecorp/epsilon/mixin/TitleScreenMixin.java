@@ -1,7 +1,6 @@
 package fr.tomizecorp.epsilon.mixin;
 
 import fr.tomizecorp.epsilon.EpsilonBranding;
-import java.util.Map;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -10,7 +9,6 @@ import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.network.CookieStorage;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.text.Text;
@@ -75,6 +73,6 @@ public abstract class TitleScreenMixin extends Screen {
         MinecraftClient client = MinecraftClient.getInstance();
         ServerAddress address = ServerAddress.parse(EpsilonBranding.SERVER);
         ServerInfo info = new ServerInfo("EPSILON", EpsilonBranding.SERVER, ServerInfo.ServerType.OTHER);
-        ConnectScreen.connect(this, client, address, info, true, new CookieStorage(Map.of(), Map.of(), false));
+        ConnectScreen.connect(this, client, address, info, false, null);
     }
 }
