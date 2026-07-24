@@ -41,6 +41,29 @@ async function prepareLowEndOptions(instancePath,resources) {
   await fs.mkdir(instancePath,{recursive:true});await fs.writeFile(optionsPath,options,'utf8');
 }
 
+async function enableAzertyDefaults(instancePath) {
+  const markerPath=path.join(instancePath,'.tomize-azerty-v1');
+  if(fsSync.existsSync(markerPath))return;
+  const optionsPath=path.join(instancePath,'options.txt');
+  await fs.mkdir(instancePath,{recursive:true});
+  let options=fsSync.existsSync(optionsPath)?await fs.readFile(optionsPath,'utf8'):'';
+  const bindings=[
+    ['key_key.forward','key.keyboard.w','key.keyboard.z'],
+    ['key_key.left','key.keyboard.a','key.keyboard.q'],
+    ['key_key.back','key.keyboard.s','key.keyboard.s'],
+    ['key_key.right','key.keyboard.d','key.keyboard.d'],
+    ['key_key.drop','key.keyboard.q','key.keyboard.a']
+  ];
+  for(const [name,vanilla,azerty] of bindings){
+    const pattern=new RegExp(`^${name.replaceAll('.','\\.')}:([^\\r\\n]+)$`,'m');
+    const match=options.match(pattern);
+    if(!match)options+=`${options&&!options.endsWith(os.EOL)?os.EOL:''}${name}:${azerty}${os.EOL}`;
+    else if(match[1]===vanilla)options=options.replace(pattern,`${name}:${azerty}`);
+  }
+  await fs.writeFile(optionsPath,options,'utf8');
+  await fs.writeFile(markerPath,'AZERTY TomizeCorp v1'+os.EOL,'utf8');
+}
+
 async function enableTomizeResourcePack(instancePath) {
   const optionsPath=path.join(instancePath,'options.txt');
   await fs.mkdir(instancePath,{recursive:true});
@@ -378,6 +401,7 @@ async function installAndLaunch(win, profile) {
   const skinPath=remoteSkin&&fsSync.existsSync(remoteSkin)?remoteSkin:(account?.skinPath&&fsSync.existsSync(account.skinPath)?account.skinPath:'');
   const resources=hardwareProfile();
   await prepareLowEndOptions(settings.instancePath,resources);
+  await enableAzertyDefaults(settings.instancePath);
   await enableTomizeResourcePack(settings.instancePath);
   const jvmArgs=['-XX:+UseG1GC','-XX:MaxGCPauseMillis=100','-XX:+UseStringDeduplication','-XX:+DisableExplicitGC',...(resources.lowEnd?['-XX:G1HeapRegionSize=4M']:[]),...(skinPath?[`-Depsilon.skin=${skinPath}`,`-Depsilon.username=${username}`]:[])];
   const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'TomizeCorp', versionType: 'TomizeCorp', gameName: 'TomizeCorp', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'TomizeCorpLauncher', launcherBrand: 'TomizeCorp', minMemory: resources.minMemory, maxMemory: resources.maxMemory, extraJVMArgs:jvmArgs, extraExecOption: { detached: true } });
