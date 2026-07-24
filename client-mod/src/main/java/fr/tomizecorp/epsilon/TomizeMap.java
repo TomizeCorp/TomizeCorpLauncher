@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.MapColor;
 import net.minecraft.client.MinecraftClient;
@@ -19,8 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
 
 public final class TomizeMap {
-    public static final int MAP_SIZE = 108;
-    public static final int MAP_RADIUS = 27;
+    public static final int MAP_SIZE = 84;
+    public static final int MAP_RADIUS = 21;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Type WAYPOINT_LIST = new TypeToken<ArrayList<Waypoint>>() {}.getType();
     private static final Path FILE = FabricLoader.getInstance().getConfigDir().resolve("tomizecorp-waypoints.json");
@@ -82,28 +83,27 @@ public final class TomizeMap {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null || client.world == null || client.options.hudHidden) return;
         load();
-        int mapX = context.getScaledWindowWidth() - MAP_SIZE - 10;
-        int mapY = 10;
-        context.fill(mapX - 6, mapY - 6, mapX + MAP_SIZE + 6, mapY + MAP_SIZE + 6, 0xEE10140B);
-        context.fill(mapX - 4, mapY - 4, mapX + MAP_SIZE + 4, mapY + MAP_SIZE + 4, 0xFFC5AE7B);
-        context.fill(mapX - 2, mapY - 2, mapX + MAP_SIZE + 2, mapY + MAP_SIZE + 2, 0xFF46572A);
-        context.fill(mapX - 1, mapY - 1, mapX + MAP_SIZE + 1, mapY + MAP_SIZE + 1, 0xFF111411);
-        context.fill(mapX - 5, mapY - 5, mapX + 7, mapY - 2, 0xFF729238);
-        context.fill(mapX + MAP_SIZE - 7, mapY + MAP_SIZE + 2, mapX + MAP_SIZE + 5, mapY + MAP_SIZE + 5, 0xFF729238);
+        int mapX = context.getScaledWindowWidth() - MAP_SIZE - 12;
+        int mapY = 12;
+        int centerX = mapX + MAP_SIZE / 2;
+        int centerY = mapY + MAP_SIZE / 2;
+        fillCircle(context, centerX + 2, centerY + 3, MAP_SIZE / 2 + 5, 0x77000000);
+        fillCircle(context, centerX, centerY, MAP_SIZE / 2 + 4, 0xFF151815);
+        fillCircle(context, centerX, centerY, MAP_SIZE / 2 + 3, 0xFF7D847A);
+        fillCircle(context, centerX, centerY, MAP_SIZE / 2 + 1, 0xFF252B25);
         int playerX = client.player.getBlockX();
         int playerZ = client.player.getBlockZ();
         int cell = 2;
         updateSurface(client, playerX, playerZ);
         for (int dz = -MAP_RADIUS; dz < MAP_RADIUS; dz++) {
             for (int dx = -MAP_RADIUS; dx < MAP_RADIUS; dx++) {
+                if (dx * dx + dz * dz > (MAP_RADIUS - 1) * (MAP_RADIUS - 1)) continue;
                 int color = SURFACE[(dz + MAP_RADIUS) * (MAP_RADIUS * 2) + dx + MAP_RADIUS];
                 int x = mapX + (dx + MAP_RADIUS) * cell;
                 int y = mapY + (dz + MAP_RADIUS) * cell;
                 context.fill(x, y, x + cell, y + cell, color);
             }
         }
-        int centerX = mapX + MAP_SIZE / 2;
-        int centerY = mapY + MAP_SIZE / 2;
         drawPlayerArrow(context, centerX, centerY, client.player.getYaw());
         context.drawCenteredTextWithShadow(client.textRenderer, "N", centerX, mapY + 2, 0xFFFFFFFF);
         context.drawCenteredTextWithShadow(client.textRenderer, "S", centerX, mapY + MAP_SIZE - 10, 0xFFFFFFFF);
@@ -124,8 +124,7 @@ public final class TomizeMap {
 
         String coordinates = "X " + client.player.getBlockX() + "  Y " + client.player.getBlockY() + "  Z " + client.player.getBlockZ();
         int coordinateWidth = client.textRenderer.getWidth(coordinates);
-        context.fill(mapX + MAP_SIZE - coordinateWidth - 8, mapY + MAP_SIZE + 6, mapX + MAP_SIZE + 4, mapY + MAP_SIZE + 20, 0xEE10140B);
-        context.fill(mapX + MAP_SIZE - coordinateWidth - 6, mapY + MAP_SIZE + 7, mapX + MAP_SIZE + 3, mapY + MAP_SIZE + 19, 0xCC46572A);
+        context.fill(mapX + MAP_SIZE - coordinateWidth - 7, mapY + MAP_SIZE + 6, mapX + MAP_SIZE + 3, mapY + MAP_SIZE + 19, 0xCC101410);
         context.drawTextWithShadow(client.textRenderer, coordinates, mapX + MAP_SIZE - coordinateWidth, mapY + MAP_SIZE + 8, 0xFFFFFFFF);
 
         List<Waypoint> nearest = WAYPOINTS.stream().filter(point -> currentDimension.equals(point.dimension))
@@ -138,7 +137,8 @@ public final class TomizeMap {
             context.drawTextWithShadow(client.textRenderer, label, mapX + MAP_SIZE - width, lineY, 0xFFFF7BE1);
             lineY += 12;
         }
-        context.drawTextWithShadow(client.textRenderer, "B : GÉRER LES PINGS", mapX, mapY + MAP_SIZE - 11, 0xFFFFFFFF);
+        String key = TomizeKeyBindings.WAYPOINTS.getBoundKeyLocalizedText().getString();
+        context.drawTextWithShadow(client.textRenderer, key + " : PINGS", mapX + 3, mapY + MAP_SIZE - 11, 0xFFE8ECE8);
     }
 
     private static void updateSurface(MinecraftClient client, int playerX, int playerZ) {
@@ -199,6 +199,13 @@ public final class TomizeMap {
         context.fill(x + points[4], y + points[5], x + points[4] + 2, y + points[5] + 2, 0xFFFFFFFF);
     }
 
+    private static void fillCircle(DrawContext context, int centerX, int centerY, int radius, int color) {
+        for (int y = -radius; y <= radius; y++) {
+            int halfWidth = (int) Math.sqrt(radius * radius - y * y);
+            context.fill(centerX - halfWidth, centerY + y, centerX + halfWidth + 1, centerY + y + 1, color);
+        }
+    }
+
     private static double distance(MinecraftClient client, Waypoint point) {
         double dx = client.player.getX() - point.x, dy = client.player.getY() - point.y, dz = client.player.getZ() - point.z;
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
@@ -210,7 +217,13 @@ public final class TomizeMap {
         if (!Files.isRegularFile(FILE)) return;
         try (Reader reader = Files.newBufferedReader(FILE)) {
             List<Waypoint> saved = GSON.fromJson(reader, WAYPOINT_LIST);
-            if (saved != null) WAYPOINTS.addAll(saved.stream().limit(50).toList());
+            if (saved != null) {
+                saved.stream().filter(Objects::nonNull).limit(50).forEach(point -> {
+                    point.name = cleanName(point.name, "Ping");
+                    if (point.dimension == null) point.dimension = "";
+                    WAYPOINTS.add(point);
+                });
+            }
         } catch (Exception ignored) { }
     }
 

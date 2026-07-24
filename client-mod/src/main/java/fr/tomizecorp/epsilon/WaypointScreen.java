@@ -11,6 +11,7 @@ public final class WaypointScreen extends Screen {
     private final int page;
     private int selected = -1;
     private TextFieldWidget nameField;
+    private boolean pendingRefresh;
 
     public WaypointScreen() { this(0); }
     private WaypointScreen(int page) { super(Text.literal("Pings TomizeCorp")); this.page = Math.max(0, page); }
@@ -33,7 +34,16 @@ public final class WaypointScreen extends Screen {
         }
         int actionsY = Math.min(height - 86, 92 + visible * 23);
         addDrawableChild(ButtonWidget.builder(Text.literal("AJOUTER ICI"), button -> {
-            TomizeMap.addCurrent(MinecraftClient.getInstance(), nameField.getText()); refresh();
+            MinecraftClient client = MinecraftClient.getInstance();
+            String name = nameField.getText();
+            try {
+                TomizeMap.addCurrent(client, name);
+                pendingRefresh = true;
+            } catch (RuntimeException error) {
+                if (client.player != null) {
+                    client.player.sendMessage(Text.literal("Impossible d'ajouter ce ping."), false);
+                }
+            }
         }).dimensions(center - 150, actionsY, 96, 20).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("RENOMMER"), button -> {
             TomizeMap.rename(selected, nameField.getText()); refresh();
@@ -60,6 +70,15 @@ public final class WaypointScreen extends Screen {
     private void refresh() {
         int lastPage = Math.max(0, (TomizeMap.waypoints().size() - 1) / 8);
         MinecraftClient.getInstance().setScreen(new WaypointScreen(Math.min(page, lastPage)));
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (pendingRefresh) {
+            pendingRefresh = false;
+            refresh();
+        }
     }
 
     @Override

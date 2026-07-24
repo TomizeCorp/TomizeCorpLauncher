@@ -44,14 +44,14 @@ public abstract class InGameHudMixin {
 
         int center = context.getScaledWindowWidth() / 2;
         int bottom = context.getScaledWindowHeight();
-        int width = 88;
+        int width = 94;
         int statusY = bottom - 42;
         int health = Math.max(0, Math.min(100,
                 Math.round(client.player.getHealth() / client.player.getMaxHealth() * 100.0F)));
         int food = Math.max(0, Math.min(100, client.player.getHungerManager().getFoodLevel() * 5));
         int armor = Math.max(0, Math.min(100, client.player.getArmor() * 5));
 
-        tomize$bar(context, client, center - 91, statusY, width, health, 0xFF9E2925, 0xFFD05A47, "PV");
+        tomize$bar(context, client, center - 97, statusY, width, health, 0xFF9E2925, 0xFFD05A47, "PV");
         tomize$bar(context, client, center + 3, statusY, width, food, 0xFF9B651D, 0xFFD69C3D, "FAIM");
         if (armor > 0) {
             tomize$bar(context, client, center + 3, statusY - 12, width, armor, 0xFF496B7C, 0xFF88AEBB, "ARMURE");
@@ -61,7 +61,7 @@ public abstract class InGameHudMixin {
         if (tracked != null) {
             int trackedHealth = Math.max(0, Math.min(100,
                     Math.round(tracked.getHealth() / tracked.getMaxHealth() * 100.0F)));
-            tomize$playerBar(context, client, center - 91, bottom - 32, 182, trackedHealth, tracked);
+            tomize$playerBar(context, client, center - 97, bottom - 32, 194, trackedHealth, tracked);
         }
     }
 
@@ -86,6 +86,7 @@ public abstract class InGameHudMixin {
         context.fill(x + width + 1, y + 1, x + width + 3, y + 7, 0xFF394B25);
         context.fill(x + width - 1, y + 5, x + width + 1, y + 8, 0xFF66763A);
         String text = label + " " + value;
+        if (client.textRenderer.getWidth(text) > width - 8) text = value + "%";
         int textX = x + (width - client.textRenderer.getWidth(text)) / 2;
         context.drawTextWithShadow(client.textRenderer, text, textX, y - 1, 0xFFF2E8D2);
     }
