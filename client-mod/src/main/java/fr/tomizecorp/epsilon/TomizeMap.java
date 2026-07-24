@@ -9,7 +9,6 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import net.fabricmc.loader.api.FabricLoader;
@@ -135,10 +134,10 @@ public final class TomizeMap {
             }
         }
         drawPlayerArrow(context, centerX, centerY, client.player.getYaw());
-        context.drawCenteredTextWithShadow(client.textRenderer, "N", centerX, mapY + 2, 0xFFFFFFFF);
-        context.drawCenteredTextWithShadow(client.textRenderer, "S", centerX, mapY + MAP_SIZE - 10, 0xFFFFFFFF);
-        context.drawTextWithShadow(client.textRenderer, "O", mapX + 3, centerY - 4, 0xFFFFFFFF);
-        context.drawTextWithShadow(client.textRenderer, "E", mapX + MAP_SIZE - 9, centerY - 4, 0xFFFFFFFF);
+        context.drawCenteredTextWithShadow(client.textRenderer, "N", centerX, mapY - 3, 0xFFFFFFFF);
+        context.drawCenteredTextWithShadow(client.textRenderer, "S", centerX, mapY + MAP_SIZE - 6, 0xFFFFFFFF);
+        context.drawTextWithShadow(client.textRenderer, "O", mapX - 2, centerY - 4, 0xFFFFFFFF);
+        context.drawTextWithShadow(client.textRenderer, "E", mapX + MAP_SIZE - 5, centerY - 4, 0xFFFFFFFF);
 
         String currentDimension = dimension(client);
         for (Waypoint waypoint : WAYPOINTS) {
@@ -152,23 +151,20 @@ public final class TomizeMap {
             context.fill(x - 1, y - 1, x + 2, y + 2, waypoint.color);
         }
 
-        String coordinates = "X " + client.player.getBlockX() + "  Y " + client.player.getBlockY() + "  Z " + client.player.getBlockZ();
+        String coordinates = client.player.getBlockX() + ", " + client.player.getBlockY() + ", " + client.player.getBlockZ();
         int coordinateWidth = client.textRenderer.getWidth(coordinates);
-        context.fill(mapX + MAP_SIZE - coordinateWidth - 7, mapY + MAP_SIZE + 6, mapX + MAP_SIZE + 3, mapY + MAP_SIZE + 19, 0xCC101410);
-        context.drawTextWithShadow(client.textRenderer, coordinates, mapX + MAP_SIZE - coordinateWidth, mapY + MAP_SIZE + 8, 0xFFFFFFFF);
-
-        List<Waypoint> nearest = WAYPOINTS.stream().filter(point -> currentDimension.equals(point.dimension))
-                .sorted(Comparator.comparingDouble(point -> distance(client, point))).limit(4).toList();
-        int lineY = mapY + MAP_SIZE + 23;
-        for (Waypoint waypoint : nearest) {
-            String label = "◆ " + waypoint.name + "  " + Math.round(distance(client, waypoint)) + " m";
-            int width = client.textRenderer.getWidth(label);
-            context.fill(mapX + MAP_SIZE - width - 6, lineY - 2, mapX + MAP_SIZE + 3, lineY + 10, 0xAA050505);
-            context.drawTextWithShadow(client.textRenderer, label, mapX + MAP_SIZE - width, lineY, waypoint.color);
-            lineY += 12;
-        }
+        int infoCenter = mapX + MAP_SIZE / 2;
+        context.fill(infoCenter - coordinateWidth / 2 - 4, mapY + MAP_SIZE + 5,
+                infoCenter + coordinateWidth / 2 + 4, mapY + MAP_SIZE + 17, 0xAA000000);
+        context.drawCenteredTextWithShadow(client.textRenderer, coordinates, infoCenter, mapY + MAP_SIZE + 7, 0xFFFFFFFF);
+        String biome = client.world.getBiome(client.player.getBlockPos()).getIdAsString()
+                .replace("minecraft:", "").replace('_', ' ');
+        int blockLight = client.world.getLightLevel(LightType.BLOCK, client.player.getBlockPos());
+        context.drawCenteredTextWithShadow(client.textRenderer, biome + "  BL: " + blockLight,
+                infoCenter, mapY + MAP_SIZE + 19, 0xFFD8D8D8);
         String key = TomizeKeyBindings.WAYPOINTS.getBoundKeyLocalizedText().getString();
-        context.drawTextWithShadow(client.textRenderer, key + " : PINGS", mapX + 3, mapY + MAP_SIZE - 11, 0xFFE8ECE8);
+        context.drawCenteredTextWithShadow(client.textRenderer, key + " : PINGS",
+                centerX, mapY + MAP_SIZE - 14, 0xFFE8ECE8);
     }
 
     private static void updateSurface(MinecraftClient client, int playerX, int playerZ) {
@@ -233,8 +229,8 @@ public final class TomizeMap {
             { -3, -3, 0, 2, 2, 0 }
         };
         int[] points = offsets[direction];
-        context.fill(x - 2, y - 2, x + 3, y + 3, 0xEE101010);
-        context.fill(x + points[0] - 1, y + points[1] - 1, x + points[0] + 2, y + points[1] + 2, 0xFFFFFFFF);
+        context.fill(x - 2, y - 2, x + 3, y + 3, 0xDD101010);
+        context.fill(x + points[0] - 1, y + points[1] - 1, x + points[0] + 2, y + points[1] + 2, 0xFFFF3030);
         context.fill(x + points[2], y + points[3], x + points[2] + 2, y + points[3] + 2, 0xFFFFFFFF);
         context.fill(x + points[4], y + points[5], x + points[4] + 2, y + points[5] + 2, 0xFFFFFFFF);
     }
@@ -244,11 +240,6 @@ public final class TomizeMap {
             int halfWidth = (int) Math.sqrt(radius * radius - y * y);
             context.fill(centerX - halfWidth, centerY + y, centerX + halfWidth + 1, centerY + y + 1, color);
         }
-    }
-
-    private static double distance(MinecraftClient client, Waypoint point) {
-        double dx = client.player.getX() - point.x, dy = client.player.getY() - point.y, dz = client.player.getZ() - point.z;
-        return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     private static void load() {
