@@ -44,17 +44,17 @@ public abstract class InGameHudMixin {
 
         int center = context.getScaledWindowWidth() / 2;
         int bottom = context.getScaledWindowHeight();
-        int width = 82;
-        int statusY = bottom - 40;
+        int width = 88;
+        int statusY = bottom - 42;
         int health = Math.max(0, Math.min(100,
                 Math.round(client.player.getHealth() / client.player.getMaxHealth() * 100.0F)));
         int food = Math.max(0, Math.min(100, client.player.getHungerManager().getFoodLevel() * 5));
         int armor = Math.max(0, Math.min(100, client.player.getArmor() * 5));
 
-        tomize$bar(context, client, center - 91, statusY, width, health, 0xFFE64141, "PV");
-        tomize$bar(context, client, center + 9, statusY, width, food, 0xFFE5A93A, "FAIM");
+        tomize$bar(context, client, center - 91, statusY, width, health, 0xFFE64040, "PV");
+        tomize$bar(context, client, center + 3, statusY, width, food, 0xFFE6A833, "FAIM");
         if (armor > 0) {
-            tomize$bar(context, client, center + 9, statusY - 11, width, armor, 0xFF73A9E8, "ARMURE");
+            tomize$bar(context, client, center + 3, statusY - 12, width, armor, 0xFF63A9E8, "ARMURE");
         }
 
         PlayerEntity tracked = tomize$nearestVisiblePlayer(client);
@@ -68,12 +68,14 @@ public abstract class InGameHudMixin {
     private void tomize$bar(
             DrawContext context, MinecraftClient client, int x, int y, int width,
             int value, int color, String label) {
-        context.fill(x, y, x + width, y + 8, 0xEE080A09);
-        context.fill(x + 1, y + 1, x + width - 1, y + 7, 0xFF252A27);
+        context.fill(x - 2, y - 2, x + width + 2, y + 10, 0xEE11150B);
+        context.fill(x - 1, y - 1, x + width + 1, y + 9, 0xFFC5AE7B);
+        context.fill(x, y, x + width, y + 8, 0xFF2B251D);
+        context.fill(x + 1, y + 1, x + width - 1, y + 7, 0xFF40382B);
         int progress = Math.round((width - 2) * value / 100.0F);
         context.fill(x + 1, y + 1, x + 1 + progress, y + 7, color);
-        context.fill(x, y, x + width, y + 1, 0xFFB99A5C);
-        String text = label + " " + value + "%";
+        context.fill(x + 1, y + 1, x + width - 1, y + 2, 0x553DFF54);
+        String text = label + " " + value;
         int textX = x + (width - client.textRenderer.getWidth(text)) / 2;
         context.drawTextWithShadow(client.textRenderer, text, textX, y - 1, 0xFFFFFFFF);
     }
@@ -81,8 +83,9 @@ public abstract class InGameHudMixin {
     private void tomize$playerBar(
             DrawContext context, MinecraftClient client, int x, int y, int width,
             int value, PlayerEntity player) {
-        context.fill(x, y, x + width, y + 5, 0xFF080A09);
-        context.fill(x + 1, y + 1, x + width - 1, y + 4, 0xFF252A27);
+        context.fill(x - 1, y - 1, x + width + 1, y + 6, 0xFFC5AE7B);
+        context.fill(x, y, x + width, y + 5, 0xFF29231B);
+        context.fill(x + 1, y + 1, x + width - 1, y + 4, 0xFF40382B);
         int progress = Math.round((width - 2) * value / 100.0F);
         context.fill(x + 1, y + 1, x + 1 + progress, y + 4, 0xFFE64141);
         String label = player.getName().getString() + "  " + value + "%";

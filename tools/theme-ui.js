@@ -1,4 +1,5 @@
 const fs = require('node:fs/promises');
+const fsSync = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const sharp = require('sharp');
@@ -19,6 +20,12 @@ async function walk(directory) {
 }
 
 function pristine(file) {
+  if (process.argv.includes('--from-vanilla')) {
+    const minecraftAssets = path.join(pack, 'assets/minecraft');
+    const relative = path.relative(minecraftAssets, file);
+    const vanilla = path.resolve('.tmp-minecraft-client/extracted/assets/minecraft', relative);
+    if (fsSync.existsSync(vanilla) && fsSync.statSync(vanilla).isFile()) return fsSync.readFileSync(vanilla);
+  }
   if (!process.argv.includes('--from-git')) return null;
   const relative = path.relative(process.cwd(), file).replaceAll('\\', '/');
   const refArgument = process.argv.find(argument => argument.startsWith('--git-ref='));
@@ -48,16 +55,16 @@ async function theme(file, medieval) {
   const themedTop = Math.max(0, -(trimInfo.trimOffsetTop || 0));
   const texture = await sharp(medieval)
     .resize(themedWidth, themedHeight, { fit: 'fill' })
-    .modulate({ brightness: 0.52, saturation: 0.82 })
+    .modulate({ brightness: 0.78, saturation: 1.05 })
     .png()
     .toBuffer();
   const output = await sharp(input)
     .ensureAlpha()
     .composite([
-      { input: texture, blend: 'screen', left: themedLeft, top: themedTop },
+      { input: texture, blend: 'soft-light', left: themedLeft, top: themedTop },
       { input, blend: 'dest-in' }
     ])
-    .modulate({ brightness: 0.92, saturation: 1.25, hue: 18 })
+    .modulate({ brightness: 1.02, saturation: 1.18, hue: 6 })
     .png()
     .toBuffer();
   await fs.writeFile(file, output);
@@ -66,8 +73,7 @@ async function theme(file, medieval) {
 (async () => {
   const medieval = await fs.readFile(source);
   const files = (await Promise.all(roots.map(walk))).flat()
-    .filter(file => !file.endsWith(path.join('title', 'edition.png')))
-    .filter(file => !file.endsWith(path.join('container', 'gamemode_switcher.png')));
+    .filter(file => !file.endsWith(path.join('title', 'edition.png')));
   for (const file of files) await theme(file, medieval);
   console.log(`${files.length} textures d'interface médiévale/nature générées.`);
 })().catch(error => {

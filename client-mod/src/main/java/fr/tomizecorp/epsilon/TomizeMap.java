@@ -84,9 +84,12 @@ public final class TomizeMap {
         load();
         int mapX = context.getScaledWindowWidth() - MAP_SIZE - 10;
         int mapY = 10;
-        context.fill(mapX - 5, mapY - 5, mapX + MAP_SIZE + 5, mapY + MAP_SIZE + 5, 0xEE050605);
-        context.fill(mapX - 3, mapY - 3, mapX + MAP_SIZE + 3, mapY + MAP_SIZE + 3, 0xFF8B7447);
+        context.fill(mapX - 6, mapY - 6, mapX + MAP_SIZE + 6, mapY + MAP_SIZE + 6, 0xEE10140B);
+        context.fill(mapX - 4, mapY - 4, mapX + MAP_SIZE + 4, mapY + MAP_SIZE + 4, 0xFFC5AE7B);
+        context.fill(mapX - 2, mapY - 2, mapX + MAP_SIZE + 2, mapY + MAP_SIZE + 2, 0xFF46572A);
         context.fill(mapX - 1, mapY - 1, mapX + MAP_SIZE + 1, mapY + MAP_SIZE + 1, 0xFF111411);
+        context.fill(mapX - 5, mapY - 5, mapX + 7, mapY - 2, 0xFF729238);
+        context.fill(mapX + MAP_SIZE - 7, mapY + MAP_SIZE + 2, mapX + MAP_SIZE + 5, mapY + MAP_SIZE + 5, 0xFF729238);
         int playerX = client.player.getBlockX();
         int playerZ = client.player.getBlockZ();
         int cell = 2;
@@ -121,7 +124,8 @@ public final class TomizeMap {
 
         String coordinates = "X " + client.player.getBlockX() + "  Y " + client.player.getBlockY() + "  Z " + client.player.getBlockZ();
         int coordinateWidth = client.textRenderer.getWidth(coordinates);
-        context.fill(mapX + MAP_SIZE - coordinateWidth - 6, mapY + MAP_SIZE + 6, mapX + MAP_SIZE + 3, mapY + MAP_SIZE + 19, 0xCC050505);
+        context.fill(mapX + MAP_SIZE - coordinateWidth - 8, mapY + MAP_SIZE + 6, mapX + MAP_SIZE + 4, mapY + MAP_SIZE + 20, 0xEE10140B);
+        context.fill(mapX + MAP_SIZE - coordinateWidth - 6, mapY + MAP_SIZE + 7, mapX + MAP_SIZE + 3, mapY + MAP_SIZE + 19, 0xCC46572A);
         context.drawTextWithShadow(client.textRenderer, coordinates, mapX + MAP_SIZE - coordinateWidth, mapY + MAP_SIZE + 8, 0xFFFFFFFF);
 
         List<Waypoint> nearest = WAYPOINTS.stream().filter(point -> currentDimension.equals(point.dimension))
