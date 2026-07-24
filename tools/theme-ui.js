@@ -79,8 +79,11 @@ async function theme(file, medieval) {
 
 (async () => {
   const medieval = await fs.readFile(source);
+  const onlyArgument = process.argv.find(argument => argument.startsWith('--only='));
+  const only = onlyArgument ? onlyArgument.slice('--only='.length).replaceAll('/', path.sep) : '';
   const files = (await Promise.all(roots.map(walk))).flat()
-    .filter(file => !file.endsWith(path.join('title', 'edition.png')));
+    .filter(file => !file.endsWith(path.join('title', 'edition.png')))
+    .filter(file => !only || file.includes(only));
   for (const file of files) await theme(file, medieval);
   console.log(`${files.length} textures d'interface médiévale/nature générées.`);
 })().catch(error => {

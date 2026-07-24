@@ -61,11 +61,13 @@ jobs:
           name: epsilon-client-mod
           path: server-files/mods
 
-      - name: Ajouter Iris et Sodium
+      - name: Ajouter Iris, Sodium et Xaero's Minimap
         shell: pwsh
         run: |
           Invoke-WebRequest 'https://cdn.modrinth.com/data/YL57xq9U/versions/fDpuVzVr/iris-fabric-1.10.7%2Bmc1.21.11.jar' -OutFile 'server-files/mods/Iris-1.10.7.jar'
           Invoke-WebRequest 'https://cdn.modrinth.com/data/AANobbMI/versions/UddlN6L4/sodium-fabric-0.8.7%2Bmc1.21.11.jar' -OutFile 'server-files/mods/Sodium-0.8.7.jar'
+          Invoke-WebRequest 'https://cdn.modrinth.com/data/P7dR8mSH/versions/zGF3drOQ/fabric-api-0.141.5%2B1.21.11.jar' -OutFile 'server-files/mods/Fabric-API-0.141.5.jar'
+          Invoke-WebRequest 'https://cdn.modrinth.com/data/1bokaNcj/versions/8MdqDp18/xaerominimap-fabric-1.21.11-26.4.2.jar' -OutFile 'server-files/mods/Xaeros-Minimap-26.4.2.jar'
 
       - name: Générer le manifeste EPSILON
         run: npm run manifest
@@ -105,10 +107,12 @@ jobs:
           name: epsilon-client-mod
           path: server-files/mods
 
-      - name: Ajouter Iris et Sodium
+      - name: Ajouter Iris, Sodium et Xaero's Minimap
         run: |
           curl --fail --location 'https://cdn.modrinth.com/data/YL57xq9U/versions/fDpuVzVr/iris-fabric-1.10.7%2Bmc1.21.11.jar' --output 'server-files/mods/Iris-1.10.7.jar'
           curl --fail --location 'https://cdn.modrinth.com/data/AANobbMI/versions/UddlN6L4/sodium-fabric-0.8.7%2Bmc1.21.11.jar' --output 'server-files/mods/Sodium-0.8.7.jar'
+          curl --fail --location 'https://cdn.modrinth.com/data/P7dR8mSH/versions/zGF3drOQ/fabric-api-0.141.5%2B1.21.11.jar' --output 'server-files/mods/Fabric-API-0.141.5.jar'
+          curl --fail --location 'https://cdn.modrinth.com/data/1bokaNcj/versions/8MdqDp18/xaerominimap-fabric-1.21.11-26.4.2.jar' --output 'server-files/mods/Xaeros-Minimap-26.4.2.jar'
 
       - name: Générer le manifeste EPSILON
         run: npm run manifest

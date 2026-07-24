@@ -1,0 +1,4 @@
+Xaero's Minimap par Xaero96
+Page officielle : https://modrinth.com/mod/xaeros-minimap
+
+Le radar d'entités et les cartes de grottes sont désactivés par défaut dans TomizeCorp.

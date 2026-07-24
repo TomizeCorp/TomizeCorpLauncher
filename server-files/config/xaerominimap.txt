@@ -1,0 +1,3 @@
+entityRadar:false
+caveMaps:0
+legibleCaveMaps:false

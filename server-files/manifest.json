@@ -1,5 +1,5 @@
 {
-  "version": "2026-07-24T09:58:04.074Z",
+  "version": "2026-07-24T11:16:02.964Z",
   "files": [
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/anvil.png",
@@ -156,6 +156,12 @@
       "sha256": "bf1db60000a9e42e3b923fd80abc0f7d337868c56dbed3f534d4106a004ee8fd",
       "size": 94676,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/villager.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/recipe_book.png",
+      "sha256": "1715e2b2ed2970b72c356c10df027838a07ed6f3d8576ca8d93bac0e00ef3146",
+      "size": 37675,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/recipe_book.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/anvil/error.png",
@@ -1514,6 +1520,186 @@
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/locator_bar_dot/default_3.png"
     },
     {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/button.png",
+      "sha256": "481214402be08db9b7d1258e62e7b036c2f8a3b8cf5b8e85ed41eb61ade6793a",
+      "size": 874,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/button.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/button_highlighted.png",
+      "sha256": "dbf0ca7302352242f3c983e6697e6dad067228c83f067ad1709cef94b1f6d4a0",
+      "size": 931,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/button_highlighted.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/crafting_overlay.png",
+      "sha256": "6a8b03ca1cf57f787566afe69c22aa598c77d6b8e4443422e46c0209485e6fd0",
+      "size": 1183,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/crafting_overlay.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/crafting_overlay_disabled.png",
+      "sha256": "c93d38c81c58479baa735e8bb805c66f0bedc7171a82d5643144cd8077b433d2",
+      "size": 1176,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/crafting_overlay_disabled.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/crafting_overlay_disabled_highlighted.png",
+      "sha256": "5f35b3c8de36b28003e5d01e60a0d7c39ef0f7f4b1d13ec7b610d6a5f3cee5e5",
+      "size": 1268,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/crafting_overlay_disabled_highlighted.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/crafting_overlay_highlighted.png",
+      "sha256": "338ca641a5a0e8e5d1301561e4086536cb4c56b3cc4803d69a5cf208e1e037ab",
+      "size": 1289,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/crafting_overlay_highlighted.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/filter_disabled.png",
+      "sha256": "094879f0d7ece7713017df0b6ae950f6b2fe5c13b5f50f028f8b5528113a7f6e",
+      "size": 1021,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/filter_disabled.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/filter_disabled_highlighted.png",
+      "sha256": "ff71c2e3c38d9fc1e94a30c500197c045dde899c9a7a3f48e1395ab2d8d0c57f",
+      "size": 1134,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/filter_disabled_highlighted.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/filter_enabled.png",
+      "sha256": "f1db7618e323865bfe8f181f9cf9527ac243651aaa24faee7d13ac7057d3a0be",
+      "size": 1000,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/filter_enabled.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/filter_enabled_highlighted.png",
+      "sha256": "1ef24a13ad9147d17f2196c842e691d7b6ec2147368347cf059700ca33ff60b2",
+      "size": 1129,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/filter_enabled_highlighted.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_filter_disabled.png",
+      "sha256": "95dd543308c28bca20729cb08cfb9f0f194bb4a8dbc2c1e1a9bdbd45dec070c9",
+      "size": 1045,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_filter_disabled.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_filter_disabled_highlighted.png",
+      "sha256": "5b4b30820eeb88d7de4657c9eac734f8a4c8cb15c44ed71473553eef11c2a395",
+      "size": 1159,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_filter_disabled_highlighted.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_filter_enabled.png",
+      "sha256": "7f5fb9fa37d5ef04131770f457be0c0af4ea042d99be86c2008971c81529677e",
+      "size": 1039,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_filter_enabled.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_filter_enabled_highlighted.png",
+      "sha256": "d5f71ac10e4dd757d9feccbc8b878af775e2f9f0597889ea1646e6074eb9f1f9",
+      "size": 1155,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_filter_enabled_highlighted.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_overlay.png",
+      "sha256": "79312268a1266b5aa7d1d0c3f8c69359c8a6fb0c362ea88bf591dcd8ec521011",
+      "size": 1165,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_overlay.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_overlay_disabled.png",
+      "sha256": "b90351bdd1106f720ae5cf642a7726a0959cd431d06ea2facd066d21134e5de2",
+      "size": 1148,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_overlay_disabled.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_overlay_disabled_highlighted.png",
+      "sha256": "a60d67cdc540db3317fbbf18b29240e8c362ab6fa026f055704ae994ccea4bef",
+      "size": 1223,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_overlay_disabled_highlighted.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_overlay_highlighted.png",
+      "sha256": "596a7b3395ee706ef334ac5b167e491f3ccd9587dd92b7f8ebd2145e7a2be625",
+      "size": 1256,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/furnace_overlay_highlighted.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/overlay_recipe.png",
+      "sha256": "60a17681bde4ffbb631649298ccb7afed6ddf93bce527bcf3529c8dc71cbf6ca",
+      "size": 2089,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/overlay_recipe.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/overlay_recipe.png.mcmeta",
+      "sha256": "1d490688369c1bd7b79fcd6b38e9f8af3ac5d88abe226624c0e27569030c52f5",
+      "size": 163,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/overlay_recipe.png.mcmeta"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/page_backward.png",
+      "sha256": "44e2ca8ac9cb3869b8ca14ae142986949fa05cf309c9dca8bbbd21e77e3ef887",
+      "size": 367,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/page_backward.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/page_backward_highlighted.png",
+      "sha256": "4f5b9a2f9d5844554bf51cf0b65efb7d5d983f94126c2752048979ded2705dab",
+      "size": 404,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/page_backward_highlighted.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/page_forward.png",
+      "sha256": "d6ee1cf01c15c1ae1404f760487a8b3db115f0f4d6f6d79614f65b5883b1d794",
+      "size": 360,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/page_forward.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/page_forward_highlighted.png",
+      "sha256": "d2739495f4eae1da4117c715bd4010baae76b2280f2b0f270b9e61786c6a9de2",
+      "size": 424,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/page_forward_highlighted.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/slot_craftable.png",
+      "sha256": "01573507159be8bab168620a3363ab513959a498cff078ef289cccaadc89a4d4",
+      "size": 1403,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/slot_craftable.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/slot_many_craftable.png",
+      "sha256": "8ed110ce90ec7708b68086bea19cc19b3c9b851f02e9c705edacc3c3978e04df",
+      "size": 1403,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/slot_many_craftable.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/slot_many_uncraftable.png",
+      "sha256": "9663bcf4cab4d7991b635d65583101c925cc0cb9d0ac74312a68f8d0003df4a0",
+      "size": 1267,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/slot_many_uncraftable.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/slot_uncraftable.png",
+      "sha256": "9663bcf4cab4d7991b635d65583101c925cc0cb9d0ac74312a68f8d0003df4a0",
+      "size": 1267,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/slot_uncraftable.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/tab.png",
+      "sha256": "a440e4e0854bde564d57b7e85f883c8e55f452047e47cd9da7aecfbe6bc7ac77",
+      "size": 1563,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/tab.png"
+    },
+    {
+      "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/tab_selected.png",
+      "sha256": "d486ef39baaabab88e51e6f43f0db91cd4a803f50a572d9a8f1d447173d9ed00",
+      "size": 1975,
+      "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/recipe_book/tab_selected.png"
+    },
+    {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/button.png",
       "sha256": "80c552b3bd820196fe3d4ac65d30d99d75558c28f388cdce48a77759930ed608",
       "size": 7668,
@@ -1818,6 +2004,18 @@
       "sha256": "edf96c7c7e384245ee3c902aedf418ed0bf55da95f9f284a5297ade093e757bc",
       "size": 38633,
       "url": "../server-files/resourcepacks/TomizeCorpUI/pack.png"
+    },
+    {
+      "path": "config/xaerominimap.txt",
+      "sha256": "222e3b6fdc02c8840d4ec4681373d788445e4e33715da03f323fa5bd96f0345e",
+      "size": 51,
+      "url": "../server-files/config/xaerominimap.txt"
+    },
+    {
+      "path": "config/XAEROS-MINIMAP-CREDIT.txt",
+      "sha256": "501ed2af5aecd2d590e313e5674f65e73552a3b891991e978d77864bd73be19e",
+      "size": 179,
+      "url": "../server-files/config/XAEROS-MINIMAP-CREDIT.txt"
     }
   ]
 }
