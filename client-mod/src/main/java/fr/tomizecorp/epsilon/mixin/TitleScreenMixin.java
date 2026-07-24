@@ -41,14 +41,34 @@ public abstract class TitleScreenMixin extends Screen {
         method = "render",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)I"
+            target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)V"
         ),
         require = 0
     )
     private void epsilon$removeTechnicalVersion(DrawContext context, TextRenderer renderer, String text, int x, int y, int color) {
-        String normalized = text == null ? "" : text.toLowerCase();
-        if (normalized.contains("minecraft 1.21.11") || normalized.contains("fabric") || normalized.contains("version modd")) return;
+        if (epsilon$isTechnicalVersion(text)) return;
         context.drawTextWithShadow(renderer, text, x, y, color);
+    }
+
+    @Redirect(
+        method = "render",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V"
+        ),
+        require = 0
+    )
+    private void epsilon$removeTechnicalVersionText(DrawContext context, TextRenderer renderer, Text text, int x, int y, int color) {
+        if (epsilon$isTechnicalVersion(text == null ? null : text.getString())) return;
+        context.drawTextWithShadow(renderer, text, x, y, color);
+    }
+
+    private boolean epsilon$isTechnicalVersion(String text) {
+        String normalized = text == null ? "" : text.toLowerCase();
+        return normalized.contains("minecraft 1.21.11")
+            || normalized.contains("tomizecorp/fabric")
+            || normalized.contains("fabric")
+            || normalized.contains("version modd");
     }
 
     private void epsilon$connect() {
