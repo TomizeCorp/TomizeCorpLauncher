@@ -19,14 +19,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
 
 public final class TomizeMap {
-    public static final int MAP_SIZE = 96;
-    public static final int MAP_RADIUS = 24;
+    public static final int MAP_SIZE = 108;
+    public static final int MAP_RADIUS = 27;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Type WAYPOINT_LIST = new TypeToken<ArrayList<Waypoint>>() {}.getType();
     private static final Path FILE = FabricLoader.getInstance().getConfigDir().resolve("tomizecorp-waypoints.json");
     private static final List<Waypoint> WAYPOINTS = new ArrayList<>();
     private static boolean loaded;
     private static final int[] SURFACE = new int[MAP_RADIUS * 2 * MAP_RADIUS * 2];
+    private static final int[] HEIGHTS = new int[MAP_RADIUS * 2 * MAP_RADIUS * 2];
     private static int cachedX = Integer.MIN_VALUE;
     private static int cachedZ = Integer.MIN_VALUE;
     private static String cachedDimension = "";
@@ -83,7 +84,9 @@ public final class TomizeMap {
         load();
         int mapX = context.getScaledWindowWidth() - MAP_SIZE - 10;
         int mapY = 10;
-        context.fill(mapX - 3, mapY - 3, mapX + MAP_SIZE + 3, mapY + MAP_SIZE + 3, 0xCC050505);
+        context.fill(mapX - 5, mapY - 5, mapX + MAP_SIZE + 5, mapY + MAP_SIZE + 5, 0xEE050605);
+        context.fill(mapX - 3, mapY - 3, mapX + MAP_SIZE + 3, mapY + MAP_SIZE + 3, 0xFF8B7447);
+        context.fill(mapX - 1, mapY - 1, mapX + MAP_SIZE + 1, mapY + MAP_SIZE + 1, 0xFF111411);
         int playerX = client.player.getBlockX();
         int playerZ = client.player.getBlockZ();
         int cell = 2;
@@ -98,8 +101,11 @@ public final class TomizeMap {
         }
         int centerX = mapX + MAP_SIZE / 2;
         int centerY = mapY + MAP_SIZE / 2;
-        context.fill(centerX - 2, centerY - 2, centerX + 3, centerY + 3, 0xFFFFFFFF);
+        drawPlayerArrow(context, centerX, centerY, client.player.getYaw());
         context.drawCenteredTextWithShadow(client.textRenderer, "N", centerX, mapY + 2, 0xFFFFFFFF);
+        context.drawCenteredTextWithShadow(client.textRenderer, "S", centerX, mapY + MAP_SIZE - 10, 0xFFFFFFFF);
+        context.drawTextWithShadow(client.textRenderer, "O", mapX + 3, centerY - 4, 0xFFFFFFFF);
+        context.drawTextWithShadow(client.textRenderer, "E", mapX + MAP_SIZE - 9, centerY - 4, 0xFFFFFFFF);
 
         String currentDimension = dimension(client);
         for (Waypoint waypoint : WAYPOINTS) {
@@ -109,7 +115,8 @@ public final class TomizeMap {
             if (Math.abs(dx) >= MAP_RADIUS || Math.abs(dz) >= MAP_RADIUS) continue;
             int x = mapX + (dx + MAP_RADIUS) * cell;
             int y = mapY + (dz + MAP_RADIUS) * cell;
-            context.fill(x - 2, y - 2, x + 3, y + 3, 0xFFFF3BD4);
+            context.fill(x - 2, y - 2, x + 3, y + 3, 0xFF111111);
+            context.fill(x - 1, y - 1, x + 2, y + 2, 0xFFFF3BD4);
         }
 
         String coordinates = "X " + client.player.getBlockX() + "  Y " + client.player.getBlockY() + "  Z " + client.player.getBlockZ();
@@ -138,16 +145,54 @@ public final class TomizeMap {
         for (int dz = -MAP_RADIUS; dz < MAP_RADIUS; dz++) {
             for (int dx = -MAP_RADIUS; dx < MAP_RADIUS; dx++) {
                 int color = 0xFF202020;
+                int top = client.world.getBottomY();
                 try {
                     int worldX = playerX + dx, worldZ = playerZ + dz;
-                    int top = client.world.getTopY(Heightmap.Type.WORLD_SURFACE, worldX, worldZ);
+                    top = client.world.getTopY(Heightmap.Type.WORLD_SURFACE, worldX, worldZ);
                     BlockPos pos = new BlockPos(worldX, top - 1, worldZ);
                     MapColor mapColor = client.world.getBlockState(pos).getMapColor(client.world, pos);
                     color = 0xFF000000 | mapColor.color;
                 } catch (RuntimeException ignored) { }
-                SURFACE[(dz + MAP_RADIUS) * (MAP_RADIUS * 2) + dx + MAP_RADIUS] = color;
+                int index = (dz + MAP_RADIUS) * (MAP_RADIUS * 2) + dx + MAP_RADIUS;
+                SURFACE[index] = color;
+                HEIGHTS[index] = top;
             }
         }
+        int diameter = MAP_RADIUS * 2;
+        for (int z = 0; z < diameter; z++) {
+            for (int x = 0; x < diameter; x++) {
+                int index = z * diameter + x;
+                int reference = z > 0 ? HEIGHTS[(z - 1) * diameter + x] : HEIGHTS[index];
+                int amount = Math.max(-28, Math.min(28, (HEIGHTS[index] - reference) * 7));
+                SURFACE[index] = shade(SURFACE[index], amount);
+            }
+        }
+    }
+
+    private static int shade(int color, int amount) {
+        int red = Math.max(0, Math.min(255, ((color >> 16) & 0xFF) + amount));
+        int green = Math.max(0, Math.min(255, ((color >> 8) & 0xFF) + amount));
+        int blue = Math.max(0, Math.min(255, (color & 0xFF) + amount));
+        return 0xFF000000 | red << 16 | green << 8 | blue;
+    }
+
+    private static void drawPlayerArrow(DrawContext context, int x, int y, float yaw) {
+        int direction = Math.floorMod(Math.round(yaw / 45.0F), 8);
+        int[][] offsets = {
+            { 0, -4, -2, 2, 2, 2 },
+            { 3, -3, -2, 0, 0, 2 },
+            { 4, 0, -2, -2, -2, 2 },
+            { 3, 3, 0, -2, -2, 0 },
+            { 0, 4, -2, -2, 2, -2 },
+            { -3, 3, 0, -2, 2, 0 },
+            { -4, 0, 2, -2, 2, 2 },
+            { -3, -3, 0, 2, 2, 0 }
+        };
+        int[] points = offsets[direction];
+        context.fill(x - 2, y - 2, x + 3, y + 3, 0xEE101010);
+        context.fill(x + points[0] - 1, y + points[1] - 1, x + points[0] + 2, y + points[1] + 2, 0xFFFFFFFF);
+        context.fill(x + points[2], y + points[3], x + points[2] + 2, y + points[3] + 2, 0xFFFFFFFF);
+        context.fill(x + points[4], y + points[5], x + points[4] + 2, y + points[5] + 2, 0xFFFFFFFF);
     }
 
     private static double distance(MinecraftClient client, Waypoint point) {
