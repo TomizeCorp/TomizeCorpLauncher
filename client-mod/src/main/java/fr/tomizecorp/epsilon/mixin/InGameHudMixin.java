@@ -51,10 +51,10 @@ public abstract class InGameHudMixin {
         int food = Math.max(0, Math.min(100, client.player.getHungerManager().getFoodLevel() * 5));
         int armor = Math.max(0, Math.min(100, client.player.getArmor() * 5));
 
-        tomize$bar(context, client, center - 91, statusY, width, health, 0xFFE64040, "PV");
-        tomize$bar(context, client, center + 3, statusY, width, food, 0xFFE6A833, "FAIM");
+        tomize$bar(context, client, center - 91, statusY, width, health, 0xFF9E2925, 0xFFD05A47, "PV");
+        tomize$bar(context, client, center + 3, statusY, width, food, 0xFF9B651D, 0xFFD69C3D, "FAIM");
         if (armor > 0) {
-            tomize$bar(context, client, center + 3, statusY - 12, width, armor, 0xFF63A9E8, "ARMURE");
+            tomize$bar(context, client, center + 3, statusY - 12, width, armor, 0xFF496B7C, 0xFF88AEBB, "ARMURE");
         }
 
         PlayerEntity tracked = tomize$nearestVisiblePlayer(client);
@@ -67,30 +67,42 @@ public abstract class InGameHudMixin {
 
     private void tomize$bar(
             DrawContext context, MinecraftClient client, int x, int y, int width,
-            int value, int color, String label) {
-        context.fill(x - 2, y - 2, x + width + 2, y + 10, 0xEE11150B);
-        context.fill(x - 1, y - 1, x + width + 1, y + 9, 0xFFC5AE7B);
-        context.fill(x, y, x + width, y + 8, 0xFF2B251D);
-        context.fill(x + 1, y + 1, x + width - 1, y + 7, 0xFF40382B);
+            int value, int darkColor, int lightColor, String label) {
+        // Ombre, bois sculpté et filet de laiton vieilli.
+        context.fill(x - 3, y - 1, x + width + 3, y + 11, 0x88000000);
+        context.fill(x - 2, y - 2, x + width + 2, y + 10, 0xFF17130F);
+        context.fill(x - 1, y - 1, x + width + 1, y + 9, 0xFF4A3523);
+        context.fill(x, y, x + width, y + 8, 0xFFB49A68);
+        context.fill(x + 1, y + 1, x + width - 1, y + 7, 0xFF29251E);
         int progress = Math.round((width - 2) * value / 100.0F);
-        context.fill(x + 1, y + 1, x + 1 + progress, y + 7, color);
-        context.fill(x + 1, y + 1, x + width - 1, y + 2, 0x553DFF54);
+        context.fill(x + 1, y + 1, x + 1 + progress, y + 7, darkColor);
+        if (progress > 1) {
+            context.fill(x + 2, y + 2, x + 1 + progress, y + 4, lightColor);
+            context.fill(x + 2, y + 5, x + 1 + progress, y + 7, 0x33000000);
+        }
+        // Feuillage discret gravé aux extrémités du cadre.
+        context.fill(x - 3, y + 1, x - 1, y + 7, 0xFF394B25);
+        context.fill(x - 1, y, x + 1, y + 3, 0xFF66763A);
+        context.fill(x + width + 1, y + 1, x + width + 3, y + 7, 0xFF394B25);
+        context.fill(x + width - 1, y + 5, x + width + 1, y + 8, 0xFF66763A);
         String text = label + " " + value;
         int textX = x + (width - client.textRenderer.getWidth(text)) / 2;
-        context.drawTextWithShadow(client.textRenderer, text, textX, y - 1, 0xFFFFFFFF);
+        context.drawTextWithShadow(client.textRenderer, text, textX, y - 1, 0xFFF2E8D2);
     }
 
     private void tomize$playerBar(
             DrawContext context, MinecraftClient client, int x, int y, int width,
             int value, PlayerEntity player) {
-        context.fill(x - 1, y - 1, x + width + 1, y + 6, 0xFFC5AE7B);
-        context.fill(x, y, x + width, y + 5, 0xFF29231B);
-        context.fill(x + 1, y + 1, x + width - 1, y + 4, 0xFF40382B);
+        context.fill(x - 2, y - 2, x + width + 2, y + 7, 0xAA000000);
+        context.fill(x - 1, y - 1, x + width + 1, y + 6, 0xFF4A3523);
+        context.fill(x, y, x + width, y + 5, 0xFFB49A68);
+        context.fill(x + 1, y + 1, x + width - 1, y + 4, 0xFF29251E);
         int progress = Math.round((width - 2) * value / 100.0F);
-        context.fill(x + 1, y + 1, x + 1 + progress, y + 4, 0xFFE64141);
+        context.fill(x + 1, y + 1, x + 1 + progress, y + 4, 0xFF9E2925);
+        if (progress > 1) context.fill(x + 2, y + 1, x + 1 + progress, y + 2, 0xFFD05A47);
         String label = player.getName().getString() + "  " + value + "%";
         int textX = x + (width - client.textRenderer.getWidth(label)) / 2;
-        context.drawTextWithShadow(client.textRenderer, label, textX, y - 9, 0xFFFFFFFF);
+        context.drawTextWithShadow(client.textRenderer, label, textX, y - 9, 0xFFF2E8D2);
     }
 
     private PlayerEntity tomize$nearestVisiblePlayer(MinecraftClient client) {
