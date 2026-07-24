@@ -48,11 +48,11 @@ async function enableAzertyDefaults(instancePath) {
   await fs.mkdir(instancePath,{recursive:true});
   let options=fsSync.existsSync(optionsPath)?await fs.readFile(optionsPath,'utf8'):'';
   const bindings=[
-    ['key_key.forward','key.keyboard.w','key.keyboard.z'],
-    ['key_key.left','key.keyboard.a','key.keyboard.q'],
+    ['key_key.forward','key.keyboard.w','key.keyboard.w'],
+    ['key_key.left','key.keyboard.a','key.keyboard.a'],
     ['key_key.back','key.keyboard.s','key.keyboard.s'],
     ['key_key.right','key.keyboard.d','key.keyboard.d'],
-    ['key_key.drop','key.keyboard.q','key.keyboard.a']
+    ['key_key.drop','key.keyboard.q','key.keyboard.q']
   ];
   for(const [name,vanilla,azerty] of bindings){
     const pattern=new RegExp(`^${name.replaceAll('.','\\.')}:([^\\r\\n]+)$`,'m');
