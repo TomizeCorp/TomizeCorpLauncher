@@ -58,13 +58,20 @@ async function theme(file, medieval) {
     .modulate({ brightness: 0.96, saturation: 1.15 })
     .png()
     .toBuffer();
-  const output = await sharp(input)
-    .ensureAlpha()
+  const output = await sharp({
+    create: {
+      width: metadata.width,
+      height: metadata.height,
+      channels: 4,
+      background: { r: 0, g: 0, b: 0, alpha: 0 }
+    }
+  })
     .composite([
-      { input: texture, blend: 'overlay', left: themedLeft, top: themedTop },
+      { input: texture, blend: 'over', left: themedLeft, top: themedTop },
+      { input, blend: 'multiply' },
       { input, blend: 'dest-in' }
     ])
-    .modulate({ brightness: 1.08, saturation: 1.22, hue: 4 })
+    .modulate({ brightness: 1.12, saturation: 1.2, hue: 4 })
     .png()
     .toBuffer();
   await fs.writeFile(file, output);
