@@ -1,250 +1,250 @@
 {
-  "version": "2026-07-24T09:50:20.516Z",
+  "version": "2026-07-24T09:56:36.775Z",
   "files": [
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/anvil.png",
-      "sha256": "aaaf0ffa2622db103579109354da87659449fd842d856e4861724534e629c7e9",
-      "size": 36226,
+      "sha256": "5bd520332525cfde3d742065176057d748daf142ac007841fb27ad79e81936e8",
+      "size": 50474,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/anvil.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/beacon.png",
-      "sha256": "0bee579527c64dd7406feb94c9ea887fae9481ec0ba4beda7f97887a5dae7416",
-      "size": 58446,
+      "sha256": "7d3646114e2f04b73f28f9f56fdb21bc88dd4a37b911c5215a2a2ad77c55900d",
+      "size": 84405,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/beacon.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/blast_furnace.png",
-      "sha256": "eda06d46eedfc32fdb61f291817c7eadc90bdd091b8d94aa8f8d5118ecf6fdbe",
-      "size": 37580,
+      "sha256": "51fcd66e2050e672cd8d0a215c49540302d29479ded3535431c088a4a44d3a1c",
+      "size": 52615,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/blast_furnace.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/brewing_stand.png",
-      "sha256": "a5cedb1186a92d2f149f32663c66891cc1c6582ce28e35ecccb2b3adf0b83427",
-      "size": 38033,
+      "sha256": "4e7fddf419d36cbf00711dbec1802d5837a3670a8235f844194193510d2bb8e3",
+      "size": 53446,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/brewing_stand.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/cartography_table.png",
-      "sha256": "77bdaddff54ff8799021d8596ea6066be7ec6b6ebada373a163e511718486e09",
-      "size": 37965,
+      "sha256": "09a052f6917a65930a3ecbd3316abdb10e0464c80c0cf42b1cc18cb250cd8c53",
+      "size": 53246,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/cartography_table.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/crafter.png",
-      "sha256": "4a75664074ef55973a86ceca2003966356eb6a1ddc93912e61ddfde9a15b1896",
-      "size": 38333,
+      "sha256": "5b47be10e3014ef0446300efc3de600541b336dd7ee4c86b55ef00d8b1e2beab",
+      "size": 54124,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/crafter.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/crafting_table.png",
-      "sha256": "0be3129a2e3e0fec73e824bd5da56b0d84ce64cdae7d150cd18c0ecb66819eca",
-      "size": 37943,
+      "sha256": "6aa51e3a3f3f94867cb6184d75f5844c26fb9ae1b3496e7ea6ae2700e15b8e57",
+      "size": 53799,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/crafting_table.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/creative_inventory/tab_inventory.png",
-      "sha256": "c3c260424c619c1abd6bcd7cd1da65aade66168b14e0071c433cf5183d495044",
-      "size": 33877,
+      "sha256": "7c6b63654c76057403b5a58187c5b091d276a7a093f3c42608bbe586425b3fa2",
+      "size": 47134,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/creative_inventory/tab_inventory.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/creative_inventory/tab_items.png",
-      "sha256": "8a8d143553b14124ed4f0dca6d9b27f91b8270e6d049f0b241ac14832972f5c0",
-      "size": 35384,
+      "sha256": "e8062e3c0391685776be7845ecea5eab738fef4da2dabcce938741bba905e228",
+      "size": 50593,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/creative_inventory/tab_items.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/creative_inventory/tab_item_search.png",
-      "sha256": "ceed2ff271cdb2f9d5a3521662a4633f29751fa7cfc4ad620ea51910f81bfdd4",
-      "size": 35882,
+      "sha256": "45e37bd6a0da17553791b33fa553a8b3da99c2d06c1a33764640bd0ed8403a12",
+      "size": 51438,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/creative_inventory/tab_item_search.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/dispenser.png",
-      "sha256": "8bd6ff27b7a27b7fcbb1c0557b76628387a68bf14c87e9c05a62a16d23c6172f",
-      "size": 37478,
+      "sha256": "f3ec19f372ab8da177c1bcc6b5bd4141c0d70c6b860af67b00d4158eeecb92d7",
+      "size": 53163,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/dispenser.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/enchanting_table.png",
-      "sha256": "b5f88bea698adaedf565a8636d9c7aef4e20e59da60d2547898903d20b49aa63",
-      "size": 39717,
+      "sha256": "e56eee72911df00a7625235aea1a10b68ad33ec4a7e90d119d78554d5e229ef0",
+      "size": 57769,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/enchanting_table.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/furnace.png",
-      "sha256": "eda06d46eedfc32fdb61f291817c7eadc90bdd091b8d94aa8f8d5118ecf6fdbe",
-      "size": 37580,
+      "sha256": "51fcd66e2050e672cd8d0a215c49540302d29479ded3535431c088a4a44d3a1c",
+      "size": 52615,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/furnace.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/gamemode_switcher.png",
-      "sha256": "d38bae1df567a19e336d2509c7b5e668e7ffd90b38038f9411d332eb8aaf1ff8",
-      "size": 13127,
+      "sha256": "908b3e3c5343e8a977c9a930ffb547e775fb0bff36bca7e8aaef89ac93472699",
+      "size": 17739,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/gamemode_switcher.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/generic_54.png",
-      "sha256": "04befaa2964586cd1f8bfdbac7f35fefcf39554252427ac05b70c4a1ee99fb59",
-      "size": 52715,
+      "sha256": "779499f1747209a599241b5b570fcd43552fa8aee1cd75a39b9ea717513eb9ea",
+      "size": 76000,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/generic_54.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/grindstone.png",
-      "sha256": "97e1f14c0a8eaeeae04731c6baed5bddc70f1fa602ec2a215eb6500655975cfe",
-      "size": 37887,
+      "sha256": "b0bf562f32fa5639e6579e2f786f0fb3ec33ba889f53d419a3aecde1a89d74ca",
+      "size": 53049,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/grindstone.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/hopper.png",
-      "sha256": "bf661049bd853db0a54473eaea53046f41052b879faee47f9c4813b162f3b882",
-      "size": 30775,
+      "sha256": "c72ae5ed2153023e761c88839036d1c405932f8e1b2462bd5fbe0190ccb40a6c",
+      "size": 43662,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/hopper.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/horse.png",
-      "sha256": "e3142582630bbc1b4f331dcff05a168f81206bb0be7f4d500a3a0f8073c2c12d",
-      "size": 35490,
+      "sha256": "a44f3de65cedce1cb519713b135af370e2d0961040121ab664d04e111ad042cf",
+      "size": 49307,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/horse.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/inventory.png",
-      "sha256": "7f2776b68967725ae5956935adb7a63a580820fe33b4b8c96825b7211b25f135",
-      "size": 36297,
+      "sha256": "bfe8c701235d251481edcd58852377001d82e1a9785ae3114e527c454a394245",
+      "size": 51027,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/inventory.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/loom.png",
-      "sha256": "1a4fd5c488a96637323ada85b875138052820a395206caaa2f059a38a75e1f8c",
-      "size": 39533,
+      "sha256": "92b4e59935f13787961e735dc5b46c37cca61a5b02cc67052dfb2d6ad70aa9b3",
+      "size": 56963,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/loom.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/nautilus.png",
-      "sha256": "98c31ca71077f08cff9072096aa511de6804a6318d1f2f32e52048c53772e441",
-      "size": 35521,
+      "sha256": "abc3c24af944e70801b80bd3e350e035602e33b2f307c7b8ff8cd13a876d8156",
+      "size": 49243,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/nautilus.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/shulker_box.png",
-      "sha256": "8f2cf6046a74cfc4e075ce99ae5bee87bdae38b8ea05c4709068f3f503d9aabf",
-      "size": 38655,
+      "sha256": "70ce3b88a04fede68300ecaf3bf0d8ecda1dcd888a51bbe49367611d5dd51444",
+      "size": 56406,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/shulker_box.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/smithing.png",
-      "sha256": "d132b9ca2c86095fa6b18f1e797f96303a1a91f7bdcd922134375c0bde122fb7",
-      "size": 37899,
+      "sha256": "55421e124657678e24c50d927da7b677610ec44dc57ec3ab2b93aca44b089c69",
+      "size": 52882,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/smithing.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/smoker.png",
-      "sha256": "eda06d46eedfc32fdb61f291817c7eadc90bdd091b8d94aa8f8d5118ecf6fdbe",
-      "size": 37580,
+      "sha256": "51fcd66e2050e672cd8d0a215c49540302d29479ded3535431c088a4a44d3a1c",
+      "size": 52615,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/smoker.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/stonecutter.png",
-      "sha256": "ba4485539e40f4ac837e7dba03a67287bb2dd49dc222bea2a16f1b8f2ed22c03",
-      "size": 38267,
+      "sha256": "a9a4f3aecfea19b82286104b995f808b099786761e70852f1dcddba388c276c4",
+      "size": 55386,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/stonecutter.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/villager.png",
-      "sha256": "33dff8c9ebec23e9b4e5a886bad8eb65d9c9d957f395ae754416e6c6feac2917",
-      "size": 60557,
+      "sha256": "6986ebdd7eb10bab632c9c9dccf77e99a8ec2b78810684b5639e5d2acd268976",
+      "size": 87720,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/villager.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/anvil/error.png",
-      "sha256": "430776ae0b0565d5fa76ea8693fab6779104e4e00002297b18a2a3a4672dfcb5",
-      "size": 698,
+      "sha256": "dedf4e0e94a5276a7b527bc408d7cad11177a5b796c8bd9f4da7915fc469eb30",
+      "size": 932,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/anvil/error.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/anvil/text_field.png",
-      "sha256": "6961690389f5d7185808eec284478df40ae8a4f927eaedaff03bdfe6fc08daf8",
-      "size": 2581,
+      "sha256": "9073c3fd6e7a4be4787b70bae7f2868acf95513d747d7e9dd4dd95a61827f162",
+      "size": 3846,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/anvil/text_field.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/anvil/text_field_disabled.png",
-      "sha256": "167845022254e65b1ca2ff02be10722a68ac84af92b579ca5601037505e0d3fc",
-      "size": 2334,
+      "sha256": "d762351c9223f061f6014bd02eecb1c48127eaaf53459e5e1cadb11f24dbfdc1",
+      "size": 3349,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/anvil/text_field_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/button.png",
-      "sha256": "de2961e625d956e1e0c709f36e384115e978b1de08207d77cee6d3adfd77595b",
-      "size": 778,
+      "sha256": "90e249ad353146d6283359b81014ee3bf6cfd812d76b82d8ea312a3c45141d74",
+      "size": 1181,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/button.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/button_disabled.png",
-      "sha256": "084e0095ea2bbce6c922a7a478bc1cb61a65ecb7488dc950b8f81ebe74a2f4c7",
-      "size": 837,
+      "sha256": "f996e2afad32184b8be5e320cf4b68afc5d180c3108e9184c531c8108adcd8de",
+      "size": 1113,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/button_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/button_highlighted.png",
-      "sha256": "fe980a320c0f6fc5deaf52bd1b928897f035f231edb137ac2d62895e114343a1",
-      "size": 892,
+      "sha256": "a73329ff49ef710c4d6188f3a75b34a4f0b25593a60138d1b269acf1a2f425c7",
+      "size": 1345,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/button_highlighted.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/button_selected.png",
-      "sha256": "7bae8d57bf7964c8c61cbef677f6e0bf854c52e754ad53d24ab18990cc6d7d31",
-      "size": 787,
+      "sha256": "1fe99fb95d7d342f01a1da35abc7bc2af0167c4f84c2bfbbd7915d19cc4a4755",
+      "size": 1183,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/button_selected.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/cancel.png",
-      "sha256": "2edb60823298319e58121b718fb658eb01358690e91d7b1e6eec0ce7259625f5",
-      "size": 244,
+      "sha256": "3fc7a7ecaabd69e7cad65e673031fc81f1fe96ebb68d0bc242f4054769d57a3a",
+      "size": 309,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/cancel.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/confirm.png",
-      "sha256": "864055145d26fbc3a14d3eed1e657511e34480f367c36c19c32eb512372e1a28",
-      "size": 217,
+      "sha256": "d21b2e2effd391a935df1a92dbd459c70034b691e2c3542dc39adc042a18257a",
+      "size": 251,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/beacon/confirm.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/blast_furnace/burn_progress.png",
-      "sha256": "1d4534d930d419a631daccb6997518a3c3f96911cbe0802b13689610fe3dda55",
-      "size": 495,
+      "sha256": "c0f644f144cb8def5c826caef3d10366eff2d12ee36b354ca9451f14094ae2e8",
+      "size": 609,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/blast_furnace/burn_progress.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/blast_furnace/lit_progress.png",
-      "sha256": "460047e3d26d0ade38fdda9b249761aa17c84129671e56cc8c8fa517627c9dcd",
-      "size": 503,
+      "sha256": "353676e13058081e7a1fab3bebce197af875319275de60358bd8f4c57eb7d424",
+      "size": 578,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/blast_furnace/lit_progress.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/brewing_stand/brew_progress.png",
-      "sha256": "db3e0d39d0a9d9419bf87085307333fed5d6eaf7dd248c177951ecc3b31cabad",
-      "size": 298,
+      "sha256": "cc20abf493a760bf8602d44f8cb72cd30bed318365283bc443aa59cca6009f3f",
+      "size": 342,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/brewing_stand/brew_progress.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/brewing_stand/bubbles.png",
-      "sha256": "8ddb371320526a80042f33d8f9d571d3463a6a78236a3f36f92d5fad2f3f358e",
-      "size": 607,
+      "sha256": "9c85810ff26d4fd7a3e9a8b3b18b76052c4ca13527a22d84cd65a33c780e9555",
+      "size": 746,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/brewing_stand/bubbles.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/brewing_stand/fuel_length.png",
-      "sha256": "f69b99e21e98a05cd530719670796f0e986d8d96c0297854f63d5a1eebf97d50",
-      "size": 266,
+      "sha256": "835c14416afdb06de70b6b314cb9991bcd16bbf41e2b63d4712b0da11e1cbafd",
+      "size": 282,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/brewing_stand/fuel_length.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/bundle_progressbar_border.png",
-      "sha256": "ad13856c88bbb73748f5c61495f82dad8cbc71b6689ec70d75ea9f751564573f",
-      "size": 233,
+      "sha256": "2a24a8f9d0ed74ab8cc1e47c6e390f05f7d42d590c62cbea8b50bc402b23f081",
+      "size": 252,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/bundle_progressbar_border.png"
     },
     {
@@ -255,8 +255,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/bundle_progressbar_fill.png",
-      "sha256": "a0a7416de64516946dd8b7311fd264f500c399cfdda37373d3d8e3b27df5e75d",
-      "size": 161,
+      "sha256": "0f6f568645e9068503cda78670ec803b66d1e50e3b23a2533bea8f0a2f8f7af4",
+      "size": 185,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/bundle_progressbar_fill.png"
     },
     {
@@ -267,8 +267,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/bundle_progressbar_full.png",
-      "sha256": "c0211a0e1fc5c9a9bcb57b79a4f7be1c31bfaea1406290b463615540b92f5af5",
-      "size": 158,
+      "sha256": "3bc8eef34c7444b5f0473bf4a6bd1414eae5846d6edc4cac1447797de07bd29b",
+      "size": 180,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/bundle_progressbar_full.png"
     },
     {
@@ -279,8 +279,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/slot_background.png",
-      "sha256": "a474401f5a5c482b872cbcfbb7a465b584eb9d0f104e900f9c3cf2e89cc29375",
-      "size": 469,
+      "sha256": "08465d23a594bdad0ec66f8d13f07f49ba4a2525d08189bccd785ab651477588",
+      "size": 709,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/slot_background.png"
     },
     {
@@ -291,8 +291,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/slot_highlight_back.png",
-      "sha256": "3cd83995ce6260dcb4776bf23a7f1f1580b92de66d98fe949e2aed5f5daf28fb",
-      "size": 729,
+      "sha256": "ee1b53d7ae556b6209cde900cd49a51c7c4f6925894cd95d52e00fdb6704cc80",
+      "size": 998,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/slot_highlight_back.png"
     },
     {
@@ -303,8 +303,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/slot_highlight_front.png",
-      "sha256": "f742e4a79521fa9c8915c4ae5937910bee196a5eae85d72594080c402adc0dbf",
-      "size": 753,
+      "sha256": "67b9f6c0e8053d7f65344a72ce926816893b9d6ce30d8af88e3465e48efff7df",
+      "size": 996,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/bundle/slot_highlight_front.png"
     },
     {
@@ -315,314 +315,314 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/cartography_table/duplicated_map.png",
-      "sha256": "240e064ff786dd4a17eb6a96a7779e5d5ac611646d78f5f92bd97c2f925d2917",
-      "size": 3837,
+      "sha256": "873ec1cb4af5557bc7bb52da3fb62dd1837cdaa3a9ba7a3a28522e3d0e21b90c",
+      "size": 5251,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/cartography_table/duplicated_map.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/cartography_table/error.png",
-      "sha256": "430776ae0b0565d5fa76ea8693fab6779104e4e00002297b18a2a3a4672dfcb5",
-      "size": 698,
+      "sha256": "dedf4e0e94a5276a7b527bc408d7cad11177a5b796c8bd9f4da7915fc469eb30",
+      "size": 932,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/cartography_table/error.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/cartography_table/locked.png",
-      "sha256": "e96c26f530f967b9f9699556350e7ccb3d664d6a8abe1d959d1e8e8ccf9610bd",
-      "size": 430,
+      "sha256": "981e25d5ac73d20151b662fbdf77ac0d9f6c40824f3e47f3afd1373cddc2c21b",
+      "size": 527,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/cartography_table/locked.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/cartography_table/map.png",
-      "sha256": "b83fa79b61e15225623c0243bb0e681d0a9ee3f4d4e389811ef5275a68e6f4ff",
-      "size": 6273,
+      "sha256": "0a61e590fbb95413088c5934cbc17abbcc0c451593c2109fa747ada66d9757c4",
+      "size": 8787,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/cartography_table/map.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/cartography_table/scaled_map.png",
-      "sha256": "a6b8d6a947663f8606142cb86d31ab8bdf31be7d762e8309348b80520941584b",
-      "size": 6139,
+      "sha256": "92537d3311206820a0724ecedcf4a8086dcf67ff5dcffef65852bc0005daf41a",
+      "size": 8479,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/cartography_table/scaled_map.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/crafter/disabled_slot.png",
-      "sha256": "e5d08ef1becf7a8582be2f337689e5807a34661bea2337ca1f910c852e926809",
-      "size": 528,
+      "sha256": "d3747b6e1350d66f1159f38799acaca686c379789a3392740799faf1a634bdef",
+      "size": 749,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/crafter/disabled_slot.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/crafter/powered_redstone.png",
-      "sha256": "adad8304d0952692b6f1e8e5b75e0408cf6ec1f5cc56e8e1ed55208511c7d343",
-      "size": 181,
+      "sha256": "3af3b80e799e01cc0bae535cda3d2afa8d80c8e85f267d28414138aa845b0167",
+      "size": 179,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/crafter/powered_redstone.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/crafter/unpowered_redstone.png",
-      "sha256": "16e645572f464ae7a6fa09b6289d4fe7b6cd724b6b2825551e501587c02e955b",
-      "size": 238,
+      "sha256": "e815b61180393589038fc8fb0b15a3a6dce0cf64ca9c630daf7e4d4a8f956c61",
+      "size": 264,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/crafter/unpowered_redstone.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/scroller.png",
-      "sha256": "e48f4e3a8a6d21d1afc81c8dbc3333d05a471d5d134462af852b6919f7dee970",
-      "size": 385,
+      "sha256": "8a81db88014ef6fa31a239e105f3300f81160ece2b35e24541c5dad087084b29",
+      "size": 538,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/scroller.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/scroller_disabled.png",
-      "sha256": "b8e79ec5f74a2d748e9a05fd9cf7497c20e48b71294912231b6b4a5b005c223d",
-      "size": 380,
+      "sha256": "19273811ac8aeb0a49c8f6272be3b6b08ef2ee863131bffe414c5c61535b906f",
+      "size": 582,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/scroller_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_1.png",
-      "sha256": "e90073017dae2cf0ec6029e2d2c08f3c817813db988770f2748b77e1ee56a9ee",
-      "size": 1009,
+      "sha256": "d43365cf2578d3efbe3bdfb7744d6eb77fba523ae5f8aeaaaf468815279c7e67",
+      "size": 1407,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_1.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_2.png",
-      "sha256": "5fd0165017b80c02e60cb870562881dd01e3cb2d74fe05cd13d9870666ec4c30",
-      "size": 1026,
+      "sha256": "1a4b27a92b25b2bf7abc2c873a61baa19ed16b7d687b83fd382da7f3048d9ab7",
+      "size": 1426,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_2.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_3.png",
-      "sha256": "5fd0165017b80c02e60cb870562881dd01e3cb2d74fe05cd13d9870666ec4c30",
-      "size": 1026,
+      "sha256": "1a4b27a92b25b2bf7abc2c873a61baa19ed16b7d687b83fd382da7f3048d9ab7",
+      "size": 1426,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_3.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_4.png",
-      "sha256": "5fd0165017b80c02e60cb870562881dd01e3cb2d74fe05cd13d9870666ec4c30",
-      "size": 1026,
+      "sha256": "1a4b27a92b25b2bf7abc2c873a61baa19ed16b7d687b83fd382da7f3048d9ab7",
+      "size": 1426,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_4.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_5.png",
-      "sha256": "5fd0165017b80c02e60cb870562881dd01e3cb2d74fe05cd13d9870666ec4c30",
-      "size": 1026,
+      "sha256": "1a4b27a92b25b2bf7abc2c873a61baa19ed16b7d687b83fd382da7f3048d9ab7",
+      "size": 1426,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_5.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_6.png",
-      "sha256": "5fd0165017b80c02e60cb870562881dd01e3cb2d74fe05cd13d9870666ec4c30",
-      "size": 1026,
+      "sha256": "1a4b27a92b25b2bf7abc2c873a61baa19ed16b7d687b83fd382da7f3048d9ab7",
+      "size": 1426,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_6.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_7.png",
-      "sha256": "10f582aa6bc006420d8545d81a6b9b0ffcf85bc5f6a23bd639a65189588092e3",
-      "size": 1017,
+      "sha256": "17fc04d00bbba7822cd5b553037825e608eb02728578deb99df767382a287003",
+      "size": 1419,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_selected_7.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_1.png",
-      "sha256": "0e603b121a24aa663d359c8f0e5b397d8e1f6caa5a00f28b8306333cb2ecee78",
-      "size": 962,
+      "sha256": "c4f099718def850cc2900d37272a9e445fba78ed7690832f61548ba103b6078a",
+      "size": 1460,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_1.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_2.png",
-      "sha256": "0e603b121a24aa663d359c8f0e5b397d8e1f6caa5a00f28b8306333cb2ecee78",
-      "size": 962,
+      "sha256": "c4f099718def850cc2900d37272a9e445fba78ed7690832f61548ba103b6078a",
+      "size": 1460,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_2.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_3.png",
-      "sha256": "0e603b121a24aa663d359c8f0e5b397d8e1f6caa5a00f28b8306333cb2ecee78",
-      "size": 962,
+      "sha256": "c4f099718def850cc2900d37272a9e445fba78ed7690832f61548ba103b6078a",
+      "size": 1460,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_3.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_4.png",
-      "sha256": "0e603b121a24aa663d359c8f0e5b397d8e1f6caa5a00f28b8306333cb2ecee78",
-      "size": 962,
+      "sha256": "c4f099718def850cc2900d37272a9e445fba78ed7690832f61548ba103b6078a",
+      "size": 1460,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_4.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_5.png",
-      "sha256": "0e603b121a24aa663d359c8f0e5b397d8e1f6caa5a00f28b8306333cb2ecee78",
-      "size": 962,
+      "sha256": "c4f099718def850cc2900d37272a9e445fba78ed7690832f61548ba103b6078a",
+      "size": 1460,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_5.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_6.png",
-      "sha256": "0e603b121a24aa663d359c8f0e5b397d8e1f6caa5a00f28b8306333cb2ecee78",
-      "size": 962,
+      "sha256": "c4f099718def850cc2900d37272a9e445fba78ed7690832f61548ba103b6078a",
+      "size": 1460,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_6.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_7.png",
-      "sha256": "0e603b121a24aa663d359c8f0e5b397d8e1f6caa5a00f28b8306333cb2ecee78",
-      "size": 962,
+      "sha256": "c4f099718def850cc2900d37272a9e445fba78ed7690832f61548ba103b6078a",
+      "size": 1460,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_bottom_unselected_7.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_1.png",
-      "sha256": "2ee08f7edfc8d0bf12fee54599d8522010d4d5c36716b84b0ce6f58efbae9524",
-      "size": 863,
+      "sha256": "4bc0eff41002c0e1c7a19ca0f6a665d26438cc12d721db33806baf7887ba55f4",
+      "size": 1263,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_1.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_2.png",
-      "sha256": "d605f085c2676f2667d309a3c63f73c598bc7cf1056ed79aea4db11a8024a17c",
-      "size": 858,
+      "sha256": "54b99cacfa404f840279bcd58a131ffe8d7a162ca37c9dd3fd5045dd23ea31c0",
+      "size": 1263,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_2.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_3.png",
-      "sha256": "d605f085c2676f2667d309a3c63f73c598bc7cf1056ed79aea4db11a8024a17c",
-      "size": 858,
+      "sha256": "54b99cacfa404f840279bcd58a131ffe8d7a162ca37c9dd3fd5045dd23ea31c0",
+      "size": 1263,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_3.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_4.png",
-      "sha256": "d605f085c2676f2667d309a3c63f73c598bc7cf1056ed79aea4db11a8024a17c",
-      "size": 858,
+      "sha256": "54b99cacfa404f840279bcd58a131ffe8d7a162ca37c9dd3fd5045dd23ea31c0",
+      "size": 1263,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_4.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_5.png",
-      "sha256": "d605f085c2676f2667d309a3c63f73c598bc7cf1056ed79aea4db11a8024a17c",
-      "size": 858,
+      "sha256": "54b99cacfa404f840279bcd58a131ffe8d7a162ca37c9dd3fd5045dd23ea31c0",
+      "size": 1263,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_5.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_6.png",
-      "sha256": "d605f085c2676f2667d309a3c63f73c598bc7cf1056ed79aea4db11a8024a17c",
-      "size": 858,
+      "sha256": "54b99cacfa404f840279bcd58a131ffe8d7a162ca37c9dd3fd5045dd23ea31c0",
+      "size": 1263,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_6.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_7.png",
-      "sha256": "7402fcaf3a657df82fac44b7148535aa5eb119c9c8f35c4026150ec0e52a6847",
-      "size": 871,
+      "sha256": "ead1a0ad531303946dd9fa3d88e1e3228a17dc72c487994ab101ee8a5b95f425",
+      "size": 1273,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_selected_7.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_1.png",
-      "sha256": "742d829434ef38e2027e5d82d432751bf528778f5d3395b4dc577c6527dbe814",
-      "size": 882,
+      "sha256": "244138e64123b629e1adb766391a827a0e6340b850f6579cafd2612f3e0a6ac4",
+      "size": 1353,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_1.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_2.png",
-      "sha256": "742d829434ef38e2027e5d82d432751bf528778f5d3395b4dc577c6527dbe814",
-      "size": 882,
+      "sha256": "244138e64123b629e1adb766391a827a0e6340b850f6579cafd2612f3e0a6ac4",
+      "size": 1353,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_2.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_3.png",
-      "sha256": "742d829434ef38e2027e5d82d432751bf528778f5d3395b4dc577c6527dbe814",
-      "size": 882,
+      "sha256": "244138e64123b629e1adb766391a827a0e6340b850f6579cafd2612f3e0a6ac4",
+      "size": 1353,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_3.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_4.png",
-      "sha256": "742d829434ef38e2027e5d82d432751bf528778f5d3395b4dc577c6527dbe814",
-      "size": 882,
+      "sha256": "244138e64123b629e1adb766391a827a0e6340b850f6579cafd2612f3e0a6ac4",
+      "size": 1353,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_4.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_5.png",
-      "sha256": "742d829434ef38e2027e5d82d432751bf528778f5d3395b4dc577c6527dbe814",
-      "size": 882,
+      "sha256": "244138e64123b629e1adb766391a827a0e6340b850f6579cafd2612f3e0a6ac4",
+      "size": 1353,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_5.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_6.png",
-      "sha256": "742d829434ef38e2027e5d82d432751bf528778f5d3395b4dc577c6527dbe814",
-      "size": 882,
+      "sha256": "244138e64123b629e1adb766391a827a0e6340b850f6579cafd2612f3e0a6ac4",
+      "size": 1353,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_6.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_7.png",
-      "sha256": "742d829434ef38e2027e5d82d432751bf528778f5d3395b4dc577c6527dbe814",
-      "size": 882,
+      "sha256": "244138e64123b629e1adb766391a827a0e6340b850f6579cafd2612f3e0a6ac4",
+      "size": 1353,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/creative_inventory/tab_top_unselected_7.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/enchantment_slot.png",
-      "sha256": "92029b4c98dc7e111b91991a8425a7410a6dabbb697e54bce69e7baa163d6e40",
-      "size": 3338,
+      "sha256": "7f09e535123ec96c303a67780e30866fd14716d561ac487d2025d7682e67aaf8",
+      "size": 4845,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/enchantment_slot.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/enchantment_slot_disabled.png",
-      "sha256": "737bb7fbba1c25de21866cc96c61cd16c5ed20aeb81d6a73ff72ccd97a953d6c",
-      "size": 2699,
+      "sha256": "896098b76505bcbd10222aa48c41ce3dae2257a7586befd7f9c71dcf130cf922",
+      "size": 4000,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/enchantment_slot_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/enchantment_slot_highlighted.png",
-      "sha256": "ba8d42e27283af5e22d287547fcc11e2fffd2e88180a0f1732ee9ab7573a0bce",
-      "size": 2983,
+      "sha256": "638194f2a18787c4bb401e47fad48eee147d20255379e7c37264d2ae2613afc3",
+      "size": 4341,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/enchantment_slot_highlighted.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_1.png",
-      "sha256": "237241a9b7501613b4112ae10aac286dc701d531ae644ad626433172044cb7f6",
-      "size": 317,
+      "sha256": "7a1f04d8dff1cc2074a00ecaaf0658814b468347f972c0c4ba806493f0a2c7ea",
+      "size": 379,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_1.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_1_disabled.png",
-      "sha256": "3c8d85f965cbf9bc4f6b2838b257d24980c8446812cf518fbcd4472c064879dd",
-      "size": 315,
+      "sha256": "286955ad6be9f2aa136ee5028f97dbf1fdb05a620ca502c384b3c4abe3255efe",
+      "size": 365,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_1_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_2.png",
-      "sha256": "0c6e9136ff3a1ee65ab80539e464515911f50815df1f038edf2975677f95a790",
-      "size": 319,
+      "sha256": "fd557e0cc401ebeeee6bebb56f1c42f4867adb02b0ede3328466d399e7dae31b",
+      "size": 408,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_2.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_2_disabled.png",
-      "sha256": "dcb54e2077aebc29cfa5432bf7ee22905d5367a6fecd47b874e281f07d28887c",
-      "size": 344,
+      "sha256": "df04c1f8db4df27cf28f6156de99c807fe05116d675a3a1d8a4059db4e3825fb",
+      "size": 431,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_2_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_3.png",
-      "sha256": "c95f6ced1caac2b7985826a94e4fbf97a7744f04a3702b5edc6f04e8a9f48a40",
-      "size": 344,
+      "sha256": "c72be877d827dcf731295c2e92e2e63964df4d86691057378b52ce3452ff71b4",
+      "size": 432,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_3.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_3_disabled.png",
-      "sha256": "5d58cd01697d06ba27617dc4514500942e63c69eeb957d28ef26963acc16f0f6",
-      "size": 348,
+      "sha256": "fef1ac57d1cac90680d8db30beb9b9388c3d620d36690beddda24fbaf29b929a",
+      "size": 446,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/enchanting_table/level_3_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/furnace/burn_progress.png",
-      "sha256": "1d4534d930d419a631daccb6997518a3c3f96911cbe0802b13689610fe3dda55",
-      "size": 495,
+      "sha256": "c0f644f144cb8def5c826caef3d10366eff2d12ee36b354ca9451f14094ae2e8",
+      "size": 609,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/furnace/burn_progress.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/furnace/lit_progress.png",
-      "sha256": "460047e3d26d0ade38fdda9b249761aa17c84129671e56cc8c8fa517627c9dcd",
-      "size": 503,
+      "sha256": "353676e13058081e7a1fab3bebce197af875319275de60358bd8f4c57eb7d424",
+      "size": 578,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/furnace/lit_progress.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/grindstone/error.png",
-      "sha256": "430776ae0b0565d5fa76ea8693fab6779104e4e00002297b18a2a3a4672dfcb5",
-      "size": 698,
+      "sha256": "dedf4e0e94a5276a7b527bc408d7cad11177a5b796c8bd9f4da7915fc469eb30",
+      "size": 932,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/grindstone/error.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/horse/chest_slots.png",
-      "sha256": "96bc398bc95d0cc929c3fba1c3b61e750f38370c1958589521c5fd2fe7a583ec",
-      "size": 6767,
+      "sha256": "3e258f0ecaff61b9fa025935228ac6671d8fa32cc7f703b5b151617cc8d5359c",
+      "size": 10064,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/horse/chest_slots.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/inventory/effect_background.png",
-      "sha256": "10aaf7de27058dae4fb650729a4415f64728a78871004fab3d40f1fd0de1cd8b",
-      "size": 1191,
+      "sha256": "6e1a41f7ef29f62272b59a58e17af45df8e1d94f5b9f274ae38fef2fdd30c504",
+      "size": 1639,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/inventory/effect_background.png"
     },
     {
@@ -633,8 +633,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/inventory/effect_background_ambient.png",
-      "sha256": "744bab039574373b479fca0a1137540c1346ababc4ac18b2be283ea1544c822c",
-      "size": 1321,
+      "sha256": "c649eca09edf9e257a4a7fb81312c3ad43f54fb213b6f7d76bd39f7ded8c466a",
+      "size": 1860,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/inventory/effect_background_ambient.png"
     },
     {
@@ -651,224 +651,224 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/loom/pattern.png",
-      "sha256": "08e70e031eeb471606c7c21d743f00577ccf3070803c1956cda30865036f7fe3",
-      "size": 515,
+      "sha256": "0f250f18db5b725419b020f5478e572b25db88a837fe7acafe0e13ece375a0f5",
+      "size": 671,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/loom/pattern.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/loom/pattern_highlighted.png",
-      "sha256": "b1189b0440b85393a2b1a89832900b7e6d6f9fc595e92de5963397f9d338b721",
-      "size": 482,
+      "sha256": "367bc36ead02cbbbf3e6bdb20204cadb5c068b2634f929b64bfc0133669adc2f",
+      "size": 618,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/loom/pattern_highlighted.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/loom/pattern_selected.png",
-      "sha256": "9522169acc321fa9ae924bce7437d025b56515975a43772ac6943c415b107cd4",
-      "size": 432,
+      "sha256": "b8b2aa75512dee332818d5113d96eb189308e382d704270496f3787f322fe8e9",
+      "size": 597,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/loom/pattern_selected.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/loom/scroller.png",
-      "sha256": "e48f4e3a8a6d21d1afc81c8dbc3333d05a471d5d134462af852b6919f7dee970",
-      "size": 385,
+      "sha256": "8a81db88014ef6fa31a239e105f3300f81160ece2b35e24541c5dad087084b29",
+      "size": 538,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/loom/scroller.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/loom/scroller_disabled.png",
-      "sha256": "b8e79ec5f74a2d748e9a05fd9cf7497c20e48b71294912231b6b4a5b005c223d",
-      "size": 380,
+      "sha256": "19273811ac8aeb0a49c8f6272be3b6b08ef2ee863131bffe414c5c61535b906f",
+      "size": 582,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/loom/scroller_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/amethyst_shard.png",
-      "sha256": "4957eed50d7e01855b00266bbfd89f8b4a8f8799ea98cae0ec60187d1fd2bead",
-      "size": 170,
+      "sha256": "ed9019025918b8e87966dc2577b57ceead767fc62404f94164bfb40131d55403",
+      "size": 173,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/amethyst_shard.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/axe.png",
-      "sha256": "9e1e6ddcc27d21f927d963fbce5f5d7c31abafbe30ab3aaf5c7fd507522a5404",
-      "size": 180,
+      "sha256": "b5e1731d09fca5ad5a96a10ff2ffd796ffdedbc170da00ac854387200d337a99",
+      "size": 192,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/axe.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/banner.png",
-      "sha256": "53b6a1546c1ac79252d0823ae5e357484f67e03cb4208a92e9f3c777a86e03c9",
-      "size": 144,
+      "sha256": "f7f347d22634792985d74bdaf171e3ccbf6992ebbbea2d7005611560b785a813",
+      "size": 148,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/banner.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/banner_pattern.png",
-      "sha256": "80290e6e24886661517ebc22b8c5553d9e4371c028c42180dc8a50aeafb059a6",
-      "size": 246,
+      "sha256": "c6f2731afc1186d44a01f385efc1b8e879e6767ddb593a7afa583d9cb693e8b6",
+      "size": 305,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/banner_pattern.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/boots.png",
-      "sha256": "34004de1cc9225259d728d1188b4a64a3c0d41b5c1a7c0dd1e41ef9e1ef3f709",
-      "size": 206,
+      "sha256": "7d676cf553258e8d22c17791360ef8ce47e7c30e47c478021f8cfd0f131a903c",
+      "size": 239,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/boots.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/brewing_fuel.png",
-      "sha256": "127dcdb1b05869aed98cb9263b5a0d0f8bd0b4e5734b0a81615c3366ab7a0a85",
-      "size": 189,
+      "sha256": "cf31e77a32340791bcde91a6c507abe55d9eea9d0e90c1ef714116df9ccc2c58",
+      "size": 198,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/brewing_fuel.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/chestplate.png",
-      "sha256": "9457f4c9ba2fe8a52aaee7c9bb39d78023a3ad18b080aed80580b0a07c00fe3e",
-      "size": 188,
+      "sha256": "5395aa1c73576915347c3551672ae8ca88e11d8289882528e694c732266cab71",
+      "size": 274,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/chestplate.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/diamond.png",
-      "sha256": "168791baea93eefc098c2dbdc2bd23921252f4f90036ee77c4718985d734d30e",
-      "size": 273,
+      "sha256": "ddfd8a514ce5c716512dbb3fef27780362f12735e0d6705ec3af9f3dad061d52",
+      "size": 323,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/diamond.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/dye.png",
-      "sha256": "8eebd03acf2722d558c6c24edc7ab9a0400ef21f72c065fcde1d616036e76228",
-      "size": 273,
+      "sha256": "f1b12728b1a300f7db4ee7bc78d74f923216b155ffbf50d14ea75cc115617ac2",
+      "size": 333,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/dye.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/emerald.png",
-      "sha256": "1dd1b02d921dd8b9f7823c82c36c1aaa1be40abd64e114cbdd93b921d12bacb3",
-      "size": 207,
+      "sha256": "283bc775c5f1b5c6e8978692569a1262ba30b190aa632e54178e9205d6aca8ee",
+      "size": 223,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/emerald.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/helmet.png",
-      "sha256": "af09d433c0bb059aeeaf5266319d5e7b884c0308b6966dd491b04f17df79e01e",
-      "size": 156,
+      "sha256": "a80fc9111616d9857289216c28494a6d4a5a2b7bf9f50c6d652cd27a557de31e",
+      "size": 199,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/helmet.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/hoe.png",
-      "sha256": "625128af76745f2aa75febb306949682e0ada66799c6df1b2665baada3d9896b",
-      "size": 194,
+      "sha256": "59e88c5de8e669cee0deec8f310e44b74386821abbcac1fd2d44f3d60f89c0c0",
+      "size": 211,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/hoe.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/horse_armor.png",
-      "sha256": "d9fc6baf18e25caeba1f5cf3c28678d134dc8237c8f8f84466ddf856a4c4ff10",
-      "size": 193,
+      "sha256": "5a6caed9e5d2d8d4815c7e06118aae75b34db86532b6edefd3ffc810044faac5",
+      "size": 221,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/horse_armor.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/ingot.png",
-      "sha256": "b524af22f6e10d1d486f3bd8f21f0e3a3fd2d220e6750cd587457a3988d105fe",
-      "size": 254,
+      "sha256": "1bff23e85153b1ab8840e7e372de90815ef6b87292e0ae4cc19218f3b0d06cda",
+      "size": 283,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/ingot.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/lapis_lazuli.png",
-      "sha256": "d8e46d3bd33349da9c1f87b420c2ca5cc58825534dc03f2d29b5b760dad4dfc5",
-      "size": 152,
+      "sha256": "995a15a779c4ebeea52ff94da8d9445818ef23807fde941b53df2543208ac003",
+      "size": 153,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/lapis_lazuli.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/leggings.png",
-      "sha256": "2530421748077c5abaf4648bbe0fa32ee49f379becf494c041b5ce4ca6883c92",
-      "size": 136,
+      "sha256": "dee96d0c030505ddcf2ec3a4249636d7fb77cb16234bfe0862b49d2777678abe",
+      "size": 135,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/leggings.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/llama_armor.png",
-      "sha256": "d487fb558b43f48a680183bfbe83099fc1e302b1bc8c636cafb43d69242b746a",
-      "size": 145,
+      "sha256": "5f7a7a5e98670e153967733d27d596fdd8434612b210ece738b4722da17f9f16",
+      "size": 146,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/llama_armor.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/nautilus_armor.png",
-      "sha256": "91e306d49ba64930ba617ea04e40fa98eafd34e143438e175e667ab966f9c6f2",
-      "size": 274,
+      "sha256": "7e050a43effcae7079d3bc7d773744c41bb7ac9b90c3b3d3d5e1e2c28d2bc139",
+      "size": 350,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/nautilus_armor.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/nautilus_armor_inventory.png",
-      "sha256": "a920ead241f163d5756c5bd0c9ff55389e416ae54d0dc73a16c58be472c0606b",
-      "size": 290,
+      "sha256": "afae2dceb484bdfd01e68b0969bd9c82a92019eee201d30b155dcef81754b6f6",
+      "size": 361,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/nautilus_armor_inventory.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/pickaxe.png",
-      "sha256": "e2550e414f952235eef453137ecdc462b49af274c8929290fe14afbf2e3cf0a1",
-      "size": 218,
+      "sha256": "57ddf449e4bdf568d86adac3c8f45baa5794769673815ebffe5f0c6708c3ad78",
+      "size": 254,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/pickaxe.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/potion.png",
-      "sha256": "03f8052d4488fb38e65baee99621e3257a077e5e349d663808b8e26865869725",
-      "size": 184,
+      "sha256": "a2c984f6177a5b8b4f256fc63240fcee38640cf83d49cc985571f6e77ccf137b",
+      "size": 213,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/potion.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/quartz.png",
-      "sha256": "bb836ae81bf67119176c3bcad668e9f213686763eb74562110559ead37d1e7a7",
-      "size": 265,
+      "sha256": "c71ec78ecc3066a497db665d9c875e2c3b89bdab0eba8e6bc3bb0794326e2a24",
+      "size": 328,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/quartz.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/redstone_dust.png",
-      "sha256": "68fc8628fd4751e644ce0a77f36822c9b3e5bcb76338f6ff8dff3ee423be4c8d",
-      "size": 221,
+      "sha256": "7bcc2f99d2d080c427fc5358fb4b587d955bf64e84dcf96d79eb3f5d666ab2c6",
+      "size": 253,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/redstone_dust.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/saddle.png",
-      "sha256": "512fd2316bde86c1ef6515c65a7445ba6c3d0944dc8293b05d6230cc2de64c2d",
-      "size": 220,
+      "sha256": "1fdb80ca64fbf7bcd6594da54a4637cb6b36a6a0143a98c35af08c74ed01efe0",
+      "size": 236,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/saddle.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/shield.png",
-      "sha256": "59d9958a11a43a36713b93d8754b4a9ac94a75f74bef4a68c399fdee2afcb603",
-      "size": 187,
+      "sha256": "aac77950c0b36481d1a89886d2a954f28fb1d684898d7b08b3c375d876d06a1c",
+      "size": 268,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/shield.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/shovel.png",
-      "sha256": "7e1aed30cbb6f5c0c312a92e8b815c4a8e1803279e7cf5143ff5b16cad86139f",
+      "sha256": "b360d26a8f682a39b5481bb6d02a0aa9863fefce897f2095b80c51bf33a60f17",
       "size": 149,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/shovel.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/smithing_template_armor_trim.png",
-      "sha256": "6bb430445d17204e52def700480df8eecd76b38a1dfef7e349606aabd8edeefe",
-      "size": 241,
+      "sha256": "34c1bf4a49e7e716861005bffb467ae671d4a4d34f59d0fb3937e3600e9cfda3",
+      "size": 279,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/smithing_template_armor_trim.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/smithing_template_netherite_upgrade.png",
-      "sha256": "cbccbe19984afa88ba30b652863bc0f96780f545c2a31b73a6058c2c590c1591",
-      "size": 199,
+      "sha256": "d4cf7f156b38a2c7f213315e038ca22dd2f98ff13dd3e8eaaf1a00508dd6d118",
+      "size": 279,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/smithing_template_netherite_upgrade.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/spear.png",
-      "sha256": "7727b3ca4bf787cbee8a720c9010fa0a63b8a001a0fd7c4fb4911ed25d9a20df",
-      "size": 227,
+      "sha256": "4e11e48546af5d87894b40ad93c9573a526cd83a1714d115af44d244aef098cd",
+      "size": 262,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/spear.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/sword.png",
-      "sha256": "aec63ec5149106653146ca6d3113a821c2e4a7defb1711c96da5b21033738b34",
-      "size": 240,
+      "sha256": "ef6f10c9a3ca4705ec0c2121080fd7ec7bed7ba2730728caf559458853950bc6",
+      "size": 285,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot/sword.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot.png",
-      "sha256": "e2eadb08d2aed9c37432103eff21b92dc9fc409d82139d8221a2279c73f3b7e6",
-      "size": 585,
+      "sha256": "e9eae2e1d5dfa07d39b5ffae9ec9b5fd7ab9f1631175c57541a26e49948f9a59",
+      "size": 846,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot_highlight_back.png",
-      "sha256": "1b4f30123e47e2f53df674bbe2f6c4b4c5e081cd8b93d6ad48ca77295eaac560",
-      "size": 629,
+      "sha256": "c0dbac2b1cc59e1ed803c427889208f93feb0a08d67b39540359fad3b4aff796",
+      "size": 842,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot_highlight_back.png"
     },
     {
@@ -879,8 +879,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot_highlight_front.png",
-      "sha256": "027e0f0f870c84e2cf3d1341eb35f1e3713deac1ea9a70de1a44bf392d4180b2",
-      "size": 655,
+      "sha256": "83ec56aa0c9ad6e3980a0681eab14107cc4e42bf37290258b62246c358b2199d",
+      "size": 844,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/slot_highlight_front.png"
     },
     {
@@ -891,140 +891,140 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/smithing/error.png",
-      "sha256": "430776ae0b0565d5fa76ea8693fab6779104e4e00002297b18a2a3a4672dfcb5",
-      "size": 698,
+      "sha256": "dedf4e0e94a5276a7b527bc408d7cad11177a5b796c8bd9f4da7915fc469eb30",
+      "size": 932,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/smithing/error.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/smoker/burn_progress.png",
-      "sha256": "1d4534d930d419a631daccb6997518a3c3f96911cbe0802b13689610fe3dda55",
-      "size": 495,
+      "sha256": "c0f644f144cb8def5c826caef3d10366eff2d12ee36b354ca9451f14094ae2e8",
+      "size": 609,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/smoker/burn_progress.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/smoker/lit_progress.png",
-      "sha256": "460047e3d26d0ade38fdda9b249761aa17c84129671e56cc8c8fa517627c9dcd",
-      "size": 503,
+      "sha256": "353676e13058081e7a1fab3bebce197af875319275de60358bd8f4c57eb7d424",
+      "size": 578,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/smoker/lit_progress.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/stonecutter/recipe.png",
-      "sha256": "7d3a05d8734cb9d7d223996a97966d32178c958c493734ff2007029f7ab51591",
-      "size": 637,
+      "sha256": "64692388fbf58325c070e705897242f5ded36df99cd535d7c184fa4ae9f961dd",
+      "size": 888,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/stonecutter/recipe.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/stonecutter/recipe_highlighted.png",
-      "sha256": "6c5e4723bcbd8d5a6c169fcd13109d009a8c4cfe71b631f2aae06b3b1e02994b",
-      "size": 563,
+      "sha256": "236dea2129be52bd703936b4c87b55518db9c624725478e1aabb62b8837ba5d5",
+      "size": 791,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/stonecutter/recipe_highlighted.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/stonecutter/recipe_selected.png",
-      "sha256": "9581cf13aea097c77af73187d4ff6d4a775da27ecfe8ebbb2f788c67c5e7dcfd",
-      "size": 582,
+      "sha256": "d58dddf1ad36b32beea88678b64790dc02088bfb6b82428f0fd54574d83c4c1e",
+      "size": 774,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/stonecutter/recipe_selected.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/stonecutter/scroller.png",
-      "sha256": "e48f4e3a8a6d21d1afc81c8dbc3333d05a471d5d134462af852b6919f7dee970",
-      "size": 385,
+      "sha256": "8a81db88014ef6fa31a239e105f3300f81160ece2b35e24541c5dad087084b29",
+      "size": 538,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/stonecutter/scroller.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/stonecutter/scroller_disabled.png",
-      "sha256": "b8e79ec5f74a2d748e9a05fd9cf7497c20e48b71294912231b6b4a5b005c223d",
-      "size": 380,
+      "sha256": "19273811ac8aeb0a49c8f6272be3b6b08ef2ee863131bffe414c5c61535b906f",
+      "size": 582,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/stonecutter/scroller_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/discount_strikethrough.png",
-      "sha256": "5891f6c6532a45692cae9ca2853d34816da47550b0cb161c1c2772dbd60a16c2",
-      "size": 134,
+      "sha256": "7e5a205041b95582786f183411531754245bc36b8022c482121e2dfed7e5367e",
+      "size": 140,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/discount_strikethrough.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/experience_bar_background.png",
-      "sha256": "d0929815a60cab3247d7b2a5c04ca2168f94336797b6a4206a21996e6dfcf61b",
-      "size": 780,
+      "sha256": "de653ac1a928a4ac5e0d291723be3a2644d059b313b358bdf2bf828c4495211b",
+      "size": 1178,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/experience_bar_background.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/experience_bar_current.png",
-      "sha256": "8bbb13f0ee2ec9ee0fb844b0126d50ce308014f820b3de039e11f4f359490342",
-      "size": 717,
+      "sha256": "da6d115017d528fe4ca7e1ef8879aee685fd4381da97c4ec02a2873db96cdbce",
+      "size": 1120,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/experience_bar_current.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/experience_bar_result.png",
-      "sha256": "fcd1a21ef38d4454e29e122c902f3c9f6bfd6a4be5ef300c1f3a541d2d1e8120",
-      "size": 673,
+      "sha256": "2c29ab09217518f9d6da3c690518c1d7789651354a3f7151c97de1df9db58ee9",
+      "size": 919,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/experience_bar_result.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/out_of_stock.png",
-      "sha256": "5c10c46ee55db33403741142932a605aeaeedb249cb95f9b0fe2b7e542c87ee8",
-      "size": 700,
+      "sha256": "ca81fd7751aa048a82773b19454b7728f457aeea4a474d75c991cb52a532f514",
+      "size": 934,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/out_of_stock.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/scroller.png",
-      "sha256": "7a096f7c1615715e6a95e0e0c82575dbb7819d5de1a1efdaec5e253718f3d212",
-      "size": 383,
+      "sha256": "3216e564d615aa720c48198639519518fbe2277ea914e1fd647bc309efc35fab",
+      "size": 514,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/scroller.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/scroller_disabled.png",
-      "sha256": "7100ddf770136af81f4aa5b456502b5f3837b1fdbcd3a7a60296086c69a4dd36",
-      "size": 387,
+      "sha256": "83e9fce28172f18dce08acadb829c896009fe160520fa4740527f41580b38ad1",
+      "size": 553,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/scroller_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/trade_arrow.png",
-      "sha256": "46747a4560bcc4a60d0cc352c92750f1b11a0774fd395d20ecc129da881e8766",
-      "size": 179,
+      "sha256": "db04ae47b0bfcd02d02d89fe42adfd371fa1123a3e85b6fb078c615f36efd265",
+      "size": 220,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/trade_arrow.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/trade_arrow_out_of_stock.png",
-      "sha256": "19e998c14bd7bc64300f34f975174514d43c6f589011fb9bd0e8bd4465b1a17d",
-      "size": 241,
+      "sha256": "0439df40ae7468edb4464b746a72dd8e670c6597f959eafddb0ae60915c35c97",
+      "size": 319,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/container/villager/trade_arrow_out_of_stock.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/air.png",
-      "sha256": "308cc2be8a377127c3db08fd937af36113a4ab87d18cc761b1973fa6dc507b72",
-      "size": 153,
+      "sha256": "c8e056d739c37313b25388454a44df3a8ceb4af11300d33cb74210b97e2c71ba",
+      "size": 175,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/air.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/air_bursting.png",
-      "sha256": "05dd597c552d9d92db3fdc2e3136b500a9ea8af59b2ad94443913abb293a5163",
-      "size": 155,
+      "sha256": "8b999146d6690ead3875485ac5b2c5aeda6a8ac04ad0ab00bb7cd28ca6c431a0",
+      "size": 153,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/air_bursting.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/air_empty.png",
-      "sha256": "50f42ab84e2336d9dca06afbfbd71d824690a8d78e9d605a51e2b1b5adfa2de2",
-      "size": 128,
+      "sha256": "e24fa115e21d9d15b0e9584ea8c1e26fe3b526d18b8b407613e8eca8a24c1733",
+      "size": 140,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/air_empty.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/armor_empty.png",
-      "sha256": "a8cd07e5509a4b0f494bf011257893a2ebac77da674c6b968764f8d1bc675ec7",
-      "size": 166,
+      "sha256": "1797a719e17fc81907614ba4794443285448154657d66cbf38e064445cd89118",
+      "size": 213,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/armor_empty.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/armor_full.png",
-      "sha256": "53c69843a199dd980e187f804ef4c267850854fc63fd6178235f25e7be921646",
-      "size": 184,
+      "sha256": "8086351763bf2bc3f29a984afc832d68370ba95d085d9e5e8be67fb4969c5ceb",
+      "size": 212,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/armor_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/armor_half.png",
-      "sha256": "be64f3f36aa44b34f7d79bb34e3d37b92b43d7c833316172ed330b8f1327ad2f",
-      "size": 182,
+      "sha256": "6a4f874c710e9570e38eb690d04f3208a3ddd75da77423a6a8585a2b795f85a7",
+      "size": 221,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/armor_half.png"
     },
     {
@@ -1035,368 +1035,368 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/crosshair_attack_indicator_background.png",
-      "sha256": "aa475234a712d37e1235832e7d41ac304afef82e998c51fdc5fa363fde96b5a1",
-      "size": 147,
+      "sha256": "6481139abb63c4041a2831f1db3b6b0380dd89a3cf8b300cfff01b5e1f581772",
+      "size": 190,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/crosshair_attack_indicator_background.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/crosshair_attack_indicator_full.png",
-      "sha256": "0901cce6c30e9cf2a66147fde8e25c02951e040f32ea2eba9defb0f84d1ea779",
-      "size": 196,
+      "sha256": "62e6d05a8f1c10c444945cc8b93001aa010749d1469a0ea0a55feb465c906a2c",
+      "size": 195,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/crosshair_attack_indicator_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/crosshair_attack_indicator_progress.png",
-      "sha256": "7638e50640894275fc8567595c7390fe770d1299b811e82df8f71b94efde504c",
-      "size": 160,
+      "sha256": "e1ec4c7526d9a23474b96a4b9dbdfef721536e5ebd68bcba779ff6c5ee0b377b",
+      "size": 163,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/crosshair_attack_indicator_progress.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/effect_background.png",
-      "sha256": "c20f1c2f292515369eb93b3ddaa001fa51ffb94e03fcabb0b2d70e9e60f17a42",
-      "size": 688,
+      "sha256": "764822670ff77a55fe3e2bc77c73ed4532b2b52187942ab00c0a6a8b2f9c1c2f",
+      "size": 971,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/effect_background.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/effect_background_ambient.png",
-      "sha256": "89343c77790239a246fa1a71ff092ae33641a635d294e3b5a35bbf5153e3986f",
-      "size": 840,
+      "sha256": "b53dc5594f9257bfd2e488dbadcf75c4efbbf38d30237b409eef47ca599541f7",
+      "size": 1159,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/effect_background_ambient.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/experience_bar_background.png",
-      "sha256": "78d498e00bea40a2232ea63ab6249fb96b8759b1694d860ac8039888425b76c4",
-      "size": 1037,
+      "sha256": "b574f95171d97552f779ddf1426b353171456d6ed1389d029a943f2b976649c3",
+      "size": 1638,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/experience_bar_background.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/experience_bar_progress.png",
-      "sha256": "9cd0a62a8cb565a43709d2d781022bf9d77ee4ec055c1ed8428d88a55fa7fefe",
-      "size": 2254,
+      "sha256": "a07e26fef728cc8af9029f06fa1aa568acd45937af1d8e912343e68c3f0e6e6a",
+      "size": 2831,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/experience_bar_progress.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_empty.png",
-      "sha256": "37e3182252b72c77ada93b01ea01c8eba9c524e07be71bfca442dfcbc358bbd6",
-      "size": 146,
+      "sha256": "90b020fe3d0ef9d064ed6746bd8d483220f651adbe87003e1bc81331ffdee9c3",
+      "size": 155,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_empty.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_empty_hunger.png",
-      "sha256": "b9a36816312b5514297c571dc1f7edc82603057a286e04c488cc9c8ccb7478a0",
-      "size": 176,
+      "sha256": "ddedfef4e78038a58bc292e13a155b9ac072444210ac01c42de37d3114bd708e",
+      "size": 201,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_empty_hunger.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_full.png",
-      "sha256": "32c47695741f56e867994b2b0c35db110809960b2eb575a96ce9483eb19a1449",
+      "sha256": "d2bf225b67b47912ec8503fc39b4367807b67047b79163adbc7a276e52d6b2ec",
       "size": 184,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_full_hunger.png",
-      "sha256": "58b5dd6f3caa31f2f64b6e102bba798a428498d7677f2d9623c6d705210c0351",
-      "size": 182,
+      "sha256": "62ec9142410816ad8b8cfd6a1c59152ab22713fb53fbe0651a6308fb4dd35cd0",
+      "size": 185,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_full_hunger.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_half.png",
-      "sha256": "3c0a7c828a3d2a5c6619a5cadebe9e81d6a73ae0dfbd07019195abe023e065f5",
-      "size": 161,
+      "sha256": "69d6c3cbea23542c7045e713486435619a38d42ca0b08c0c37590b1fcfd4b6f2",
+      "size": 158,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_half_hunger.png",
-      "sha256": "28f2a57340bb1366f0101d038fc46d8ee3b0144db83feac74e4260f4bb01480a",
-      "size": 157,
+      "sha256": "90778dd9371bfa7b48411aa02ef1a5b5b1dbff48012d33fba11ff37abaab6749",
+      "size": 158,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/food_half_hunger.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_full.png",
-      "sha256": "4d118d4a9b2a7027013d090506aa79f8025bb2868100b71586594302369a2b48",
-      "size": 195,
+      "sha256": "356b77865959684b82e5530cf973b73d7cb3544d08e20c9115047218c2c73aaa",
+      "size": 214,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_full_blinking.png",
-      "sha256": "4d118d4a9b2a7027013d090506aa79f8025bb2868100b71586594302369a2b48",
-      "size": 195,
+      "sha256": "356b77865959684b82e5530cf973b73d7cb3544d08e20c9115047218c2c73aaa",
+      "size": 214,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_full_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_half.png",
-      "sha256": "d8348af2f8549c5785a28c1cfda1a652621fd00ad46df05b9bff30418ed7ab61",
-      "size": 169,
+      "sha256": "1819e0f1faa87e2534d063c48a2420a9c2fc4d2fe26bbc2e8050a163a5458749",
+      "size": 180,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_half_blinking.png",
-      "sha256": "d8348af2f8549c5785a28c1cfda1a652621fd00ad46df05b9bff30418ed7ab61",
-      "size": 169,
+      "sha256": "1819e0f1faa87e2534d063c48a2420a9c2fc4d2fe26bbc2e8050a163a5458749",
+      "size": 180,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_half_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_hardcore_full.png",
-      "sha256": "5e2f7fc4407390b1d4cd7c021fdbe5864e24826d918ad8b85cb0ce1a9ce3f730",
-      "size": 205,
+      "sha256": "a811f0572a115789f3af52e304c27d07bd19632bf35be2f5710fa8e2f473dac5",
+      "size": 223,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_hardcore_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_hardcore_full_blinking.png",
-      "sha256": "5e2f7fc4407390b1d4cd7c021fdbe5864e24826d918ad8b85cb0ce1a9ce3f730",
-      "size": 205,
+      "sha256": "a811f0572a115789f3af52e304c27d07bd19632bf35be2f5710fa8e2f473dac5",
+      "size": 223,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_hardcore_full_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_hardcore_half.png",
-      "sha256": "ff06e85615913d7ca95c6c58ce1c84930014af002783a575e78464d23f0941bc",
-      "size": 178,
+      "sha256": "9ac6f54e6ae25702e5a2044a6b55b1a53b5467eb117c1ee5e6b000f3e95b5687",
+      "size": 191,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_hardcore_half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_hardcore_half_blinking.png",
-      "sha256": "ff06e85615913d7ca95c6c58ce1c84930014af002783a575e78464d23f0941bc",
-      "size": 178,
+      "sha256": "9ac6f54e6ae25702e5a2044a6b55b1a53b5467eb117c1ee5e6b000f3e95b5687",
+      "size": 191,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/absorbing_hardcore_half_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/container.png",
-      "sha256": "01f2ae7d1044124e2f6520e59f842e3316b2cf1e8a279d5f74bb0cfd71b6377d",
-      "size": 150,
+      "sha256": "cdd3a53c94a40eae135a02585ad4583c228a3f3e7af3f084deb407a7015d7da2",
+      "size": 183,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/container.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/container_blinking.png",
-      "sha256": "b19dc07d5d25019f999ae42086c865e7bdb18d81d601f70c1ae03de57e40c87f",
-      "size": 154,
+      "sha256": "b786992f99d20c39889666583949e3e2142d12334e573ecebbbd4932a1338b79",
+      "size": 184,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/container_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/container_hardcore.png",
-      "sha256": "01f2ae7d1044124e2f6520e59f842e3316b2cf1e8a279d5f74bb0cfd71b6377d",
-      "size": 150,
+      "sha256": "cdd3a53c94a40eae135a02585ad4583c228a3f3e7af3f084deb407a7015d7da2",
+      "size": 183,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/container_hardcore.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/container_hardcore_blinking.png",
-      "sha256": "b19dc07d5d25019f999ae42086c865e7bdb18d81d601f70c1ae03de57e40c87f",
-      "size": 154,
+      "sha256": "b786992f99d20c39889666583949e3e2142d12334e573ecebbbd4932a1338b79",
+      "size": 184,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/container_hardcore_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_full.png",
-      "sha256": "fb1b6ea4a3b8f3b70b322d2fb44ab3abd46880839fce14fd0369f674db1338ff",
-      "size": 216,
+      "sha256": "49afcdadcbbdcaa25081aededbc4d985752b2159e5966cf369c9dac736e11c8b",
+      "size": 229,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_full_blinking.png",
-      "sha256": "fb1b6ea4a3b8f3b70b322d2fb44ab3abd46880839fce14fd0369f674db1338ff",
-      "size": 216,
+      "sha256": "49afcdadcbbdcaa25081aededbc4d985752b2159e5966cf369c9dac736e11c8b",
+      "size": 229,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_full_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_half.png",
-      "sha256": "66903e061a691e0e3c69ca779e48799ff679df46a848cd4f645990254a2fc674",
-      "size": 174,
+      "sha256": "0026ec588c1d02b923374b4b909eca08abed55dc467fe6e8ff4016fb2921a967",
+      "size": 183,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_half_blinking.png",
-      "sha256": "66903e061a691e0e3c69ca779e48799ff679df46a848cd4f645990254a2fc674",
-      "size": 174,
+      "sha256": "0026ec588c1d02b923374b4b909eca08abed55dc467fe6e8ff4016fb2921a967",
+      "size": 183,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_half_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_hardcore_full.png",
-      "sha256": "9d8c51aa8907e3f34b8cd4416c91c0964a99d960a416968274b505d3b72af199",
-      "size": 231,
+      "sha256": "abb33e9ffc12736ab17c47e37883f69a297ac0871ae2ed63fc3fa268f458902b",
+      "size": 241,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_hardcore_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_hardcore_full_blinking.png",
-      "sha256": "9d8c51aa8907e3f34b8cd4416c91c0964a99d960a416968274b505d3b72af199",
-      "size": 231,
+      "sha256": "abb33e9ffc12736ab17c47e37883f69a297ac0871ae2ed63fc3fa268f458902b",
+      "size": 241,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_hardcore_full_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_hardcore_half.png",
-      "sha256": "f7cc430438c512972b21de1dfbae1d1fc9691b5cff7ecb3431583024a66ba76f",
-      "size": 177,
+      "sha256": "a3bd29f5d03057828714b2aae3fc52d38aadec6f8bef5aee67bd85fad56dbb27",
+      "size": 189,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_hardcore_half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_hardcore_half_blinking.png",
-      "sha256": "f7cc430438c512972b21de1dfbae1d1fc9691b5cff7ecb3431583024a66ba76f",
-      "size": 177,
+      "sha256": "a3bd29f5d03057828714b2aae3fc52d38aadec6f8bef5aee67bd85fad56dbb27",
+      "size": 189,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/frozen_hardcore_half_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/full.png",
-      "sha256": "daa364655cda485fe6777dc618b0d637ad1dfde99df8d0b8028e538447787885",
+      "sha256": "93973819a22e92df0639cddcff333e3c4c720137c10fc2ecf6072b969d57e2d4",
       "size": 137,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/full_blinking.png",
-      "sha256": "375002171d6cb8d0dd98135db381a91dd25237d0eeed1af83394d31c601e7635",
-      "size": 200,
+      "sha256": "b86b0802550c5f792429f071a9276f039c5a45ceb1d5d38eaca411ddcc99fb36",
+      "size": 215,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/full_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/half.png",
-      "sha256": "bdb046b09a752afe6f5204377cc415e50f2e202704250d3774a4d752132d92ea",
+      "sha256": "8bcd3d0573607e2d4ff977e2d3bc0f2c8dc2ca46f020d58179a1049a0d13fda4",
       "size": 128,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/half_blinking.png",
-      "sha256": "55630824257cbdaf2e928c11344977bc36db11fe09e9057d19dc65668b4ac096",
-      "size": 166,
+      "sha256": "ffe676634452bfaeb7fc8a0349ee72c73fafdcb30e12656a0d4d34d3f099345f",
+      "size": 175,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/half_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/hardcore_full.png",
-      "sha256": "991aeaaafb7917d9ae48aeb1d077631229ab2cd4425c65caccba24cb22818018",
-      "size": 148,
+      "sha256": "2dbde0475a9893d8f59ba11edf46537f6af0db4a9af829f7be0a02f4e5b4544b",
+      "size": 150,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/hardcore_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/hardcore_full_blinking.png",
-      "sha256": "5215c857aba8f5fbd132bcecc789828e4e2ab8ce4bb535c5965bf3c070751439",
-      "size": 209,
+      "sha256": "3dc6a445ab0e8324661091b3de9b9cbb7dc11e42c794d8622ca113487e37203d",
+      "size": 226,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/hardcore_full_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/hardcore_half.png",
-      "sha256": "51ba185e578a0d14359512b1e804ffef0433a0cee80896742d0adc390db0a343",
-      "size": 131,
+      "sha256": "446dceb0b26a0d340e3a644a8a667753c45bcefdcdc755e1b93397993aff975d",
+      "size": 134,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/hardcore_half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/hardcore_half_blinking.png",
-      "sha256": "569f4d9ca0514f12cf73d18270d9abcf46decfaa4d1730bc5c3af58a348e2b8a",
-      "size": 170,
+      "sha256": "08d3c0bdb60564fd8cfb6a8de7be20eae4487645751994a4d6932ecf54aa9b9a",
+      "size": 180,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/hardcore_half_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_full.png",
-      "sha256": "fcebe1fafc23b63487222acae22ca9e584cce1f8885090f85c8cb97e77369dcd",
-      "size": 205,
+      "sha256": "bd884555175273083cc513d86e80d2a7b22cfd05f98d6b3d1f46f494e51200bc",
+      "size": 228,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_full_blinking.png",
-      "sha256": "56aef7a04b902d6aeb87634f6deb15a44a95e7cc91102b513a8c2da5ea0e1598",
-      "size": 202,
+      "sha256": "6d3bd488c013783b1c04df8a224c8e2b6a680b9d2d54bbdd9d7e51b02ad81569",
+      "size": 231,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_full_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_half.png",
-      "sha256": "3d7072ab9fb639c747e226844a9a6a64b8d779ff7c38d3ed7c51da494764ae31",
-      "size": 172,
+      "sha256": "67df35ab173984f0a83bc6118e58e64f94e7442dbfb95ade7a29560e6a360724",
+      "size": 179,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_half_blinking.png",
-      "sha256": "41240697a56d76b0f194a8f28790d223b63bd6774d84f84c36349792720fbdc6",
-      "size": 170,
+      "sha256": "34f3cc63d8b6fcb9c1f4667f128b18cd7acb86e6892a45c601770009c48a8f10",
+      "size": 187,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_half_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_hardcore_full.png",
-      "sha256": "ae26b61027038d55babe6f3b55315882805fbcde77328d454d561e40e5db4a2a",
-      "size": 204,
+      "sha256": "ef69994bafab54df3705be030a3b485e3595a7a821a65ffc817da76df146ef09",
+      "size": 229,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_hardcore_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_hardcore_full_blinking.png",
-      "sha256": "e106c268fa36092f46820d97ab1080c923489d8bc6684fa230806b1fda8438b7",
-      "size": 207,
+      "sha256": "c30fcd9a64ca708e38e2f489840885648ecb15b359d60b8c058e9e13f059ebb9",
+      "size": 241,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_hardcore_full_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_hardcore_half.png",
-      "sha256": "b2e66690a0d030d05a14aadb521f9e1c06a69ec34292c3de2d125a4cc029b456",
-      "size": 172,
+      "sha256": "361c1ca0ccec16f4fc983bfedf21ff8c1a00be586d2c5edf10c5085a5c5afb6c",
+      "size": 183,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_hardcore_half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_hardcore_half_blinking.png",
-      "sha256": "376a3b7f43505d9b302106613132bc4119c95858b91dc9b7e9c5b074077e1ef0",
-      "size": 175,
+      "sha256": "5c71df787b75228833201305a0acc0942b90d49ebd644d67e4aab78387950c00",
+      "size": 191,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/poisoned_hardcore_half_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/vehicle_container.png",
-      "sha256": "01f2ae7d1044124e2f6520e59f842e3316b2cf1e8a279d5f74bb0cfd71b6377d",
-      "size": 150,
+      "sha256": "cdd3a53c94a40eae135a02585ad4583c228a3f3e7af3f084deb407a7015d7da2",
+      "size": 183,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/vehicle_container.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/vehicle_full.png",
-      "sha256": "526951769e7b5cb6ba6a9ce93164caa9edb049bc07ecb3c733c8a6b18c16502a",
-      "size": 206,
+      "sha256": "a76111de37a851e353fd1675b3a8130e57209648aa7f9a36e3de65fd3497bf7c",
+      "size": 226,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/vehicle_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/vehicle_half.png",
-      "sha256": "9118548ed0b145a53354a4a17b27d73761e0fe4380dfc02664762638d13fc46c",
-      "size": 164,
+      "sha256": "85bc4e7358536c841f86a62657a96cb4c988b0adbfa515b4aba87d91e5c64832",
+      "size": 174,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/vehicle_half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_full.png",
-      "sha256": "9b7c164c7bab81c3874f48ac9e76ac8d470cb50932e4b778f0ba7105b362d91c",
-      "size": 209,
+      "sha256": "991688ba0a9cb58f7e9dcc75760e11bb1f96bbbae94fb680cfd882eb6981d3b6",
+      "size": 230,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_full_blinking.png",
-      "sha256": "7aa44d37b070f6d16d9c70073e2000f02d30549efa4e362829f3fb55908fa655",
-      "size": 202,
+      "sha256": "4e12933f4af7c0db5c8142cd8b2db319a7ec1787d368e1b5e636da66478db2fb",
+      "size": 232,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_full_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_half.png",
-      "sha256": "168bcbe68988d42ac518545a134665957899ee649e4417d6870616526daf6789",
-      "size": 171,
+      "sha256": "c824d9a2fb9dba99a8d081cf85c92b8c95ec7bc7d49783f142eab9daf37da23b",
+      "size": 186,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_half_blinking.png",
-      "sha256": "56a949b060cb3ed2d8538dfd96dd7fdf4b9379d6c3f62f3259d8da58b29d0bbf",
-      "size": 169,
+      "sha256": "21cdb8c1af52ea4137ca041194d563c9770aeff84310ff02d0ace5cc5194139d",
+      "size": 181,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_half_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_hardcore_full.png",
-      "sha256": "c51864769d61b93defd1a7fcceb8a5d6183729cc208bb31e93d27989f01b8f62",
-      "size": 218,
+      "sha256": "2114ea5b026df7a32c43fa44e1edd5494d839885c2d104481cead5033f2d0875",
+      "size": 239,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_hardcore_full.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_hardcore_full_blinking.png",
-      "sha256": "7cdeb09c51329a61b97b1a156523a632c488e3c068b24cfaa434f5a8547c9293",
-      "size": 217,
+      "sha256": "7285df82492bbcf28a67ca060e90e36f215544dc1d8c70575481dc287e4f3f4a",
+      "size": 247,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_hardcore_full_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_hardcore_half.png",
-      "sha256": "4f0642430053fc6843fdde768bf5b375cf69205786e9a89bfa6b2aab394712e9",
-      "size": 177,
+      "sha256": "786d398cbfb6bce6b66279d3c58b50175dfdd047e600d2610664751ca4658053",
+      "size": 187,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_hardcore_half.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_hardcore_half_blinking.png",
-      "sha256": "222ffb6214b219eae6beda4f10afc063d2f3aea066a07fcbdab5f5e6dbbd98bf",
-      "size": 181,
+      "sha256": "b4663686e087059e4f26768a8f17a2ae432c341fce4851a6744cb5d347682997",
+      "size": 188,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/heart/withered_hardcore_half_blinking.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar.png",
-      "sha256": "d06a01cabfe6f30b5dcc42337dac5ee7e72107e2c534ea170b8059dec88e3217",
-      "size": 6922,
+      "sha256": "28654a74f73f7e8911021f0abb6d98b4380b4c49769c97986f23103352c37cd7",
+      "size": 9255,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar.png"
     },
     {
@@ -1407,44 +1407,44 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_attack_indicator_progress.png",
-      "sha256": "0d0ce25fc4e0718da20daf9c4c549e2f6f3d77f8e01c425006bff3a27c28f9b9",
-      "size": 346,
+      "sha256": "2a0e81625a36b5496dc670280a460c63404be13b388fd02bc72b4b759447a631",
+      "size": 369,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_attack_indicator_progress.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_offhand_left.png",
-      "sha256": "9558ee074a5030c51599fd0ebfcc2348aac15c2280526dae7f9f418aad8fa72c",
-      "size": 1060,
+      "sha256": "8f286b65b7273718af2ca8e1c53bcacd67416126f414bdaaf4fcedbd2c801698",
+      "size": 1333,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_offhand_left.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_offhand_right.png",
-      "sha256": "084df5af7fb2dfa80148524cb322f83524c4f40a4ac9a564fd9d2706096f34a0",
-      "size": 1125,
+      "sha256": "f1a8d35ce8ab13b20c1b9526f5d0a9b2d593c156dcdd3e26f04e8ce444593caa",
+      "size": 1381,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_offhand_right.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_selection.png",
-      "sha256": "7eeab1588811f92db3a67a84285aa5ba86a2ae1194250d63df8430032902691f",
-      "size": 1040,
+      "sha256": "9ecee9742cbc85e4337c418843d711d65e3062888000a9d0969e94364b37928c",
+      "size": 1051,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_selection.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/jump_bar_background.png",
-      "sha256": "aa7ce5a27a334c962ff5586515d1d6dd61fa167824912822639176b328852bfd",
-      "size": 1296,
+      "sha256": "6490fd8f8c7e15a85f2eb82f9647ec8807da1f6477fae42199c099f87e4a70d6",
+      "size": 2101,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/jump_bar_background.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/jump_bar_cooldown.png",
-      "sha256": "c8a6afaed63932d03dab1246267e6f84d8086c28d99b8626bc8a049db00cc358",
-      "size": 904,
+      "sha256": "004fafa2a5632a98da1535f4bb4ace21453720550b699d8ef032b88a94fdfd69",
+      "size": 1478,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/jump_bar_cooldown.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/jump_bar_progress.png",
-      "sha256": "e33be72522428c50258bb1a8e265465f3810603c1975bfb34c0d4d29cde8c3a5",
-      "size": 2359,
+      "sha256": "03e40fb55bafeee08d94e80e0d84052817aa225b1eb4cafd4a00f859427935b8",
+      "size": 2919,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/jump_bar_progress.png"
     },
     {
@@ -1473,8 +1473,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/locator_bar_background.png",
-      "sha256": "f1a907462f423e7a1be0b1e8834b2b6c0f06589ade5ecc907ceaadae86e8fc28",
-      "size": 216,
+      "sha256": "e1cdf10ac77b13400470c256cf44ea8f391d3f3aacca4d2821bdf1e745dfe44d",
+      "size": 274,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/locator_bar_background.png"
     },
     {
@@ -1485,20 +1485,20 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/locator_bar_dot/bowtie.png",
-      "sha256": "a96994f9494c763865192672b93bef96838e27cf1055a9683fceeadc2eab1483",
-      "size": 152,
+      "sha256": "ed92ec78f1b3135b592ef6270aed83f1176c5efd37f08903152355e5e4a94836",
+      "size": 170,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/locator_bar_dot/bowtie.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/locator_bar_dot/default_0.png",
-      "sha256": "7b79ab17315c4e2f340d952818f2dc71780117cb347c1453c9c4e4cd32d92b0b",
-      "size": 152,
+      "sha256": "bd028fbaa4f03feb3234d32815485f17b983a12783c95921157b84234b540c31",
+      "size": 137,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/locator_bar_dot/default_0.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/locator_bar_dot/default_1.png",
-      "sha256": "5b48a73ff4719ff66818146f67021b5c0cbe2a73acb3dab15705c6e77e74e54a",
-      "size": 133,
+      "sha256": "235d528cc3222219402cafbc06e068f96ea58ce0f826682b169012d295611dfd",
+      "size": 152,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/locator_bar_dot/default_1.png"
     },
     {
@@ -1509,14 +1509,14 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/locator_bar_dot/default_3.png",
-      "sha256": "08dddb61e6258375f0b26acbd684111e56ce769575f7cd6e3c78e70f5c31a155",
-      "size": 116,
+      "sha256": "22ee87baee4150bf0c50a8b0d9e3c17d9229895a3baa4c2ebd394ffa790314aa",
+      "size": 114,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/locator_bar_dot/default_3.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/button.png",
-      "sha256": "f792e8227ab29d0a12bd54863c8a3074c205dffd4e65bf62312a7fb706f61a0b",
-      "size": 6844,
+      "sha256": "d70dab6b3bfc3f197382a24da86e85bc868907bc0510497a65f6d21954c192d0",
+      "size": 9825,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/button.png"
     },
     {
@@ -1527,8 +1527,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/button_disabled.png",
-      "sha256": "b20ead3df57f3dea735900daf8d51503654ced448b1605387b5309757bc486bd",
-      "size": 5081,
+      "sha256": "33cb0c9f8b4b7fa089fd15596a7d7fba9012aa597470afeb5998d0e5dc823ad3",
+      "size": 7409,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/button_disabled.png"
     },
     {
@@ -1539,8 +1539,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/button_highlighted.png",
-      "sha256": "36282d359f2ce8bd7f66f8665cfd7eb3f9dd267454f8c040b1ca064adacd8610",
-      "size": 6928,
+      "sha256": "25dde1db42407e820dcd112193c7629c9becdc1016e0c85e16e73c44d22ffdba",
+      "size": 9877,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/button_highlighted.png"
     },
     {
@@ -1551,86 +1551,86 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/checkbox.png",
-      "sha256": "d7b16ba9bbc008e61cb9308d310b82389147906b23948ef7bf15fb16bf102041",
-      "size": 650,
+      "sha256": "ce2ca571d399528e706ce693260ddd892e693b68625e83b38caaa9a5d7d2d86e",
+      "size": 915,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/checkbox.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/checkbox_highlighted.png",
-      "sha256": "59c2703a7daec791923fdc168c1c7e4da28a3e86766f86fc4f1522426191832a",
-      "size": 650,
+      "sha256": "a3607cc201492b3d984ea8c17e1259025f32575db35d078c292abda9615d44b4",
+      "size": 915,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/checkbox_highlighted.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/checkbox_selected.png",
-      "sha256": "a9c06b86a99a97a6f24acdec19fe811e83cf3973bdefa0c0d5d4d0c6ee35ccb4",
-      "size": 663,
+      "sha256": "9984efc5ca68873c6c868f60b134efd639e7ac250ca4c2fbd2f2784fc009feb7",
+      "size": 926,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/checkbox_selected.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/checkbox_selected_highlighted.png",
-      "sha256": "ec50fceb52c73edd3ada74184838ea1fc6f20fd5898128ea2f5341e25f392f41",
-      "size": 662,
+      "sha256": "47e432e41b681e77dac221ddda8f33e5197b09147572e14366b23e6cebc14aba",
+      "size": 926,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/checkbox_selected_highlighted.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/cross_button.png",
-      "sha256": "65b15ff2aa09db4b6809041732a92874a22af128daeb1d3b7bc506257aefc772",
-      "size": 385,
+      "sha256": "aed0caa40c99778d302bb4ae14aff03ba84bba812c67b04a59b04316986cef0a",
+      "size": 509,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/cross_button.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/cross_button_highlighted.png",
-      "sha256": "2a3b378a05f371d8af132197d5763b36a397c699fbd2f8424a1f57936f009996",
-      "size": 367,
+      "sha256": "bac5bf2b5d55b7667e162cd8c9219863219c22226c1aa99b8bf47f025b5c5384",
+      "size": 459,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/cross_button_highlighted.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/locked_button.png",
-      "sha256": "6ac5322dac61e362db2c37425f46b5ba842a4575b987c6f676923efe9af24b17",
-      "size": 929,
+      "sha256": "b7fce936628265af2854a0d4d671d209a492a4a95e2a7b2437ae4efdfaff512c",
+      "size": 1155,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/locked_button.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/locked_button_disabled.png",
-      "sha256": "d22be8841c1fa50980afd8af3baa021479b22bbc5e167ba8b7bf2638679472e7",
-      "size": 804,
+      "sha256": "b649eeddca3108e90e2fef6a23ac195b73805b23529f00bc4dafc0f596f1c53c",
+      "size": 1057,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/locked_button_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/locked_button_highlighted.png",
-      "sha256": "59980c13fc5fcf48dad9dda24971cbeadf02bbf9564bbe12ab445136b5f2d757",
-      "size": 956,
+      "sha256": "da2bcd6de6a76b323dffe6b6c36a4052ae849d480d6a1ecddfee203fa20592dc",
+      "size": 1154,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/locked_button_highlighted.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/page_backward.png",
-      "sha256": "e87a7b666d6679fc824e9b33b7fccafca9d32e873d5b3d766b56aba26e07bd47",
-      "size": 376,
+      "sha256": "8650f6641c87870694b0ccba79d2f834653ba41693190cc171bccb3651afd0e6",
+      "size": 391,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/page_backward.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/page_backward_highlighted.png",
-      "sha256": "e440df29786b5723e109e429adc5077867c49dbbb9b6425e9cfcbc3a1f4ee4f1",
-      "size": 381,
+      "sha256": "e61d298b518bd9a72c4fe92f9a6b6b36136a9fc189a7e53311775df46fe35392",
+      "size": 432,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/page_backward_highlighted.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/page_forward.png",
-      "sha256": "a207f42aad52b22cfdfa20e7baa685dffaf9846d1b8999ec0f3a3b572b5027f5",
-      "size": 377,
+      "sha256": "ff7186ad99d23a85f671ae787d12eaf04fc1e39861319e5c05a33cf52baa817b",
+      "size": 389,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/page_forward.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/page_forward_highlighted.png",
-      "sha256": "de6eeb9af9edc588b44e1121c13795dd983e558582dfd7b8f61c8a08d2df4cfa",
-      "size": 396,
+      "sha256": "871e2f59096ec2a2838dd8ea999fbc6d3bc664e383361a6b066dc636bdb76cbe",
+      "size": 428,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/page_forward_highlighted.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/scroller.png",
-      "sha256": "5cefdc2bc5fc493468f31c6b885dac61ea0fee0e19708c5bf2d322ec7f53ff30",
-      "size": 387,
+      "sha256": "48b0b565c3b8e6860f4a3554af3bacd11a45b439d5e3ad8fadf0904f6276faef",
+      "size": 516,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/scroller.png"
     },
     {
@@ -1653,8 +1653,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/slider.png",
-      "sha256": "b20ead3df57f3dea735900daf8d51503654ced448b1605387b5309757bc486bd",
-      "size": 5081,
+      "sha256": "33cb0c9f8b4b7fa089fd15596a7d7fba9012aa597470afeb5998d0e5dc823ad3",
+      "size": 7409,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/slider.png"
     },
     {
@@ -1665,8 +1665,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/slider_handle.png",
-      "sha256": "b80a4419deef52334eb8b4396292307bc4a4ae795e137836fd558213250f9db1",
-      "size": 411,
+      "sha256": "664638cb9380f6b11b2a00eb7759fda7219ebe46d47a8960e6590e20b5ea072c",
+      "size": 518,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/slider_handle.png"
     },
     {
@@ -1677,8 +1677,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/slider_handle_highlighted.png",
-      "sha256": "682479f9d44d0337540255bdeff440409d3453f6c100b05ad06fb098980f1f25",
-      "size": 411,
+      "sha256": "8d22270362cd9bd7066dc7f05c8ecf25cb4025ed0d28c7da144e0f65cab26710",
+      "size": 528,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/slider_handle_highlighted.png"
     },
     {
@@ -1689,8 +1689,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/slider_highlighted.png",
-      "sha256": "fb946f7e86d6e0460a953e632043ab57fe43291fadafd7a77cf6ed1881e71809",
-      "size": 5077,
+      "sha256": "37f457c1167d2ea480e0044f752da59c157b9e56405cb752d9f3a5cfb0009fb6",
+      "size": 7407,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/slider_highlighted.png"
     },
     {
@@ -1701,14 +1701,14 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/slot_frame.png",
-      "sha256": "bd0040d41ede1f99d40e35d4db9925638cef77059ffbbe933e767adffae0ca69",
-      "size": 3200,
+      "sha256": "5117309f004ea9e1ff089410f3c83e7d0210ecbd9533890cec54452bb0dc2229",
+      "size": 3435,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/slot_frame.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/tab.png",
-      "sha256": "03ac112d78dc1d160d2284676549fc515f4fc07407d2e5bcbb3da2ac588c7863",
-      "size": 2685,
+      "sha256": "0efb3e38d2754eb997ec2d427ae12282c653e332abb4fc8fd000012141b01657",
+      "size": 3634,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/tab.png"
     },
     {
@@ -1719,8 +1719,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/tab_highlighted.png",
-      "sha256": "57240216ae4c30a94a73328968dce039095ec7f3b122c8c78ecf9eaf8d576761",
-      "size": 2257,
+      "sha256": "9918510d3fe061dc279b0178d0bf26a320a448a41731f620c72e4997ecb1da80",
+      "size": 2954,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/tab_highlighted.png"
     },
     {
@@ -1731,8 +1731,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/tab_selected.png",
-      "sha256": "6ff4289614b90fe20fbb6052a903ccffe286c5d0919bd6119fdd51c7d46c6f74",
-      "size": 1084,
+      "sha256": "cd9b63aa51ba770486a00b91bbbcb082d55262385d962ab741dc0f673b43dd38",
+      "size": 1189,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/tab_selected.png"
     },
     {
@@ -1743,8 +1743,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/tab_selected_highlighted.png",
-      "sha256": "c64d5dcc84c0d783fefc9b4da006e3e5b7cc8f05dc760112870647cfa15b1b3d",
-      "size": 555,
+      "sha256": "78f4f6136c18900a05e610e2b8a7375e7568ed6d4916ab742b5813c176ab9896",
+      "size": 611,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/tab_selected_highlighted.png"
     },
     {
@@ -1755,7 +1755,7 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/text_field.png",
-      "sha256": "bbd3b6ba443864e6cf3f148b126fac8d59af00317e1fad51786faed6231880c6",
+      "sha256": "9e6fe4ecc3203c6c5c3dba556d891b96e87f4d0c79c975c5489b00349af3fa69",
       "size": 240,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/text_field.png"
     },
@@ -1779,20 +1779,20 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/unlocked_button.png",
-      "sha256": "6f0352c4fc16668b747796919121e1f4e2e1590e2c68caebabe8f1d5c04fcbdb",
-      "size": 964,
+      "sha256": "4ad12c19fbd1d8dfcd284d0f7bd892e9c447867568162794294a5bb576cfc0ec",
+      "size": 1168,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/unlocked_button.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/unlocked_button_disabled.png",
-      "sha256": "ef3f5d71ba9fac57a9f491ed6504f9d33f17837d01760f6e246b873b11648f70",
-      "size": 835,
+      "sha256": "aeb40d977aaa004fb4a0ad62510355116d4c732aef91a2dac215229fffdd9c1f",
+      "size": 1079,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/unlocked_button_disabled.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/unlocked_button_highlighted.png",
-      "sha256": "a3dfe640ea418e341fbf8e2b71f6672818fb2d0b30471bc839cb076395c2b953",
-      "size": 981,
+      "sha256": "10d743866b2b5adfd46fa16f0332ae16717e5efddf8b511cd262724062262e54",
+      "size": 1173,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/widget/unlocked_button_highlighted.png"
     },
     {
@@ -1803,8 +1803,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/tomizecorp/textures/gui/medieval-panel-source.png",
-      "sha256": "a415db10754f7361478139587f41f4bcbdfc51e429a932b2ff181432097ee517",
-      "size": 1465190,
+      "sha256": "f5148b71c7283913feefc580e6417bdac70edb93e056172fd2e9f2045f6d58ea",
+      "size": 1716708,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/tomizecorp/textures/gui/medieval-panel-source.png"
     },
     {
