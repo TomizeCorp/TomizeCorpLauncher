@@ -129,7 +129,7 @@ function applyUpdateState(update) {
   $('updatePercent').textContent = update.state === 'checking' ? '…' : `${percent}%`;
   $('updateMessage').textContent = update.message || 'Préparation de la mise à jour…';
   $('updateStatus').textContent = ({checking:'VÉRIFICATION',available:'NOUVELLE VERSION',downloading:'TÉLÉCHARGEMENT',ready:'INSTALLATION',installing:'REDÉMARRAGE AUTOMATIQUE',failed:'NOUVELLE TENTATIVE REQUISE'})[update.state];
-  $('updateTitle').textContent = update.state === 'installing' ? 'Installation de la mise à jour' : update.state === 'failed' ? 'Mise à jour obligatoire' : update.state === 'downloading' ? `Téléchargement ${update.version || ''}` : update.state === 'available' ? `TomizeCorpLauncher ${update.version}` : 'Recherche d’une mise à jour';
+  $('updateTitle').textContent = update.state === 'installing' ? 'Installation de la mise à jour' : update.state === 'failed' ? 'Mise à jour obligatoire' : update.state === 'downloading' ? 'Téléchargement de la mise à jour' : update.state === 'available' ? 'Mise à jour TomizeCorpLauncher' : 'Recherche d’une mise à jour';
   $('installUpdate').hidden = !['available','failed'].includes(update.state);
   $('installUpdate').innerHTML = update.state === 'failed' ? 'RÉESSAYER <b>↻</b>' : 'TÉLÉCHARGER <b>↓</b>';
   $('installUpdate').dataset.action = update.state;
