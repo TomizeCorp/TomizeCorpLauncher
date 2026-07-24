@@ -18,10 +18,23 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.LightType;
 
 public final class TomizeMap {
     public static final int MAP_SIZE = 84;
     public static final int MAP_RADIUS = 21;
+    public static final int[] PING_COLORS = {
+        0xFFF9FFFE, 0xFFF9801D, 0xFFC74EBD, 0xFF3AB3DA,
+        0xFFFED83D, 0xFF80C71F, 0xFFF38BAA, 0xFF474F52,
+        0xFF9D9D97, 0xFF169C9C, 0xFF8932B8, 0xFF3C44AA,
+        0xFF835432, 0xFF5E7C16, 0xFFB02E26, 0xFF1D1D21
+    };
+    public static final String[] PING_COLOR_NAMES = {
+        "Blanc", "Orange", "Magenta", "Bleu clair",
+        "Jaune", "Vert clair", "Rose", "Gris foncé",
+        "Gris clair", "Cyan", "Violet", "Bleu",
+        "Marron", "Vert", "Rouge", "Noir"
+    };
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Type WAYPOINT_LIST = new TypeToken<ArrayList<Waypoint>>() {}.getType();
     private static final Path FILE = FabricLoader.getInstance().getConfigDir().resolve("tomizecorp-waypoints.json");
@@ -42,9 +55,11 @@ public final class TomizeMap {
         public int y;
         public int z;
         public String dimension;
+        public int color;
 
-        public Waypoint(String name, int x, int y, int z, String dimension) {
-            this.name = name; this.x = x; this.y = y; this.z = z; this.dimension = dimension;
+        public Waypoint(String name, int x, int y, int z, String dimension, int color) {
+            this.name = name; this.x = x; this.y = y; this.z = z;
+            this.dimension = dimension; this.color = color;
         }
     }
 
@@ -52,10 +67,16 @@ public final class TomizeMap {
     public static String dimension(MinecraftClient client) { return client.world == null ? "" : client.world.getRegistryKey().getValue().toString(); }
 
     public static void addCurrent(MinecraftClient client, String name) {
+        if (client.player == null) return;
+        add(client, name, client.player.getBlockX(), client.player.getBlockY(),
+                client.player.getBlockZ(), PING_COLORS[14]);
+    }
+
+    public static void add(MinecraftClient client, String name, int x, int y, int z, int color) {
         load();
-        if (client.player == null || client.world == null || WAYPOINTS.size() >= 50) return;
+        if (client.world == null || WAYPOINTS.size() >= 50) return;
         String clean = cleanName(name, "Ping " + (WAYPOINTS.size() + 1));
-        WAYPOINTS.add(new Waypoint(clean, client.player.getBlockX(), client.player.getBlockY(), client.player.getBlockZ(), dimension(client)));
+        WAYPOINTS.add(new Waypoint(clean, x, y, z, dimension(client), color));
         save();
     }
 
@@ -63,6 +84,15 @@ public final class TomizeMap {
         load();
         if (index < 0 || index >= WAYPOINTS.size()) return;
         WAYPOINTS.get(index).name = cleanName(name, WAYPOINTS.get(index).name);
+        save();
+    }
+
+    public static void update(int index, String name, int x, int y, int z, int color) {
+        load();
+        if (index < 0 || index >= WAYPOINTS.size()) return;
+        Waypoint point = WAYPOINTS.get(index);
+        point.name = cleanName(name, point.name);
+        point.x = x; point.y = y; point.z = z; point.color = color;
         save();
     }
 
@@ -119,7 +149,7 @@ public final class TomizeMap {
             int x = mapX + (dx + MAP_RADIUS) * cell;
             int y = mapY + (dz + MAP_RADIUS) * cell;
             context.fill(x - 2, y - 2, x + 3, y + 3, 0xFF111111);
-            context.fill(x - 1, y - 1, x + 2, y + 2, 0xFFFF3BD4);
+            context.fill(x - 1, y - 1, x + 2, y + 2, waypoint.color);
         }
 
         String coordinates = "X " + client.player.getBlockX() + "  Y " + client.player.getBlockY() + "  Z " + client.player.getBlockZ();
@@ -134,7 +164,7 @@ public final class TomizeMap {
             String label = "◆ " + waypoint.name + "  " + Math.round(distance(client, waypoint)) + " m";
             int width = client.textRenderer.getWidth(label);
             context.fill(mapX + MAP_SIZE - width - 6, lineY - 2, mapX + MAP_SIZE + 3, lineY + 10, 0xAA050505);
-            context.drawTextWithShadow(client.textRenderer, label, mapX + MAP_SIZE - width, lineY, 0xFFFF7BE1);
+            context.drawTextWithShadow(client.textRenderer, label, mapX + MAP_SIZE - width, lineY, waypoint.color);
             lineY += 12;
         }
         String key = TomizeKeyBindings.WAYPOINTS.getBoundKeyLocalizedText().getString();
@@ -156,6 +186,8 @@ public final class TomizeMap {
                     BlockPos pos = new BlockPos(worldX, top - 1, worldZ);
                     MapColor mapColor = client.world.getBlockState(pos).getMapColor(client.world, pos);
                     color = 0xFF000000 | mapColor.color;
+                    int blockLight = client.world.getLightLevel(LightType.BLOCK, pos.up());
+                    if (blockLight >= 10) color = warmLight(color, blockLight);
                 } catch (RuntimeException ignored) { }
                 int index = (dz + MAP_RADIUS) * (MAP_RADIUS * 2) + dx + MAP_RADIUS;
                 SURFACE[index] = color;
@@ -177,6 +209,14 @@ public final class TomizeMap {
         int red = Math.max(0, Math.min(255, ((color >> 16) & 0xFF) + amount));
         int green = Math.max(0, Math.min(255, ((color >> 8) & 0xFF) + amount));
         int blue = Math.max(0, Math.min(255, (color & 0xFF) + amount));
+        return 0xFF000000 | red << 16 | green << 8 | blue;
+    }
+
+    private static int warmLight(int color, int level) {
+        int strength = Math.min(72, (level - 8) * 12);
+        int red = Math.min(255, ((color >> 16) & 0xFF) + strength);
+        int green = Math.min(255, ((color >> 8) & 0xFF) + strength * 3 / 4);
+        int blue = Math.min(255, (color & 0xFF) + strength / 4);
         return 0xFF000000 | red << 16 | green << 8 | blue;
     }
 
@@ -221,6 +261,7 @@ public final class TomizeMap {
                 saved.stream().filter(Objects::nonNull).limit(50).forEach(point -> {
                     point.name = cleanName(point.name, "Ping");
                     if (point.dimension == null) point.dimension = "";
+                    if (point.color == 0) point.color = PING_COLORS[14];
                     WAYPOINTS.add(point);
                 });
             }
