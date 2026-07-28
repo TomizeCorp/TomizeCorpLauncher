@@ -20,7 +20,16 @@ function showDashboard() {
   $('login').classList.add('hidden');
   $('dashboard').classList.remove('hidden');
   $('logout').classList.remove('hidden');
-  loadReviews();
+  showAdminPanel('accounts');
+}
+function showAdminPanel(panel) {
+  const accounts = panel === 'accounts';
+  $('accounts-panel').classList.toggle('hidden', !accounts);
+  $('reviews-panel').classList.toggle('hidden', accounts);
+  $('accounts-tab').classList.toggle('active', accounts);
+  $('reviews-tab').classList.toggle('active', !accounts);
+  if (accounts) $('search').focus();
+  else loadReviews();
 }
 async function loadReviews() {
   try {
@@ -67,6 +76,8 @@ $('logout').addEventListener('click', async () => {
   try { await api('/admin/api/logout', { method: 'POST', body: '{}' }); } catch {}
   showLogin();
 });
+$('accounts-tab').addEventListener('click', () => showAdminPanel('accounts'));
+$('reviews-tab').addEventListener('click', () => showAdminPanel('reviews'));
 $('search').addEventListener('input', () => {
   clearTimeout(timer);
   const query = $('search').value.trim();

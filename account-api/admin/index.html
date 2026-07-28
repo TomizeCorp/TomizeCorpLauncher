@@ -7,11 +7,12 @@
   <title>Administration TomizeCorp</title>
   <link rel="stylesheet" href="/admin/app.css">
   <link rel="stylesheet" href="/admin/logo.css">
+  <link rel="stylesheet" href="/admin/tabs.css">
 </head>
 <body>
   <main>
     <header>
-      <div class="brand"><img src="/admin/tomizecorp-logo.png" alt="Logo TomizeCorp"><div><strong>TomizeCorp</strong><small>Administration des comptes</small></div></div>
+      <div class="brand"><img src="/admin/tomizecorp-logo.png" alt="Logo TomizeCorp"><div><strong>TomizeCorp</strong><small>Administration</small></div></div>
       <button id="logout" class="ghost hidden">Déconnexion</button>
     </header>
 
@@ -31,15 +32,26 @@
     </section>
 
     <section id="dashboard" class="hidden">
-      <div class="hero">
-        <div><p class="eyebrow">COMPTES TOMIZECORP</p><h1>Joueurs</h1></div>
-        <label class="search">Rechercher<input id="search" type="search" placeholder="Pseudo ou adresse e-mail" autocomplete="off"></label>
-      </div>
-      <p class="notice">Les mots de passe existants ne sont jamais visibles. Définir un nouveau mot de passe déconnecte automatiquement le joueur de tous ses appareils.</p>
-      <div id="results" class="accounts"></div>
-      <div class="hero"><div><p class="eyebrow">AVIS EPSILON</p><h1>Avis des joueurs</h1></div></div>
-      <div id="review-results" class="accounts"></div>
-      <p id="empty" class="empty">Commencez à écrire pour rechercher un joueur.</p>
+      <nav class="admin-tabs" aria-label="Sections de l’administration">
+        <button id="accounts-tab" class="admin-tab active" type="button">Comptes joueurs</button>
+        <button id="reviews-tab" class="admin-tab" type="button">Avis EPSILON</button>
+      </nav>
+
+      <section id="accounts-panel" class="admin-panel">
+        <div class="hero">
+          <div><p class="eyebrow">COMPTES TOMIZECORP</p><h1>Joueurs</h1></div>
+          <label class="search">Rechercher<input id="search" type="search" placeholder="Pseudo ou adresse e-mail" autocomplete="off"></label>
+        </div>
+        <p class="notice">Les mots de passe existants ne sont jamais visibles. Définir un nouveau mot de passe déconnecte automatiquement le joueur de tous ses appareils.</p>
+        <div id="results" class="accounts"></div>
+        <p id="empty" class="empty">Commencez à écrire pour rechercher un joueur.</p>
+      </section>
+
+      <section id="reviews-panel" class="admin-panel hidden">
+        <div class="hero"><div><p class="eyebrow">AVIS EPSILON</p><h1>Avis des joueurs</h1></div></div>
+        <p class="notice">Les réponses publiées ici apparaissent officiellement sous l’avis du joueur sur le site EPSILON.</p>
+        <div id="review-results" class="accounts"></div>
+      </section>
     </section>
   </main>
 

@@ -1,0 +1,51 @@
+.admin-tabs {
+  display: flex;
+  width: max-content;
+  gap: 8px;
+  margin: -36px 0 44px;
+  padding: 6px;
+  border: 1px solid #252a32;
+  border-radius: 15px;
+  background: #0d0f13;
+}
+
+.admin-tab {
+  padding: 11px 18px;
+  background: transparent;
+  color: #858e9b;
+}
+
+.admin-tab:hover {
+  background: #171a20;
+  color: #fff;
+}
+
+.admin-tab.active {
+  background: #f4f6f8;
+  color: #090a0c;
+}
+
+.admin-panel {
+  min-height: 480px;
+}
+
+#reviews-panel .account {
+  grid-template-columns: 1fr 2fr auto;
+}
+
+@media (max-width: 700px) {
+  .admin-tabs {
+    width: 100%;
+    margin-top: -22px;
+  }
+
+  .admin-tab {
+    flex: 1;
+    padding: 11px 8px;
+    font-size: 12px;
+  }
+
+  #reviews-panel .account {
+    grid-template-columns: 1fr;
+  }
+}
