@@ -223,7 +223,7 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
     const origin = String(req.headers.origin || '');
-    if (origin === reviewsSiteUrl || origin.endsWith('.chatgpt.app')) {
+    if (origin === reviewsSiteUrl || origin.endsWith('.chatgpt.site')) {
       res.setHeader('access-control-allow-origin', origin);
       res.setHeader('vary', 'Origin');
       res.setHeader('access-control-allow-headers', 'authorization,content-type');
