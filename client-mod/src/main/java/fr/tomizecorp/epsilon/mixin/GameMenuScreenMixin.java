@@ -28,14 +28,23 @@ public abstract class GameMenuScreenMixin extends Screen {
             .filter(ButtonWidget.class::isInstance)
             .map(ButtonWidget.class::cast)
             .toList();
-        int buttonWidth = 200;
-        int left = (width - buttonWidth) / 2;
+        int fullWidth = 200;
+        int halfWidth = 98;
+        int left = (width - fullWidth) / 2;
         int top = height / 4 + 18;
         for (int index = 0; index < buttons.size(); index++) {
             ButtonWidget button = buttons.get(index);
-            button.setX(left);
-            button.setY(top + index * 24);
-            button.setWidth(buttonWidth);
+            boolean fullRow = index == 0 || index == buttons.size() - 1;
+            if (fullRow) {
+                button.setX(left);
+                button.setY(top + (index == 0 ? 0 : ((index + 1) / 2) * 24));
+                button.setWidth(fullWidth);
+            } else {
+                int middleIndex = index - 1;
+                button.setX(left + (middleIndex % 2) * (halfWidth + 4));
+                button.setY(top + (middleIndex / 2 + 1) * 24);
+                button.setWidth(halfWidth);
+            }
         }
     }
 

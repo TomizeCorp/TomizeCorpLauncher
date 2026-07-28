@@ -15,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class HandledScreenMixin extends Screen {
     @Shadow protected int titleX;
     @Shadow protected int titleY;
+    @Shadow protected int x;
+    @Shadow protected int y;
     @Shadow protected int playerInventoryTitleX;
     @Shadow protected int playerInventoryTitleY;
     @Shadow protected Text playerInventoryTitle;
@@ -23,17 +25,17 @@ public abstract class HandledScreenMixin extends Screen {
         super(title);
     }
 
-    @Inject(method = "drawForeground", at = @At("HEAD"))
-    private void tomize$frameInterfaceLabels(DrawContext context, int mouseX, int mouseY, CallbackInfo ci) {
-        drawLabelFrame(context, title, titleX, titleY);
-        drawLabelFrame(context, playerInventoryTitle, playerInventoryTitleX, playerInventoryTitleY);
-    }
-
-    @Inject(method = "drawForeground", at = @At("TAIL"))
-    private void tomize$redrawReadableLabels(DrawContext context, int mouseX, int mouseY, CallbackInfo ci) {
-        context.drawText(MinecraftClient.getInstance().textRenderer, title, titleX, titleY, 0xFFFFFFFF, true);
+    @Inject(method = "render", at = @At("TAIL"))
+    private void tomize$redrawReadableLabels(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        int titleLeft = x + titleX;
+        int titleTop = y + titleY;
+        int inventoryLeft = x + playerInventoryTitleX;
+        int inventoryTop = y + playerInventoryTitleY;
+        drawLabelFrame(context, title, titleLeft, titleTop);
+        drawLabelFrame(context, playerInventoryTitle, inventoryLeft, inventoryTop);
+        context.drawText(MinecraftClient.getInstance().textRenderer, title, titleLeft, titleTop, 0xFFFFFFFF, true);
         context.drawText(MinecraftClient.getInstance().textRenderer, playerInventoryTitle,
-            playerInventoryTitleX, playerInventoryTitleY, 0xFFFFFFFF, true);
+            inventoryLeft, inventoryTop, 0xFFFFFFFF, true);
     }
 
     private static void drawLabelFrame(DrawContext context, Text text, int x, int y) {
