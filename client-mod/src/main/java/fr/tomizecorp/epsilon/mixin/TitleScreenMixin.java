@@ -27,12 +27,12 @@ public abstract class TitleScreenMixin extends Screen {
         clearChildren();
         int left = width / 2 - 100;
         int top = height / 2 + 4;
-        addDrawableChild(ButtonWidget.builder(Text.literal("Lancer Epsilon"), button -> epsilon$connect()).dimensions(left, top, 200, 20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("Option"), button -> {
+        addDrawableChild(ButtonWidget.builder(Text.translatable("menu.epsilon.play"), button -> epsilon$connect()).dimensions(left, top, 200, 20).build());
+        addDrawableChild(ButtonWidget.builder(Text.translatable("menu.epsilon.options"), button -> {
             MinecraftClient client = MinecraftClient.getInstance();
             client.setScreen(new OptionsScreen(this, client.options));
         }).dimensions(left, top + 28, 200, 20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("Quitter"), button -> MinecraftClient.getInstance().scheduleStop()).dimensions(left, top + 56, 200, 20).build());
+        addDrawableChild(ButtonWidget.builder(Text.translatable("menu.epsilon.quit"), button -> MinecraftClient.getInstance().scheduleStop()).dimensions(left, top + 56, 200, 20).build());
     }
 
     @Redirect(

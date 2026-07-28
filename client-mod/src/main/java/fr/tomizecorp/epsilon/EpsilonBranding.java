@@ -9,6 +9,7 @@ import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
 public final class EpsilonBranding {
+    public static final String REVIEWS_URL = "https://avis.tomize.fr";
     public static final String TITLE = "EPSILON — TomizeCorp";
     public static final String SERVER = "play.minecraft.epsilon.tomize.fr:25568";
 

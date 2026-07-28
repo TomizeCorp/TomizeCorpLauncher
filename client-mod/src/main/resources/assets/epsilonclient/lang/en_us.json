@@ -1,3 +1,7 @@
 {
-  "key.tomizecorp.waypoints": "Open waypoint manager"
+  "key.tomizecorp.waypoints": "Open waypoint manager",
+  "menu.epsilon.play": "Play Epsilon",
+  "menu.epsilon.options": "Options",
+  "menu.epsilon.quit": "Quit Game",
+  "menu.epsilon.review": "Review EPSILON"
 }

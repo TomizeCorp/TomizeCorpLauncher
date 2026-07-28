@@ -29,6 +29,10 @@ services:
       ADMIN_DOMAIN: ${ADMIN_DOMAIN:-admin-launcher.tomize.fr}
       ADMIN_EMAIL: ${ADMIN_EMAIL}
       ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
+      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
+      DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET}
+      DISCORD_REDIRECT_URI: ${DISCORD_REDIRECT_URI:-https://api.tomize.fr/v1/reviews/discord/callback}
+      REVIEWS_SITE_URL: ${REVIEWS_SITE_URL:-https://avis.tomize.fr}
     depends_on:
       db:
         condition: service_healthy

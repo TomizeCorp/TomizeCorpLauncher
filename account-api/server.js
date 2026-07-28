@@ -14,6 +14,10 @@ const pepper = process.env.SESSION_PEPPER || '';
 const adminDomain = String(process.env.ADMIN_DOMAIN || 'admin-launcher.tomize.fr').toLowerCase();
 const adminEmail = String(process.env.ADMIN_EMAIL || '').trim().toLowerCase();
 const adminPasswordHash = String(process.env.ADMIN_PASSWORD_HASH || '');
+const discordClientId = String(process.env.DISCORD_CLIENT_ID || '');
+const discordClientSecret = String(process.env.DISCORD_CLIENT_SECRET || '');
+const discordRedirectUri = String(process.env.DISCORD_REDIRECT_URI || 'https://api.tomize.fr/v1/reviews/discord/callback');
+const reviewsSiteUrl = String(process.env.REVIEWS_SITE_URL || 'https://avis.tomize.fr');
 const adminDirectory = path.join(path.dirname(fileURLToPath(import.meta.url)), 'admin');
 if (!process.env.DATABASE_URL || pepper.length < 32) throw new Error('DATABASE_URL et SESSION_PEPPER (32 caractères minimum) sont requis.');
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
@@ -78,6 +82,26 @@ await pool.query(`
     details JSONB NOT NULL DEFAULT '{}'::jsonb,
     ip VARCHAR(80),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  );
+  CREATE TABLE IF NOT EXISTS review_users (
+    discord_id VARCHAR(32) PRIMARY KEY,
+    username VARCHAR(80) NOT NULL,
+    avatar VARCHAR(300),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  );
+  CREATE TABLE IF NOT EXISTS review_sessions (
+    token_hash CHAR(64) PRIMARY KEY,
+    discord_id VARCHAR(32) NOT NULL REFERENCES review_users(discord_id) ON DELETE CASCADE,
+    expires_at TIMESTAMPTZ NOT NULL
+  );
+  CREATE TABLE IF NOT EXISTS reviews (
+    id UUID PRIMARY KEY,
+    discord_id VARCHAR(32) UNIQUE NOT NULL REFERENCES review_users(discord_id) ON DELETE CASCADE,
+    rating SMALLINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    content VARCHAR(1200) NOT NULL,
+    admin_reply VARCHAR(1200),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
   );
 `);
 
@@ -157,6 +181,18 @@ async function adminSession() {
   await pool.query(`INSERT INTO admin_sessions(token_hash,expires_at) VALUES($1,NOW()+INTERVAL '2 hours')`, [tokenHash(token)]);
   return token;
 }
+async function reviewSession(discordId) {
+  const token = crypto.randomBytes(32).toString('base64url');
+  await pool.query(`INSERT INTO review_sessions(token_hash,discord_id,expires_at) VALUES($1,$2,NOW()+INTERVAL '30 days')`, [tokenHash(token), discordId]);
+  return token;
+}
+async function authenticatedReviewer(req) {
+  const match = String(req.headers.authorization || '').match(/^Bearer ([A-Za-z0-9_-]{40,})$/);
+  if (!match) throw Object.assign(new Error('Connexion Discord requise.'), { status: 401 });
+  const result = await pool.query(`SELECT u.* FROM review_sessions s JOIN review_users u ON u.discord_id=s.discord_id WHERE s.token_hash=$1 AND s.expires_at>NOW()`, [tokenHash(match[1])]);
+  if (!result.rowCount) throw Object.assign(new Error('Session Discord expirée.'), { status: 401 });
+  return result.rows[0];
+}
 function publicAccount(account, includeSkin = false) {
   const result = { id: account.id, username: account.username, email: account.email || '', hasSkin: Boolean(account.skin) };
   if (includeSkin && account.skin) result.skin = account.skin.toString('base64');
@@ -186,6 +222,62 @@ function validPng(data) {
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
+    const origin = String(req.headers.origin || '');
+    if (origin === reviewsSiteUrl || origin.endsWith('.chatgpt.app')) {
+      res.setHeader('access-control-allow-origin', origin);
+      res.setHeader('vary', 'Origin');
+      res.setHeader('access-control-allow-headers', 'authorization,content-type');
+      res.setHeader('access-control-allow-methods', 'GET,POST,PATCH,OPTIONS');
+    }
+    if (req.method === 'OPTIONS') { res.writeHead(204); return res.end(); }
+    if (req.method === 'GET' && url.pathname === '/v1/reviews/discord/login') {
+      if (!discordClientId || !discordClientSecret) throw Object.assign(new Error('Connexion Discord pas encore configurée.'), { status: 503 });
+      res.writeHead(302, { location: `https://discord.com/oauth2/authorize?client_id=${encodeURIComponent(discordClientId)}&response_type=code&redirect_uri=${encodeURIComponent(discordRedirectUri)}&scope=identify` });
+      return res.end();
+    }
+    if (req.method === 'GET' && url.pathname === '/v1/reviews/discord/callback') {
+      const code = String(url.searchParams.get('code') || '');
+      if (!code) throw Object.assign(new Error('Code Discord manquant.'), { status: 400 });
+      const tokenResponse = await fetch('https://discord.com/api/v10/oauth2/token', { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ client_id: discordClientId, client_secret: discordClientSecret, grant_type: 'authorization_code', code, redirect_uri: discordRedirectUri }) });
+      if (!tokenResponse.ok) throw Object.assign(new Error('Connexion Discord refusée.'), { status: 401 });
+      const discordToken = await tokenResponse.json();
+      const userResponse = await fetch('https://discord.com/api/v10/users/@me', { headers: { authorization: `Bearer ${discordToken.access_token}` } });
+      if (!userResponse.ok) throw Object.assign(new Error('Profil Discord inaccessible.'), { status: 401 });
+      const user = await userResponse.json(), avatar = user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128` : '';
+      await pool.query(`INSERT INTO review_users(discord_id,username,avatar) VALUES($1,$2,$3) ON CONFLICT(discord_id) DO UPDATE SET username=EXCLUDED.username,avatar=EXCLUDED.avatar,updated_at=NOW()`, [user.id, user.global_name || user.username, avatar]);
+      res.writeHead(302, { location: `${reviewsSiteUrl}/?token=${encodeURIComponent(await reviewSession(user.id))}` });
+      return res.end();
+    }
+    if (req.method === 'GET' && url.pathname === '/v1/reviews/me') {
+      const user = await authenticatedReviewer(req);
+      return json(res, 200, { username: user.username, avatar: user.avatar || '' });
+    }
+    if (req.method === 'GET' && url.pathname === '/v1/reviews') {
+      const sort = String(url.searchParams.get('sort') || 'relevant');
+      const order = sort === 'best' ? 'r.rating DESC,r.updated_at DESC' : sort === 'worst' ? 'r.rating ASC,r.updated_at DESC' : sort === 'recent' ? 'r.created_at DESC' : '(CASE WHEN r.admin_reply IS NULL THEN 0 ELSE 1 END) DESC,r.rating DESC,r.updated_at DESC';
+      const result = await pool.query(`SELECT r.id,r.rating,r.content,r.admin_reply AS reply,r.created_at,u.username,u.avatar FROM reviews r JOIN review_users u USING(discord_id) ORDER BY ${order} LIMIT 200`);
+      const stats = await pool.query('SELECT COUNT(*)::int AS count,AVG(rating)::float AS average FROM reviews');
+      return json(res, 200, { reviews: result.rows.map(row => ({ ...row, createdAt: row.created_at })), ...stats.rows[0] });
+    }
+    if (req.method === 'POST' && url.pathname === '/v1/reviews') {
+      const user = await authenticatedReviewer(req), value = await body(req, 20_000), rating = Number(value.rating), content = String(value.content || '').trim();
+      if (!Number.isInteger(rating) || rating < 1 || rating > 5 || content.length < 10 || content.length > 1200) throw Object.assign(new Error('Avis invalide.'), { status: 400 });
+      await pool.query(`INSERT INTO reviews(id,discord_id,rating,content) VALUES($1,$2,$3,$4) ON CONFLICT(discord_id) DO UPDATE SET rating=EXCLUDED.rating,content=EXCLUDED.content,admin_reply=NULL,updated_at=NOW()`, [crypto.randomUUID(), user.discord_id, rating, content]);
+      return json(res, 200, { ok: true });
+    }
+    const replyMatch = url.pathname.match(/^\/admin\/api\/reviews\/([0-9a-f-]{36})\/reply$/i);
+    if (req.method === 'GET' && url.pathname === '/admin/api/reviews') {
+      await authenticatedAdmin(req);
+      const result = await pool.query(`SELECT r.id,r.rating,r.content,r.admin_reply AS reply,r.created_at,u.username,u.avatar FROM reviews r JOIN review_users u USING(discord_id) ORDER BY r.updated_at DESC`);
+      return json(res, 200, { reviews: result.rows });
+    }
+    if (req.method === 'PATCH' && replyMatch) {
+      await authenticatedAdmin(req);
+      const value = await body(req, 10_000), reply = String(value.reply || '').trim();
+      if (!reply || reply.length > 1200) throw Object.assign(new Error('Réponse invalide.'), { status: 400 });
+      await pool.query('UPDATE reviews SET admin_reply=$1,updated_at=NOW() WHERE id=$2', [reply, replyMatch[1]]);
+      return json(res, 200, { ok: true });
+    }
     const hostname = String(req.headers.host || '').split(':')[0].toLowerCase();
     const adminHost = hostname === adminDomain || hostname === 'localhost' || hostname === '127.0.0.1';
     if (adminHost && req.method === 'GET' && (url.pathname === '/' || url.pathname === '/admin' || url.pathname === '/admin/')) return staticAdmin(res, 'index.html', 'text/html; charset=utf-8');

@@ -29,6 +29,13 @@ public abstract class HandledScreenMixin extends Screen {
         drawLabelFrame(context, playerInventoryTitle, playerInventoryTitleX, playerInventoryTitleY);
     }
 
+    @Inject(method = "drawForeground", at = @At("TAIL"))
+    private void tomize$redrawReadableLabels(DrawContext context, int mouseX, int mouseY, CallbackInfo ci) {
+        context.drawText(MinecraftClient.getInstance().textRenderer, title, titleX, titleY, 0xFF2A1B10, false);
+        context.drawText(MinecraftClient.getInstance().textRenderer, playerInventoryTitle,
+            playerInventoryTitleX, playerInventoryTitleY, 0xFF2A1B10, false);
+    }
+
     private static void drawLabelFrame(DrawContext context, Text text, int x, int y) {
         if (text == null || text.getString().isBlank()) return;
         int width = MinecraftClient.getInstance().textRenderer.getWidth(text);

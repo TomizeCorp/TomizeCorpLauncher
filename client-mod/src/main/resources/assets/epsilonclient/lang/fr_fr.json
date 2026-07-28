@@ -1,3 +1,7 @@
 {
-  "key.tomizecorp.waypoints": "Ouvrir la gestion des pings"
+  "key.tomizecorp.waypoints": "Ouvrir la gestion des pings",
+  "menu.epsilon.play": "Lancer Epsilon",
+  "menu.epsilon.options": "Options",
+  "menu.epsilon.quit": "Quitter",
+  "menu.epsilon.review": "Noter EPSILON"
 }

@@ -77,6 +77,15 @@ async function enableTomizeResourcePack(instancePath) {
   if(!packs.includes(packName))packs.push(packName);
   const newLine=`resourcePacks:${JSON.stringify(packs)}`;
   options=match?options.replace(linePattern,newLine):`${options}${options&&!options.endsWith(os.EOL)?os.EOL:''}${newLine}${os.EOL}`;
+  const incompatiblePattern=/^incompatibleResourcePacks:(.*)$/m;
+  const incompatibleMatch=options.match(incompatiblePattern);
+  if(incompatibleMatch){
+    let incompatible=[];try{incompatible=JSON.parse(incompatibleMatch[1]);}catch{}
+    if(Array.isArray(incompatible)){
+      incompatible=incompatible.filter(name=>name!==packName);
+      options=options.replace(incompatiblePattern,`incompatibleResourcePacks:${JSON.stringify(incompatible)}`);
+    }
+  }
   await fs.writeFile(optionsPath,options,'utf8');
 }
 

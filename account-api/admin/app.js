@@ -20,6 +20,25 @@ function showDashboard() {
   $('login').classList.add('hidden');
   $('dashboard').classList.remove('hidden');
   $('logout').classList.remove('hidden');
+  loadReviews();
+}
+async function loadReviews() {
+  try {
+    const { reviews } = await api('/admin/api/reviews');
+    $('review-results').replaceChildren(...reviews.map(review => {
+      const row = document.createElement('article'); row.className = 'account';
+      const name = document.createElement('strong'); name.textContent = `${review.username} — ${'★'.repeat(review.rating)}`;
+      const content = document.createElement('span'); content.textContent = review.content + (review.reply ? ` • Réponse : ${review.reply}` : '');
+      const reply = document.createElement('button'); reply.textContent = review.reply ? 'Modifier la réponse' : 'Répondre';
+      reply.addEventListener('click', async () => {
+        const text = prompt('Réponse officielle EPSILON :', review.reply || '');
+        if (!text) return;
+        await api(`/admin/api/reviews/${review.id}/reply`, { method: 'PATCH', body: JSON.stringify({ reply: text }) });
+        loadReviews();
+      });
+      row.append(name, content, reply); return row;
+    }));
+  } catch (error) { $('review-results').textContent = error.message; }
 }
 function showLogin() {
   token = ''; sessionStorage.removeItem('tomizeAdminToken');
