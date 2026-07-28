@@ -26,8 +26,11 @@ public abstract class GameMenuScreenMixin {
         require = 0
     )
     private static ButtonWidget tomize$replaceMinecraftLinks(Screen parent, Text text, URI uri) {
-        return ButtonWidget.builder(Text.translatable("menu.epsilon.review"), button ->
-            Util.getOperatingSystem().open(URI.create(EpsilonBranding.REVIEWS_URL))
+        boolean feedbackLink = uri != null && uri.toString().toLowerCase().contains("feedback");
+        URI destination = feedbackLink ? URI.create(EpsilonBranding.REVIEWS_URL) : uri;
+        Text label = feedbackLink ? Text.translatable("menu.epsilon.review") : text;
+        return ButtonWidget.builder(label, button ->
+            Util.getOperatingSystem().open(destination)
         ).build();
     }
 
