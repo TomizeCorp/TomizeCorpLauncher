@@ -12,6 +12,7 @@
 .poster { cursor:pointer; }
 .poster:focus-visible { outline:2px solid #fff; outline-offset:3px; }
 .features { align-items:center; }
+#serverCount { display:none; }
 .empty-search { grid-column:1/-1; color:#777; font-size:11px; }
 .skin-settings #skinPreview { position:relative; width:220px; height:320px; max-width:100%; margin:auto; overflow:hidden; perspective:560px; background:radial-gradient(circle at 50% 42%,#202024,#050505 70%); border:1px solid #29292e; border-radius:10px; cursor:grab; touch-action:none; }
 .skin-settings #skinPreview:active { cursor:grabbing; }
