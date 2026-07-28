@@ -32,7 +32,7 @@ services:
       DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
       DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET}
       DISCORD_REDIRECT_URI: ${DISCORD_REDIRECT_URI:-https://api.tomize.fr/v1/reviews/discord/callback}
-      REVIEWS_SITE_URL: ${REVIEWS_SITE_URL:-https://avis.tomize.fr}
+      REVIEWS_SITE_URL: ${REVIEWS_SITE_URL:-https://avis-epsilon.tomize.fr}
     depends_on:
       db:
         condition: service_healthy

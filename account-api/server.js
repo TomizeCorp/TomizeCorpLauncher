@@ -17,7 +17,7 @@ const adminPasswordHash = String(process.env.ADMIN_PASSWORD_HASH || '');
 const discordClientId = String(process.env.DISCORD_CLIENT_ID || '');
 const discordClientSecret = String(process.env.DISCORD_CLIENT_SECRET || '');
 const discordRedirectUri = String(process.env.DISCORD_REDIRECT_URI || 'https://api.tomize.fr/v1/reviews/discord/callback');
-const reviewsSiteUrl = String(process.env.REVIEWS_SITE_URL || 'https://avis.tomize.fr');
+const reviewsSiteUrl = String(process.env.REVIEWS_SITE_URL || 'https://avis-epsilon.tomize.fr');
 const adminDirectory = path.join(path.dirname(fileURLToPath(import.meta.url)), 'admin');
 if (!process.env.DATABASE_URL || pepper.length < 32) throw new Error('DATABASE_URL et SESSION_PEPPER (32 caractères minimum) sont requis.');
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
