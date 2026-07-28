@@ -3,7 +3,6 @@ package fr.tomizecorp.epsilon.mixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,22 +15,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class HandledScreenMixin extends Screen {
     @Shadow protected int titleX;
     @Shadow protected int titleY;
-    @Shadow protected int x;
-    @Shadow protected int y;
+
     protected HandledScreenMixin(Text title) {
         super(title);
     }
 
-    @Inject(method = "render", at = @At("TAIL"))
-    private void tomize$redrawReadableLabels(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if ((Object) this instanceof CreativeInventoryScreen) return;
-        // Certains écrans, notamment le livre de recettes, conservent une zone de découpe
-        // jusqu'à la fin du rendu. Le titre doit toujours être dessiné au-dessus de celle-ci.
-        context.disableScissor();
-        int titleLeft = x + titleX;
-        int titleTop = y + titleY;
-        drawLabelFrame(context, title, titleLeft, titleTop);
-        context.drawText(MinecraftClient.getInstance().textRenderer, title, titleLeft, titleTop, 0xFFFFFFFF, true);
+    @Inject(method = "drawForeground", at = @At("HEAD"), cancellable = true)
+    private void tomize$drawSingleReadableTitle(DrawContext context, int mouseX, int mouseY, CallbackInfo ci) {
+        drawLabelFrame(context, title, titleX, titleY);
+        context.drawText(MinecraftClient.getInstance().textRenderer, title, titleX, titleY, 0xFFFFFFFF, true);
+        ci.cancel();
     }
 
     private static void drawLabelFrame(DrawContext context, Text text, int x, int y) {
