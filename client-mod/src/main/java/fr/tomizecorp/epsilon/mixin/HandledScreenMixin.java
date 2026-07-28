@@ -25,6 +25,9 @@ public abstract class HandledScreenMixin extends Screen {
     @Inject(method = "render", at = @At("TAIL"))
     private void tomize$redrawReadableLabels(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if ((Object) this instanceof CreativeInventoryScreen) return;
+        // Certains écrans, notamment le livre de recettes, conservent une zone de découpe
+        // jusqu'à la fin du rendu. Le titre doit toujours être dessiné au-dessus de celle-ci.
+        context.disableScissor();
         int titleLeft = x + titleX;
         int titleTop = y + titleY;
         drawLabelFrame(context, title, titleLeft, titleTop);
