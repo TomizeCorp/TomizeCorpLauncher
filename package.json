@@ -1,6 +1,6 @@
 {
   "name": "epsilon-launcher",
-  "version": "1.10.34",
+  "version": "1.10.35",
   "description": "Launcher Minecraft dédié au serveur EPSILON",
   "main": "src/main.js",
   "type": "commonjs",
@@ -44,7 +44,9 @@
       "signAndEditExecutable": true
     },
     "mac": {
-      "target": ["dmg"],
+      "target": [
+        "dmg"
+      ],
       "icon": "build/icon.icns",
       "category": "public.app-category.games",
       "artifactName": "TomizeCorpLauncher-${version}-mac-universal.${ext}"
