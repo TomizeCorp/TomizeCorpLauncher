@@ -349,6 +349,11 @@ async function ensureJava(settings, win) {
 }
 async function installAndLaunch(win, profile) {
   const settings = await loadSettings();
+  const serverStatus=await accountApi('/v1/server-status').catch(error=>{
+    console.warn('Statut EPSILON indisponible :',error.message);
+    return{online:true};
+  });
+  if(serverStatus.online===false)throw new Error(serverStatus.message||'EPSILON est temporairement en maintenance.');
   if(settings.authMode==='microsoft'&&!activeSession)await authenticateMicrosoft(settings.rememberSession);
   const microsoft = settings.authMode === 'microsoft' && activeSession;
   const username = String(microsoft ? activeSession.name : (profile?.username || settings.username || '')).trim();

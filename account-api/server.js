@@ -103,6 +103,14 @@ await pool.query(`
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
   );
+  CREATE TABLE IF NOT EXISTS service_settings (
+    setting_key VARCHAR(80) PRIMARY KEY,
+    setting_value JSONB NOT NULL,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  );
+  INSERT INTO service_settings(setting_key,setting_value)
+    VALUES('epsilon_server','{"online":true,"message":"EPSILON est disponible."}'::jsonb)
+    ON CONFLICT(setting_key) DO NOTHING;
 `);
 
 function json(res, status, body) {
@@ -119,7 +127,7 @@ function securityHeaders(res) {
 async function staticAdmin(res, filename, type) {
   securityHeaders(res);
   const data = await fs.readFile(path.join(adminDirectory, filename));
-  res.writeHead(200, { 'content-type': type, 'content-length': data.length, 'cache-control': filename === 'index.html' ? 'no-store' : 'public, max-age=3600' });
+  res.writeHead(200, { 'content-type': type, 'content-length': data.length, 'cache-control': 'no-store, max-age=0' });
   res.end(data);
 }
 function clientIp(req) { return String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim(); }
@@ -283,9 +291,14 @@ const server = http.createServer(async (req, res) => {
     if (adminHost && req.method === 'GET' && (url.pathname === '/' || url.pathname === '/admin' || url.pathname === '/admin/')) return staticAdmin(res, 'index.html', 'text/html; charset=utf-8');
     if (adminHost && req.method === 'GET' && url.pathname === '/admin/app.css') return staticAdmin(res, 'app.css', 'text/css; charset=utf-8');
     if (adminHost && req.method === 'GET' && url.pathname === '/admin/logo.css') return staticAdmin(res, 'logo.css', 'text/css; charset=utf-8');
+    if (adminHost && req.method === 'GET' && url.pathname === '/admin/tabs.css') return staticAdmin(res, 'tabs.css', 'text/css; charset=utf-8');
     if (adminHost && req.method === 'GET' && url.pathname === '/admin/app.js') return staticAdmin(res, 'app.js', 'text/javascript; charset=utf-8');
     if (adminHost && req.method === 'GET' && url.pathname === '/admin/tomizecorp-logo.png') return staticAdmin(res, 'tomizecorp-logo.png', 'image/png');
     if (req.method === 'GET' && url.pathname === '/health') return json(res, 200, { ok: true });
+    if (req.method === 'GET' && url.pathname === '/v1/server-status') {
+      const result = await pool.query(`SELECT setting_value FROM service_settings WHERE setting_key='epsilon_server'`);
+      return json(res, 200, result.rows[0]?.setting_value || { online: true, message: 'EPSILON est disponible.' });
+    }
     if (!throttle(req)) return json(res, 429, { error: 'Trop de tentatives. Réessayez dans une minute.' });
     if (url.pathname.startsWith('/admin/api/') && !adminHost) return json(res, 404, { error: 'Route introuvable.' });
     if (req.method === 'POST' && url.pathname === '/admin/api/auth/request') {
@@ -317,6 +330,23 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && url.pathname === '/admin/api/me') {
       await authenticatedAdmin(req);
       return json(res, 200, { ok: true });
+    }
+    if (req.method === 'GET' && url.pathname === '/admin/api/server-status') {
+      await authenticatedAdmin(req);
+      const result = await pool.query(`SELECT setting_value,updated_at FROM service_settings WHERE setting_key='epsilon_server'`);
+      return json(res, 200, { ...(result.rows[0]?.setting_value || { online: true, message: 'EPSILON est disponible.' }), updatedAt: result.rows[0]?.updated_at || null });
+    }
+    if (req.method === 'PATCH' && url.pathname === '/admin/api/server-status') {
+      await authenticatedAdmin(req);
+      const value = await body(req, 10_000), online = value.online;
+      const message = String(value.message || (online ? 'EPSILON est disponible.' : 'EPSILON est temporairement en maintenance.')).trim();
+      if (typeof online !== 'boolean' || !message || message.length > 240) throw Object.assign(new Error('Statut du serveur invalide.'), { status: 400 });
+      await pool.query(`INSERT INTO service_settings(setting_key,setting_value,updated_at)
+        VALUES('epsilon_server',$1::jsonb,NOW())
+        ON CONFLICT(setting_key) DO UPDATE SET setting_value=EXCLUDED.setting_value,updated_at=NOW()`,
+        [JSON.stringify({ online, message })]);
+      await pool.query('INSERT INTO admin_audit_log(action,details,ip) VALUES($1,$2,$3)', ['server.status.updated', JSON.stringify({ online, message }), clientIp(req)]);
+      return json(res, 200, { online, message });
     }
     if (req.method === 'GET' && url.pathname === '/admin/api/accounts') {
       await authenticatedAdmin(req);

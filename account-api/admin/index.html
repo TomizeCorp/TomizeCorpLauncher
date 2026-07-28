@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <title>Administration TomizeCorp</title>
-  <link rel="stylesheet" href="/admin/app.css">
-  <link rel="stylesheet" href="/admin/logo.css">
-  <link rel="stylesheet" href="/admin/tabs.css">
+  <link rel="stylesheet" href="/admin/app.css?v=3">
+  <link rel="stylesheet" href="/admin/logo.css?v=3">
+  <link rel="stylesheet" href="/admin/tabs.css?v=3">
 </head>
 <body>
   <main>
@@ -35,6 +35,7 @@
       <nav class="admin-tabs" aria-label="Sections de l’administration">
         <button id="accounts-tab" class="admin-tab active" type="button">Comptes joueurs</button>
         <button id="reviews-tab" class="admin-tab" type="button">Avis EPSILON</button>
+        <button id="server-tab" class="admin-tab" type="button">Serveur</button>
       </nav>
 
       <section id="accounts-panel" class="admin-panel">
@@ -52,6 +53,25 @@
         <p class="notice">Les réponses publiées ici apparaissent officiellement sous l’avis du joueur sur le site EPSILON.</p>
         <div id="review-results" class="accounts"></div>
       </section>
+
+      <section id="server-panel" class="admin-panel hidden">
+        <div class="hero"><div><p class="eyebrow">ÉTAT PUBLIC</p><h1>Serveur EPSILON</h1></div></div>
+        <div class="server-control-card">
+          <div class="server-control-head">
+            <div><span id="server-dot" class="server-dot"></span><strong id="server-state-label">Chargement…</strong></div>
+            <span class="server-control-caption">Contrôle du launcher</span>
+          </div>
+          <p>Le mode hors ligne empêche les joueurs de lancer EPSILON depuis TomizeCorp sans arrêter le serveur Minecraft.</p>
+          <label>Message affiché aux joueurs
+            <textarea id="server-message" maxlength="240" placeholder="EPSILON est temporairement en maintenance."></textarea>
+          </label>
+          <div class="server-actions">
+            <button id="server-offline" class="danger" type="button">Passer Hors ligne</button>
+            <button id="server-online" class="success" type="button">Passer En ligne</button>
+          </div>
+          <p id="server-message-result" class="message"></p>
+        </div>
+      </section>
     </section>
   </main>
 
@@ -68,6 +88,6 @@
       <button id="save" value="default">Enregistrer les modifications</button>
     </form>
   </dialog>
-  <script src="/admin/app.js" defer></script>
+  <script src="/admin/app.js?v=3" defer></script>
 </body>
 </html>

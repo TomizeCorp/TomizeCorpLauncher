@@ -24,12 +24,48 @@ function showDashboard() {
 }
 function showAdminPanel(panel) {
   const accounts = panel === 'accounts';
+  const reviews = panel === 'reviews';
+  const server = panel === 'server';
   $('accounts-panel').classList.toggle('hidden', !accounts);
-  $('reviews-panel').classList.toggle('hidden', accounts);
+  $('reviews-panel').classList.toggle('hidden', !reviews);
+  $('server-panel').classList.toggle('hidden', !server);
   $('accounts-tab').classList.toggle('active', accounts);
-  $('reviews-tab').classList.toggle('active', !accounts);
+  $('reviews-tab').classList.toggle('active', reviews);
+  $('server-tab').classList.toggle('active', server);
   if (accounts) $('search').focus();
-  else loadReviews();
+  if (reviews) loadReviews();
+  if (server) loadServerStatus();
+}
+function renderServerStatus(status) {
+  const online = status.online !== false;
+  $('server-dot').classList.toggle('offline', !online);
+  $('server-state-label').textContent = online ? 'EPSILON est en ligne' : 'EPSILON est hors ligne';
+  $('server-message').value = status.message || (online ? 'EPSILON est disponible.' : 'EPSILON est temporairement en maintenance.');
+  $('server-online').disabled = online;
+  $('server-offline').disabled = !online;
+}
+async function loadServerStatus() {
+  message('server-message-result', 'Chargement…');
+  try {
+    renderServerStatus(await api('/admin/api/server-status'));
+    message('server-message-result', '');
+  } catch (error) { message('server-message-result', error.message); }
+}
+async function setServerStatus(online) {
+  $('server-online').disabled = true;
+  $('server-offline').disabled = true;
+  message('server-message-result', 'Mise à jour du statut…');
+  try {
+    const status = await api('/admin/api/server-status', {
+      method: 'PATCH',
+      body: JSON.stringify({ online, message: $('server-message').value.trim() })
+    });
+    renderServerStatus(status);
+    message('server-message-result', online ? 'Le serveur est maintenant en ligne.' : 'Le mode maintenance est activé.', true);
+  } catch (error) {
+    message('server-message-result', error.message);
+    await loadServerStatus();
+  }
 }
 async function loadReviews() {
   try {
@@ -78,6 +114,9 @@ $('logout').addEventListener('click', async () => {
 });
 $('accounts-tab').addEventListener('click', () => showAdminPanel('accounts'));
 $('reviews-tab').addEventListener('click', () => showAdminPanel('reviews'));
+$('server-tab').addEventListener('click', () => showAdminPanel('server'));
+$('server-online').addEventListener('click', () => setServerStatus(true));
+$('server-offline').addEventListener('click', () => setServerStatus(false));
 $('search').addEventListener('input', () => {
   clearTimeout(timer);
   const query = $('search').value.trim();
