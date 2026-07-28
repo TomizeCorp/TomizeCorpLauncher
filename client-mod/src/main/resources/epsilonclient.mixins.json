@@ -2,6 +2,6 @@
   "required": true,
   "package": "fr.tomizecorp.epsilon.mixin",
   "compatibilityLevel": "JAVA_21",
-  "client": ["TitleScreenMixin", "WindowMixin", "PlayerListEntryMixin", "SplashOverlayMixin", "GameMenuScreenMixin", "HandledScreenMixin"],
+  "client": ["TitleScreenMixin", "WindowMixin", "PlayerListEntryMixin", "SplashOverlayMixin", "GameMenuScreenMixin", "HandledScreenMixin", "CreativeInventoryScreenMixin"],
   "injectors": { "defaultRequire": 1 }
 }
