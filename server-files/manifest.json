@@ -1,5 +1,5 @@
 {
-  "version": "2026-07-28T13:18:45.307Z",
+  "version": "2026-07-28T13:47:03.400Z",
   "files": [
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/anvil.png",
@@ -1995,8 +1995,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/pack.mcmeta",
-      "sha256": "55aa1043d037fbee0d7cc3e679bba15741eceaf77da603b077e575cd9a5f5874",
-      "size": 137,
+      "sha256": "c92038d3bf6e4dc6b843e99f314bdc81b3d0d013bed9e0184cc197b09a998754",
+      "size": 181,
       "url": "../server-files/resourcepacks/TomizeCorpUI/pack.mcmeta"
     },
     {
