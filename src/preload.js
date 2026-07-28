@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('launcher', {
   sync: () => ipcRenderer.invoke('sync:start'),
   play: () => ipcRenderer.invoke('play'),
   openEpsilon: () => ipcRenderer.invoke('epsilon:open'),
+  serverStatus: () => ipcRenderer.invoke('server:status'),
   loginOffline: username => ipcRenderer.invoke('auth:offline', username),
   loginMicrosoft: rememberSession => ipcRenderer.invoke('auth:microsoft', rememberSession),
   logout: () => ipcRenderer.invoke('auth:logout'),

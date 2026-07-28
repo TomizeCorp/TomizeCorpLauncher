@@ -1,5 +1,7 @@
 const $ = id => document.getElementById(id);
 let config;
+let epsilonOnline = false;
+let epsilonStatusMessage = 'Vérification du serveur…';
 
 function toast(message, title = 'TOMIZECORP') {
   const element = $('toast');
@@ -105,12 +107,46 @@ function installPasswordResetUi() {
 installPasswordResetUi();
 
 async function openServer() {
+  await refreshServerStatus();
+  if (!epsilonOnline) {
+    toast(epsilonStatusMessage || 'EPSILON est actuellement hors ligne.');
+    return;
+  }
   config = await window.launcher.settings();
   if (!config.authMode) {
     if (!$('loginDialog').open) $('loginDialog').showModal();
     return;
   }
   await window.launcher.openEpsilon();
+}
+
+function applyServerStatus(status) {
+  epsilonOnline = status?.online === true;
+  epsilonStatusMessage = epsilonOnline ? 'EPSILON est en ligne' : (status?.message || 'EPSILON est hors ligne');
+  const indicator = $('hubServerStatus');
+  indicator.classList.toggle('online', epsilonOnline);
+  indicator.classList.toggle('offline', !epsilonOnline);
+  indicator.classList.remove('checking');
+  indicator.querySelector('b').textContent = epsilonOnline ? 'EN LIGNE' : 'HORS LIGNE';
+  indicator.title = epsilonStatusMessage;
+  $('playButton').disabled = !epsilonOnline;
+  $('playButton').title = epsilonOnline ? 'Ouvrir EPSILON' : epsilonStatusMessage;
+  document.querySelectorAll('.poster[data-server-status], .poster').forEach(poster => {
+    poster.classList.toggle('server-offline', !epsilonOnline);
+    poster.setAttribute('aria-disabled', String(!epsilonOnline));
+  });
+  document.querySelectorAll('.favorite-server').forEach(button => {
+    button.disabled = !epsilonOnline;
+    button.title = epsilonOnline ? (button.dataset.serverName || 'EPSILON') : epsilonStatusMessage;
+  });
+}
+
+async function refreshServerStatus() {
+  try {
+    applyServerStatus(await window.launcher.serverStatus());
+  } catch (_) {
+    applyServerStatus({ online: false, message: 'Statut du serveur indisponible' });
+  }
 }
 
 function applyUpdateState(update) {
@@ -299,7 +335,9 @@ function renderFavorites() {
     if (!game) return document.createDocumentFragment();
     const button = document.createElement('button');
     button.className = 'side favorite-server';
-    button.title = game.querySelector('h3')?.textContent || id;
+    button.dataset.serverName = game.querySelector('h3')?.textContent || id;
+    button.title = epsilonOnline ? button.dataset.serverName : epsilonStatusMessage;
+    button.disabled = !epsilonOnline;
     button.innerHTML = `<img src="${game.querySelector('.poster img').getAttribute('src')}" alt="">`;
     button.onclick = openServer;
     return button;
@@ -324,6 +362,8 @@ async function init() {
   else showUser('');
   applyUpdateState(await window.launcher.updateState());
   renderFavorites();
+  await refreshServerStatus();
+  setInterval(refreshServerStatus, 15000);
 
   document.querySelectorAll('.game[data-server-id]').forEach(game => {
     game.querySelector('.favorite-toggle').onclick = event => { event.stopPropagation(); toggleFavorite(game).catch(error => toast(error.message)); };

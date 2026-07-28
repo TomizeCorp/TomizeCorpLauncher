@@ -8,6 +8,7 @@
 .game[hidden] { display:none; }
 .favorite-toggle { position:absolute; right:9px; top:9px; z-index:3; width:34px; height:34px; border:1px solid #ffffff35; border-radius:8px; background:#050505cc; color:#fff; font-size:22px; cursor:pointer; }
 .favorite-toggle.active { color:#ffd54a; }
+.server-status{display:inline-flex!important;align-items:center;gap:7px}.server-status i{width:8px;height:8px;border-radius:50%;background:#929a95;box-shadow:0 0 9px #929a9580}.server-status b{font:inherit;color:inherit}.server-status.online{color:#8dff47}.server-status.online i{background:#65e339;box-shadow:0 0 11px #65e339a8}.server-status.offline{color:#ff6262}.server-status.offline i{background:#ff3f3f;box-shadow:0 0 11px #ff3f3fa8}.install:disabled,.poster.server-offline,.favorite-server:disabled{cursor:not-allowed!important;filter:grayscale(.75);opacity:.55}
 .poster { cursor:pointer; }
 .poster:focus-visible { outline:2px solid #fff; outline-offset:3px; }
 .empty-search { grid-column:1/-1; color:#777; font-size:11px; }
