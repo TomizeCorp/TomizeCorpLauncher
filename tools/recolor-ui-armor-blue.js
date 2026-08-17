@@ -18,15 +18,6 @@ const palette = [
 ];
 const paletteKeys = new Set(palette.map(color => color.join(',')));
 
-const vanillaInventoryPaths = [
-  `${path.sep}container${path.sep}inventory.png`,
-  `${path.sep}container${path.sep}creative_inventory${path.sep}`,
-  `${path.sep}recipe_book.png`,
-  `${path.sep}sprites${path.sep}container${path.sep}inventory${path.sep}`,
-  `${path.sep}sprites${path.sep}container${path.sep}creative_inventory${path.sep}`,
-  `${path.sep}sprites${path.sep}recipe_book${path.sep}`
-];
-
 async function walk(directory) {
   const entries = await fs.readdir(directory, { withFileTypes: true });
   const files = [];
@@ -36,10 +27,6 @@ async function walk(directory) {
     else if (entry.name.endsWith('.png')) files.push(target);
   }
   return files;
-}
-
-function shouldKeepVanilla(file) {
-  return vanillaInventoryPaths.some(fragment => file.includes(fragment));
 }
 
 function paletteColor(luma) {
@@ -67,8 +54,7 @@ async function recolor(file) {
 
 (async () => {
   const files = (await walk(guiRoot))
-    .filter(file => !file.endsWith(`${path.sep}title${path.sep}edition.png`))
-    .filter(file => !shouldKeepVanilla(file));
+    .filter(file => !file.endsWith(`${path.sep}title${path.sep}edition.png`));
   for (const file of files) await recolor(file);
   console.log(`${files.length} textures recolorées avec la palette de l'armure.`);
 })().catch(error => {
