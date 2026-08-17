@@ -4,7 +4,6 @@ import fr.tomizecorp.epsilon.EpsilonBranding;
 import java.net.URI;
 import java.util.List;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -47,38 +46,6 @@ public abstract class GameMenuScreenMixin extends Screen {
                 button.setWidth(halfWidth);
             }
         }
-    }
-
-    @Inject(
-        method = "render",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/gui/DrawContext;IIF)V",
-            shift = At.Shift.BEFORE
-        ),
-        require = 0
-    )
-    private void tomize$renderBlueMenuPanel(DrawContext context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
-        int minX = Integer.MAX_VALUE;
-        int minY = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE;
-        int maxY = Integer.MIN_VALUE;
-        for (ButtonWidget button : children().stream().filter(ButtonWidget.class::isInstance).map(ButtonWidget.class::cast).toList()) {
-            minX = Math.min(minX, button.getX());
-            minY = Math.min(minY, button.getY());
-            maxX = Math.max(maxX, button.getX() + button.getWidth());
-            maxY = Math.max(maxY, button.getY() + button.getHeight());
-        }
-        if (minX == Integer.MAX_VALUE) return;
-        int left = minX - 12;
-        int top = minY - 12;
-        int right = maxX + 12;
-        int bottom = maxY + 12;
-        context.fill(left - 2, top - 2, right + 2, bottom + 2, 0xE5121D4E);
-        context.fill(left, top, right, bottom, 0xE51B2A70);
-        context.fill(left + 2, top + 2, right - 2, bottom - 2, 0xE5435EE8);
-        context.fill(left + 4, top + 4, right - 4, bottom - 4, 0xF0121D4E);
-        context.fill(left + 4, top + 4, right - 4, top + 6, 0xFFAEBAF7);
     }
 
     @Redirect(
