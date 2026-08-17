@@ -4,6 +4,7 @@ const sharp = require('sharp');
 
 const packRoot = path.resolve('server-files/resourcepacks/TomizeCorpUI');
 const guiRoot = path.join(packRoot, 'assets/minecraft/textures/gui');
+const vanillaGuiRoot = path.resolve('.tmp-minecraft-client/extracted/assets/minecraft/textures/gui');
 
 // Palette relevée sur l'armure de référence, du bleu nuit aux reflets glacés.
 const palette = [
@@ -47,7 +48,9 @@ function paletteColor(luma) {
 }
 
 async function recolor(file) {
-  const image = sharp(file).ensureAlpha();
+  const relative = path.relative(guiRoot, file);
+  const vanillaFile = path.join(vanillaGuiRoot, relative);
+  const image = sharp(vanillaFile).ensureAlpha();
   const { data, info } = await image.raw().toBuffer({ resolveWithObject: true });
   for (let offset = 0; offset < data.length; offset += 4) {
     if (data[offset + 3] === 0) continue;
