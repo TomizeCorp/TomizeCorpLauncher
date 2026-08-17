@@ -1,6 +1,6 @@
 {
   "name": "epsilon-launcher",
-  "version": "1.10.49",
+  "version": "1.10.50",
   "description": "Launcher Minecraft dédié au serveur EPSILON",
   "main": "src/main.js",
   "type": "commonjs",
@@ -13,7 +13,8 @@
     "dist": "electron-builder --win nsis",
     "release": "electron-builder --win nsis --publish always",
     "release:win": "electron-builder --win nsis --publish always",
-    "release:mac": "electron-builder --mac dmg --universal --publish always"
+    "release:mac": "electron-builder --mac dmg --universal --publish always",
+    "dist:mac": "electron-builder --mac dmg --universal --publish never"
   },
   "devDependencies": {
     "electron": "33.4.11",

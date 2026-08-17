@@ -123,7 +123,16 @@ jobs:
           node --check src/renderer/app.js
           node --check src/renderer/epsilon.js
 
-      - name: Compiler et publier macOS
-        run: npm run release:mac
+      - name: Compiler macOS
+        run: npm run dist:mac
+
+      - name: Ajouter macOS à la publication existante
+        shell: bash
+        run: |
+          files=(dist/*.dmg dist/latest-mac.yml)
+          for file in dist/*.dmg.blockmap; do
+            if [[ -e "$file" ]]; then files+=("$file"); fi
+          done
+          gh release upload "$GITHUB_REF_NAME" "${files[@]}" --clobber
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
