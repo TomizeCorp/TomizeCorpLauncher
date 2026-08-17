@@ -21,12 +21,12 @@ function Convert-ToTomizeTexture {
             $pixel = $source.GetPixel($x, $y)
             if ($pixel.A -eq 0) { continue }
             $luma = [int](0.2126 * $pixel.R + 0.7152 * $pixel.G + 0.0722 * $pixel.B)
-            # Palette noire unie : quatre niveaux nets, sans bruit ni couleur.
-            if ($luma -ge 210) { $shade = 48 }
-            elseif ($luma -ge 145) { $shade = 34 }
-            elseif ($luma -ge 75) { $shade = 22 }
-            else { $shade = 7 }
-            $bitmap.SetPixel($x, $y, [System.Drawing.Color]::FromArgb($pixel.A, $shade, $shade, $shade))
+            # Palette bleue EPSILON, identique aux inventaires créatif et survie.
+            if ($luma -ge 210) { $red = 229; $green = 234; $blue = 255 }
+            elseif ($luma -ge 145) { $red = 174; $green = 187; $blue = 247 }
+            elseif ($luma -ge 75) { $red = 67; $green = 94; $blue = 232 }
+            else { $red = 18; $green = 29; $blue = 78 }
+            $bitmap.SetPixel($x, $y, [System.Drawing.Color]::FromArgb($pixel.A, $red, $green, $blue))
         }
     }
     $directory = Split-Path -Parent $OutputPath
