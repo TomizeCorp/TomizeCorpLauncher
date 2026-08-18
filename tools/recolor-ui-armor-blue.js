@@ -52,10 +52,117 @@ async function recolor(file) {
   await fs.rename(`${file}.tmp`, file);
 }
 
+const colors = {
+  panel: palette[5],
+  darkest: palette[0],
+  dark: palette[1],
+  medium: palette[2],
+  blue: palette[3],
+  light: palette[4],
+  pale: palette[5],
+  white: palette[6]
+};
+
+function sameColor(data, offset, color) {
+  return data[offset] === color[0]
+    && data[offset + 1] === color[1]
+    && data[offset + 2] === color[2]
+    && data[offset + 3] !== 0;
+}
+
+function setPixel(data, width, x, y, color, alpha = 255) {
+  const offset = (y * width + x) * 4;
+  data[offset] = color[0];
+  data[offset + 1] = color[1];
+  data[offset + 2] = color[2];
+  data[offset + 3] = alpha;
+}
+
+function isVanillaSlot(data, width, height, x, y) {
+  if (x + 17 >= width || y + 17 >= height) return false;
+  const at = (px, py) => (py * width + px) * 4;
+  return sameColor(data, at(x, y), colors.dark)
+    && sameColor(data, at(x + 1, y), colors.dark)
+    && sameColor(data, at(x, y + 1), colors.dark)
+    && sameColor(data, at(x + 17, y + 1), colors.white)
+    && sameColor(data, at(x + 1, y + 17), colors.white)
+    && sameColor(data, at(x + 8, y + 8), colors.blue);
+}
+
+function drawSeparatedRoundedSlot(data, width, x, y) {
+  for (let py = 0; py < 18; py += 1) {
+    for (let px = 0; px < 18; px += 1) setPixel(data, width, x + px, y + py, colors.panel);
+  }
+  for (let py = 1; py <= 16; py += 1) {
+    for (let px = 1; px <= 16; px += 1) {
+      const corner = (px === 1 || px === 16) && (py === 1 || py === 16);
+      if (corner) continue;
+      let color = colors.blue;
+      if (py === 1 || px === 1) color = colors.dark;
+      if (py === 16 || px === 16) color = colors.light;
+      setPixel(data, width, x + px, y + py, color);
+    }
+  }
+}
+
+async function separateInventorySlots(file) {
+  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const slots = [];
+  for (let y = 0; y <= info.height - 18; y += 1) {
+    for (let x = 0; x <= info.width - 18; x += 1) {
+      if (!isVanillaSlot(data, info.width, info.height, x, y)) continue;
+      slots.push([x, y]);
+      x += 17;
+    }
+  }
+  if (slots.length === 0) return 0;
+  for (const [x, y] of slots) drawSeparatedRoundedSlot(data, info.width, x, y);
+  await sharp(data, { raw: info }).png().toFile(`${file}.tmp`);
+  await fs.rename(`${file}.tmp`, file);
+  return slots.length;
+}
+
+async function flattenButton(file, state) {
+  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const stateColors = {
+    normal: { border: colors.dark, fill: colors.blue, shine: colors.light },
+    highlighted: { border: colors.medium, fill: colors.light, shine: colors.pale },
+    disabled: { border: colors.darkest, fill: colors.dark, shine: colors.medium }
+  }[state];
+  for (let y = 0; y < info.height; y += 1) {
+    for (let x = 0; x < info.width; x += 1) {
+      const offset = (y * info.width + x) * 4;
+      if (data[offset + 3] === 0) continue;
+      const corner = (x < 2 || x >= info.width - 2) && (y === 0 || y === info.height - 1);
+      if (corner) {
+        data[offset + 3] = 0;
+        continue;
+      }
+      let color = stateColors.fill;
+      if (x === 0 || x === info.width - 1 || y === 0 || y === info.height - 1) color = stateColors.border;
+      else if (y === 1) color = stateColors.shine;
+      setPixel(data, info.width, x, y, color);
+    }
+  }
+  await sharp(data, { raw: info }).png().toFile(`${file}.tmp`);
+  await fs.rename(`${file}.tmp`, file);
+}
+
 (async () => {
   const files = (await walk(guiRoot))
     .filter(file => !file.endsWith(`${path.sep}title${path.sep}edition.png`));
   for (const file of files) await recolor(file);
+
+  const widgetRoot = path.join(guiRoot, 'sprites/widget');
+  await flattenButton(path.join(widgetRoot, 'button.png'), 'normal');
+  await flattenButton(path.join(widgetRoot, 'button_highlighted.png'), 'highlighted');
+  await flattenButton(path.join(widgetRoot, 'button_disabled.png'), 'disabled');
+
+  let separatedSlots = 0;
+  for (const file of files.filter(file => file.includes(`${path.sep}container${path.sep}`))) {
+    separatedSlots += await separateInventorySlots(file);
+  }
+  console.log(`Boutons unis sans motif et ${separatedSlots} cases separees avec coins arrondis.`);
   console.log(`${files.length} textures recolorées avec la palette de l'armure.`);
 })().catch(error => {
   console.error(error);
