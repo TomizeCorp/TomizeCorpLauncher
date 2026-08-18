@@ -148,6 +148,53 @@ async function flattenButton(file, state) {
   await fs.rename(`${file}.tmp`, file);
 }
 
+function clearImage(data) {
+  data.fill(0);
+}
+
+function drawRoundedBox(data, width, x, y, boxWidth, boxHeight, border, fill, shine = null) {
+  for (let py = 0; py < boxHeight; py += 1) {
+    for (let px = 0; px < boxWidth; px += 1) {
+      const corner = (px === 0 || px === boxWidth - 1) && (py === 0 || py === boxHeight - 1);
+      if (corner) continue;
+      let color = fill;
+      if (px === 0 || px === boxWidth - 1 || py === 0 || py === boxHeight - 1) color = border;
+      else if (shine && py === 1) color = shine;
+      setPixel(data, width, x + px, y + py, color);
+    }
+  }
+}
+
+async function flattenHotbar(file) {
+  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  clearImage(data);
+  for (let slot = 0; slot < 9; slot += 1) {
+    drawRoundedBox(data, info.width, 1 + slot * 20, 1, 19, 20, colors.dark, colors.blue, colors.light);
+  }
+  await sharp(data, { raw: info }).png().toFile(`${file}.tmp`);
+  await fs.rename(`${file}.tmp`, file);
+}
+
+async function flattenHotbarSelection(file) {
+  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  clearImage(data);
+  drawRoundedBox(data, info.width, 0, 0, info.width, info.height, colors.white, [0, 0, 0], colors.pale);
+  for (let y = 2; y < info.height - 2; y += 1) {
+    for (let x = 2; x < info.width - 2; x += 1) setPixel(data, info.width, x, y, [0, 0, 0], 0);
+  }
+  await sharp(data, { raw: info }).png().toFile(`${file}.tmp`);
+  await fs.rename(`${file}.tmp`, file);
+}
+
+async function flattenOffhandSlot(file, side) {
+  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  clearImage(data);
+  const x = side === 'left' ? 1 : info.width - 20;
+  drawRoundedBox(data, info.width, x, 2, 19, 20, colors.dark, colors.blue, colors.light);
+  await sharp(data, { raw: info }).png().toFile(`${file}.tmp`);
+  await fs.rename(`${file}.tmp`, file);
+}
+
 (async () => {
   const files = (await walk(guiRoot))
     .filter(file => !file.endsWith(`${path.sep}title${path.sep}edition.png`));
@@ -157,6 +204,12 @@ async function flattenButton(file, state) {
   await flattenButton(path.join(widgetRoot, 'button.png'), 'normal');
   await flattenButton(path.join(widgetRoot, 'button_highlighted.png'), 'highlighted');
   await flattenButton(path.join(widgetRoot, 'button_disabled.png'), 'disabled');
+
+  const hudRoot = path.join(guiRoot, 'sprites/hud');
+  await flattenHotbar(path.join(hudRoot, 'hotbar.png'));
+  await flattenHotbarSelection(path.join(hudRoot, 'hotbar_selection.png'));
+  await flattenOffhandSlot(path.join(hudRoot, 'hotbar_offhand_left.png'), 'left');
+  await flattenOffhandSlot(path.join(hudRoot, 'hotbar_offhand_right.png'), 'right');
 
   let separatedSlots = 0;
   for (const file of files.filter(file => file.includes(`${path.sep}container${path.sep}`))) {

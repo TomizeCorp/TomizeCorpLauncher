@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-18T11:32:13.929Z",
+  "version": "2026-08-18T11:48:47.849Z",
   "files": [
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/anvil.png",
@@ -1401,8 +1401,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar.png",
-      "sha256": "0eac087d34d98ac8286196a8ffdd3f8f65953a7f578d86f5d9ac8a29ac03201c",
-      "size": 735,
+      "sha256": "8b7ea4772fd4278fb38f363e24b73fff5f884253cb0e1a080504539af7ad2246",
+      "size": 272,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar.png"
     },
     {
@@ -1419,20 +1419,20 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_offhand_left.png",
-      "sha256": "d3b634cc9a8fdc8a5d7e258005b56133c9d93a00ff0d47baf1e62dbe55f34f05",
-      "size": 368,
+      "sha256": "7b4efe454435b8994f06dfb679fcbddb16473ea56ea24622b273bf74d36837b8",
+      "size": 151,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_offhand_left.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_offhand_right.png",
-      "sha256": "57ad9c854d05bd85f8e71061c0c497f0506449b2d3bde940962c1cb36d657ad8",
-      "size": 412,
+      "sha256": "57b77f703684064c97c434d091172f4731b5155694c74e59af78b07005403c7f",
+      "size": 155,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_offhand_right.png"
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_selection.png",
-      "sha256": "9272329e28e42ec1038a2fcc8a2034cf2cde293506cbfe52ccfbfd189c899368",
-      "size": 232,
+      "sha256": "0d8dd9b46cd2e6234a3b0624e4bb5c4b14183f2567d52e31f647f6653c681076",
+      "size": 152,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_selection.png"
     },
     {
