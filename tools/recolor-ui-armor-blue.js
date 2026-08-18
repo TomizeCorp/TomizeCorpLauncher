@@ -178,9 +178,11 @@ async function flattenHotbar(file) {
 async function flattenHotbarSelection(file) {
   const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   clearImage(data);
-  drawRoundedBox(data, info.width, 0, 0, info.width, info.height, colors.white, [0, 0, 0], colors.pale);
-  for (let y = 2; y < info.height - 2; y += 1) {
-    for (let x = 2; x < info.width - 2; x += 1) setPixel(data, info.width, x, y, [0, 0, 0], 0);
+  // Le sprite reste en 24x23 pour Minecraft, mais le contour visible est
+  // recentre en 20x20 afin de suivre la case au lieu de la depasser.
+  drawRoundedBox(data, info.width, 2, 2, 20, 20, colors.white, [0, 0, 0]);
+  for (let y = 3; y <= 20; y += 1) {
+    for (let x = 3; x <= 20; x += 1) setPixel(data, info.width, x, y, [0, 0, 0], 0);
   }
   await sharp(data, { raw: info }).png().toFile(`${file}.tmp`);
   await fs.rename(`${file}.tmp`, file);

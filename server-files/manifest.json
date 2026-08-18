@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-18T11:48:47.849Z",
+  "version": "2026-08-18T12:01:06.630Z",
   "files": [
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/container/anvil.png",
@@ -1431,8 +1431,8 @@
     },
     {
       "path": "resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_selection.png",
-      "sha256": "0d8dd9b46cd2e6234a3b0624e4bb5c4b14183f2567d52e31f647f6653c681076",
-      "size": 152,
+      "sha256": "51a8cab5fcc787a7776e7890e3b3f1afb0cb9e4ac472f89c91aef23ee3086045",
+      "size": 133,
       "url": "../server-files/resourcepacks/TomizeCorpUI/assets/minecraft/textures/gui/sprites/hud/hotbar_selection.png"
     },
     {
