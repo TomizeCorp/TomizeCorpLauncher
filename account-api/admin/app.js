@@ -146,6 +146,30 @@ function openEditor(account) {
   $('editor-title').textContent = account.username; message('edit-message', ''); $('editor').showModal();
 }
 $('close').addEventListener('click', () => $('editor').close());
+$('delete-account').addEventListener('click', () => {
+  $('delete-username').textContent = $('editor-title').textContent;
+  $('delete-confirmation').value = '';
+  message('delete-message', '');
+  $('delete-dialog').showModal();
+  $('delete-confirmation').focus();
+});
+$('close-delete').addEventListener('click', () => $('delete-dialog').close());
+$('cancel-delete').addEventListener('click', () => $('delete-dialog').close());
+$('delete-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  const button = $('confirm-delete');
+  button.disabled = true;
+  message('delete-message', 'Suppression…');
+  try {
+    await api(`/admin/api/accounts/${encodeURIComponent($('account-id').value)}`, {
+      method: 'DELETE', body: JSON.stringify({ confirmation: $('delete-confirmation').value })
+    });
+    $('delete-dialog').close();
+    $('editor').close();
+    await search($('search').value.trim());
+  } catch (error) { message('delete-message', error.message); }
+  finally { button.disabled = false; }
+});
 $('account-form').addEventListener('submit', async event => {
   event.preventDefault();
   if ($('new-password').value !== $('confirm-password').value) return message('edit-message', 'Les mots de passe sont différents.');

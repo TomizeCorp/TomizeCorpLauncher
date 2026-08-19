@@ -1,0 +1,14 @@
+button.danger {
+  background: #b4232f;
+  color: #fff;
+  border: 1px solid #e14c58;
+}
+
+button.danger:hover { background: #d12d3b; }
+.danger-text { color: #ff747e; }
+.delete-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.delete-actions button { width: 100%; }
+
+@media (max-width: 700px) {
+  .delete-actions { grid-template-columns: 1fr; }
+}

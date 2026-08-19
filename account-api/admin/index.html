@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/admin/app.css?v=3">
   <link rel="stylesheet" href="/admin/logo.css?v=3">
   <link rel="stylesheet" href="/admin/tabs.css?v=3">
+  <link rel="stylesheet" href="/admin/delete-account.css?v=1">
 </head>
 <body>
   <main>
@@ -86,8 +87,18 @@
       <label class="check"><input id="invalidate" type="checkbox" checked> Déconnecter le joueur de tous ses appareils</label>
       <p id="edit-message" class="message"></p>
       <button id="save" value="default">Enregistrer les modifications</button>
+      <button id="delete-account" class="danger" type="button">Supprimer définitivement le compte</button>
     </form>
   </dialog>
-  <script src="/admin/app.js?v=3" defer></script>
+  <dialog id="delete-dialog">
+    <form id="delete-form" method="dialog">
+      <div class="dialog-title"><div><p class="eyebrow danger-text">SUPPRESSION DÉFINITIVE</p><h2>Supprimer <span id="delete-username"></span> ?</h2></div><button type="button" id="close-delete" class="icon">×</button></div>
+      <p class="muted">Le compte, son skin, ses sessions et ses codes de réinitialisation seront supprimés. Cette action est irréversible.</p>
+      <label>Recopiez le pseudo pour confirmer<input id="delete-confirmation" autocomplete="off" required></label>
+      <p id="delete-message" class="message"></p>
+      <div class="delete-actions"><button type="button" id="cancel-delete" class="ghost">Annuler</button><button id="confirm-delete" class="danger">Supprimer le compte</button></div>
+    </form>
+  </dialog>
+  <script src="/admin/app.js?v=4" defer></script>
 </body>
 </html>

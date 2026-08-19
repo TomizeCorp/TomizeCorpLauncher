@@ -292,6 +292,7 @@ const server = http.createServer(async (req, res) => {
     if (adminHost && req.method === 'GET' && url.pathname === '/admin/app.css') return staticAdmin(res, 'app.css', 'text/css; charset=utf-8');
     if (adminHost && req.method === 'GET' && url.pathname === '/admin/logo.css') return staticAdmin(res, 'logo.css', 'text/css; charset=utf-8');
     if (adminHost && req.method === 'GET' && url.pathname === '/admin/tabs.css') return staticAdmin(res, 'tabs.css', 'text/css; charset=utf-8');
+    if (adminHost && req.method === 'GET' && url.pathname === '/admin/delete-account.css') return staticAdmin(res, 'delete-account.css', 'text/css; charset=utf-8');
     if (adminHost && req.method === 'GET' && url.pathname === '/admin/app.js') return staticAdmin(res, 'app.js', 'text/javascript; charset=utf-8');
     if (adminHost && req.method === 'GET' && url.pathname === '/admin/tomizecorp-logo.png') return staticAdmin(res, 'tomizecorp-logo.png', 'image/png');
     if (req.method === 'GET' && url.pathname === '/health') return json(res, 200, { ok: true });
@@ -357,6 +358,29 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, { accounts: result.rows });
     }
     const adminAccountMatch = url.pathname.match(/^\/admin\/api\/accounts\/([0-9a-f-]{36})$/i);
+    if (req.method === 'DELETE' && adminAccountMatch) {
+      await authenticatedAdmin(req);
+      const value = await body(req, 10_000);
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+        const currentResult = await client.query('SELECT id,username,email FROM accounts WHERE id=$1 FOR UPDATE', [adminAccountMatch[1]]);
+        if (!currentResult.rowCount) throw Object.assign(new Error('Compte introuvable.'), { status: 404 });
+        const current = currentResult.rows[0];
+        if (String(value.confirmation || '') !== current.username) {
+          throw Object.assign(new Error('Le pseudo de confirmation ne correspond pas.'), { status: 400 });
+        }
+        await client.query('INSERT INTO admin_audit_log(action,details,ip) VALUES($1,$2,$3)', [
+          'account.deleted', JSON.stringify({ accountId: current.id, username: current.username, email: current.email || '' }), clientIp(req)
+        ]);
+        await client.query('DELETE FROM accounts WHERE id=$1', [current.id]);
+        await client.query('COMMIT');
+        return json(res, 200, { ok: true });
+      } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+      } finally { client.release(); }
+    }
     if (req.method === 'PATCH' && adminAccountMatch) {
       await authenticatedAdmin(req);
       const value = await body(req, 30_000);
