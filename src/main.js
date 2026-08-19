@@ -98,6 +98,40 @@ async function enableTomizeResourcePack(instancePath) {
   await fs.writeFile(markerPath,'Pack TomizeCorpUI active une seule fois'+os.EOL,'utf8');
 }
 
+const musicPreferencePattern=/^soundCategory_music:([^\r\n]+)$/m;
+async function restoreMusicPreference(instancePath) {
+  const preferencePath=path.join(instancePath,'.tomize-player-preferences.json');
+  const optionsPath=path.join(instancePath,'options.txt');
+  if(!fsSync.existsSync(preferencePath)||!fsSync.existsSync(optionsPath))return;
+  try{
+    const preferences=await readJson(preferencePath),music=Number(preferences.music);
+    if(!Number.isFinite(music)||music<0||music>1)return;
+    const options=await fs.readFile(optionsPath,'utf8'),value=String(music);
+    const updated=musicPreferencePattern.test(options)?options.replace(musicPreferencePattern,`soundCategory_music:${value}`):`${options}${options&&!options.endsWith(os.EOL)?os.EOL:''}soundCategory_music:${value}${os.EOL}`;
+    if(updated!==options)await fs.writeFile(optionsPath,updated,'utf8');
+  }catch(error){console.warn('Restauration du volume musical impossible :',error.message);}
+}
+
+function watchMusicPreference(instancePath) {
+  const preferencePath=path.join(instancePath,'.tomize-player-preferences.json');
+  const optionsPath=path.join(instancePath,'options.txt');
+  let stopped=false;
+  const capture=async()=>{
+    if(stopped||!fsSync.existsSync(optionsPath))return;
+    try{
+      const match=(await fs.readFile(optionsPath,'utf8')).match(musicPreferencePattern),music=match?Number(match[1]):NaN;
+      if(Number.isFinite(music)&&music>=0&&music<=1){
+        const temporary=`${preferencePath}.tmp`;
+        await fs.writeFile(temporary,JSON.stringify({music},null,2),'utf8');
+        await fs.rename(temporary,preferencePath).catch(async()=>{await fs.unlink(preferencePath).catch(()=>{});await fs.rename(temporary,preferencePath);});
+      }
+    }catch(error){console.warn('Sauvegarde du volume musical impossible :',error.message);}
+  };
+  fsSync.watchFile(optionsPath,{interval:500,persistent:false},capture);
+  capture();
+  return async()=>{await capture();stopped=true;fsSync.unwatchFile(optionsPath,capture);};
+}
+
 async function readJson(file) { return JSON.parse(await fs.readFile(file, 'utf8')); }
 async function validJsonFile(file) { try { const content=await fs.readFile(file,'utf8');if(!content.trim())return false;JSON.parse(content);return true;} catch (_) { return false; } }
 async function runWithProgress(win, task, { start, end, message }) {
@@ -426,12 +460,14 @@ async function installAndLaunch(win, profile) {
   await prepareLowEndOptions(settings.instancePath,resources);
   await enableAzertyDefaults(settings.instancePath);
   await enableTomizeResourcePack(settings.instancePath);
-  const jvmArgs=['-XX:+UseG1GC','-XX:MaxGCPauseMillis=100','-XX:+UseStringDeduplication','-XX:+DisableExplicitGC',...(resources.lowEnd?['-XX:G1HeapRegionSize=4M']:[]),...(skinPath?[`-Depsilon.skin=${skinPath}`,`-Depsilon.username=${username}`]:[])];
+  await restoreMusicPreference(settings.instancePath);
+  const jvmArgs=['-XX:+UseG1GC','-XX:MaxGCPauseMillis=100','-XX:+UseStringDeduplication',...(resources.lowEnd?['-XX:G1HeapRegionSize=4M']:[]),...(skinPath?[`-Depsilon.skin=${skinPath}`,`-Depsilon.username=${username}`]:[])];
   const child = await launch({ gamePath: settings.instancePath, javaPath, version: fabricVersion, versionName: 'TomizeCorp', versionType: 'TomizeCorp', gameName: 'TomizeCorp', gameProfile: { name: username, id: microsoft ? activeSession.id : offlineUuid(username) }, accessToken: microsoft ? activeSession.accessToken : '0', userType: microsoft ? 'mojang' : 'legacy', launcherName: 'TomizeCorpLauncher', launcherBrand: 'TomizeCorp', minMemory: resources.minMemory, maxMemory: resources.maxMemory, extraJVMArgs:jvmArgs, extraExecOption: { detached: true } });
+  const stopMusicWatcher=watchMusicPreference(settings.instancePath);
   setDiscordMode('epsilon').catch(()=>{});
   let gameFinished=false;
-  const finishGame=code=>{if(gameFinished)return;gameFinished=true;clearDiscordActivity().catch(()=>{});if(code&&code!==0&&!win.isDestroyed()){win.show();win.focus();dialog.showMessageBox(win,{type:'error',title:'Minecraft s’est arrêté',message:'Minecraft a rencontré un problème.',detail:`Code de sortie : ${code}. Le launcher a été conservé pour permettre de réessayer.`}).catch(()=>{});}};
-  child.once('error',error=>{if(!gameFinished){gameFinished=true;clearDiscordActivity().catch(()=>{});}if(!win.isDestroyed()){win.show();dialog.showMessageBox(win,{type:'error',title:'Minecraft ne peut pas démarrer',message:'Le jeu n’a pas pu être lancé.',detail:error.message}).catch(()=>{});}});
+  const finishGame=code=>{if(gameFinished)return;gameFinished=true;stopMusicWatcher().catch(()=>{});clearDiscordActivity().catch(()=>{});if(code&&code!==0&&!win.isDestroyed()){win.show();win.focus();dialog.showMessageBox(win,{type:'error',title:'Minecraft s’est arrêté',message:'Minecraft a rencontré un problème.',detail:`Code de sortie : ${code}. Le launcher a été conservé pour permettre de réessayer.`}).catch(()=>{});}};
+  child.once('error',error=>{if(!gameFinished){gameFinished=true;stopMusicWatcher().catch(()=>{});clearDiscordActivity().catch(()=>{});}if(!win.isDestroyed()){win.show();dialog.showMessageBox(win,{type:'error',title:'Minecraft ne peut pas démarrer',message:'Le jeu n’a pas pu être lancé.',detail:error.message}).catch(()=>{});}});
   child.once('exit',finishGame);
   child.once('close',finishGame);
   child.unref(); win.webContents.send('sync-progress', { percent: 100, message: 'Minecraft lancé sur EPSILON' });
