@@ -197,6 +197,22 @@ async function flattenOffhandSlot(file, side) {
   await fs.rename(`${file}.tmp`, file);
 }
 
+async function brightenEmptyHudIcon(file) {
+  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  for (let offset = 0; offset < data.length; offset += 4) {
+    if (data[offset + 3] === 0) continue;
+    const isDarkest = data[offset] === colors.darkest[0]
+      && data[offset + 1] === colors.darkest[1]
+      && data[offset + 2] === colors.darkest[2];
+    const color = isDarkest ? colors.medium : colors.light;
+    data[offset] = color[0];
+    data[offset + 1] = color[1];
+    data[offset + 2] = color[2];
+  }
+  await sharp(data, { raw: info }).png().toFile(`${file}.tmp`);
+  await fs.rename(`${file}.tmp`, file);
+}
+
 (async () => {
   const files = (await walk(guiRoot))
     .filter(file => !file.endsWith(`${path.sep}title${path.sep}edition.png`));
@@ -212,6 +228,22 @@ async function flattenOffhandSlot(file, side) {
   await flattenHotbarSelection(path.join(hudRoot, 'hotbar_selection.png'));
   await flattenOffhandSlot(path.join(hudRoot, 'hotbar_offhand_left.png'), 'left');
   await flattenOffhandSlot(path.join(hudRoot, 'hotbar_offhand_right.png'), 'right');
+
+  // Les emplacements vides des coeurs et de la faim doivent rester lisibles
+  // sur le HUD bleu, notamment quand le joueur perd des PV ou de la nourriture.
+  for (const name of ['food_empty.png', 'food_empty_hunger.png']) {
+    await brightenEmptyHudIcon(path.join(hudRoot, name));
+  }
+  const heartRoot = path.join(hudRoot, 'heart');
+  for (const name of [
+    'container.png',
+    'container_blinking.png',
+    'container_hardcore.png',
+    'container_hardcore_blinking.png',
+    'vehicle_container.png'
+  ]) {
+    await brightenEmptyHudIcon(path.join(heartRoot, name));
+  }
 
   let separatedSlots = 0;
   for (const file of files.filter(file => file.includes(`${path.sep}container${path.sep}`))) {

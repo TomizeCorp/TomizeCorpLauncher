@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(SplashOverlay.class)
 public abstract class SplashOverlayMixin {
     private static final Identifier EPSILON_LOADING = Identifier.of("epsilon", "textures/gui/loading.png");
-    private static final int IMAGE_WIDTH = 1920;
-    private static final int IMAGE_HEIGHT = 1080;
+    private static final int IMAGE_WIDTH = 3840;
+    private static final int IMAGE_HEIGHT = 2240;
 
     @Shadow private float progress;
 
