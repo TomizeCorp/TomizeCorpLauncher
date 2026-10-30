@@ -47,6 +47,12 @@ git push origin v1.5.0
 
 GitHub Actions compile et publie automatiquement l'installateur, son blockmap et `latest.yml`. Les launchers installés vérifient la Release au démarrage, téléchargent la mise à jour et proposent de redémarrer. Les comptes locaux et l'instance EPSILON sont conservés.
 
+## Rendu distant
+
+Le launcher distribue [Voxy 0.2.16-beta pour Minecraft 1.21.11](https://modrinth.com/mod/voxy/version/H3w2nVdU), avec Sodium et Fabric API. Voxy remplace Distant Horizons : l'ancien mod distribué par le launcher est retiré automatiquement lors de la synchronisation de l'instance. Les données et configurations de Distant Horizons restent conservées.
+
+Le rendu distant de Voxy nécessite OpenGL 4.6. Les shaders doivent explicitement prendre en charge Voxy pour fonctionner avec son rendu distant.
+
 ## Sécurité
 
 - Les chemins `../` et les fichiers hors instance sont refusés.

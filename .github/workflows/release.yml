@@ -61,12 +61,12 @@ jobs:
           name: epsilon-client-mod
           path: server-files/mods
 
-      - name: Ajouter Iris, Sodium, Distant Horizons et Xaero's Minimap
+      - name: Ajouter Iris, Sodium, Voxy et Xaero's Minimap
         shell: pwsh
         run: |
           Invoke-WebRequest 'https://cdn.modrinth.com/data/YL57xq9U/versions/fDpuVzVr/iris-fabric-1.10.7%2Bmc1.21.11.jar' -OutFile 'server-files/mods/Iris-1.10.7.jar'
           Invoke-WebRequest 'https://cdn.modrinth.com/data/AANobbMI/versions/UddlN6L4/sodium-fabric-0.8.7%2Bmc1.21.11.jar' -OutFile 'server-files/mods/Sodium-0.8.7.jar'
-          Invoke-WebRequest 'https://cdn.modrinth.com/data/uCdwusMi/versions/bCTilxSz/DistantHorizons-3.2.0-b-1.21.11-fabric-neoforge.jar' -OutFile 'server-files/mods/DistantHorizons-3.2.0-b.jar'
+          Invoke-WebRequest 'https://cdn.modrinth.com/data/fxxUqruK/versions/H3w2nVdU/voxy-0.2.16-beta%2B1.21.11.jar' -OutFile 'server-files/mods/Voxy-0.2.16-beta.jar'
           Invoke-WebRequest 'https://cdn.modrinth.com/data/P7dR8mSH/versions/zGF3drOQ/fabric-api-0.141.5%2B1.21.11.jar' -OutFile 'server-files/mods/Fabric-API-0.141.5.jar'
           Invoke-WebRequest 'https://cdn.modrinth.com/data/1bokaNcj/versions/8MdqDp18/xaerominimap-fabric-1.21.11-26.4.2.jar' -OutFile 'server-files/mods/Xaeros-Minimap-26.4.2.jar'
 
@@ -108,11 +108,11 @@ jobs:
           name: epsilon-client-mod
           path: server-files/mods
 
-      - name: Ajouter Iris, Sodium, Distant Horizons et Xaero's Minimap
+      - name: Ajouter Iris, Sodium, Voxy et Xaero's Minimap
         run: |
           curl --fail --location 'https://cdn.modrinth.com/data/YL57xq9U/versions/fDpuVzVr/iris-fabric-1.10.7%2Bmc1.21.11.jar' --output 'server-files/mods/Iris-1.10.7.jar'
           curl --fail --location 'https://cdn.modrinth.com/data/AANobbMI/versions/UddlN6L4/sodium-fabric-0.8.7%2Bmc1.21.11.jar' --output 'server-files/mods/Sodium-0.8.7.jar'
-          curl --fail --location 'https://cdn.modrinth.com/data/uCdwusMi/versions/bCTilxSz/DistantHorizons-3.2.0-b-1.21.11-fabric-neoforge.jar' --output 'server-files/mods/DistantHorizons-3.2.0-b.jar'
+          curl --fail --location 'https://cdn.modrinth.com/data/fxxUqruK/versions/H3w2nVdU/voxy-0.2.16-beta%2B1.21.11.jar' --output 'server-files/mods/Voxy-0.2.16-beta.jar'
           curl --fail --location 'https://cdn.modrinth.com/data/P7dR8mSH/versions/zGF3drOQ/fabric-api-0.141.5%2B1.21.11.jar' --output 'server-files/mods/Fabric-API-0.141.5.jar'
           curl --fail --location 'https://cdn.modrinth.com/data/1bokaNcj/versions/8MdqDp18/xaerominimap-fabric-1.21.11-26.4.2.jar' --output 'server-files/mods/Xaeros-Minimap-26.4.2.jar'
 

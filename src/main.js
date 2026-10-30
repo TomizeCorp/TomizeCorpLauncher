@@ -65,8 +65,6 @@ async function enableAzertyDefaults(instancePath) {
 }
 
 async function enableTomizeResourcePack(instancePath) {
-  const markerPath=path.join(instancePath,'.tomize-resource-pack-initialized-v1');
-  if(fsSync.existsSync(markerPath))return;
   const optionsPath=path.join(instancePath,'options.txt');
   await fs.mkdir(instancePath,{recursive:true});
   let options=fsSync.existsSync(optionsPath)?await fs.readFile(optionsPath,'utf8'):'';
@@ -76,12 +74,7 @@ async function enableTomizeResourcePack(instancePath) {
   const match=options.match(linePattern);
   if(match){try{packs=JSON.parse(match[1]);}catch{}}
   if(!Array.isArray(packs))packs=[];
-  // Une liste existante sans TomizeCorpUI signifie que le joueur l'a desactive.
-  // On conserve ce choix au lieu de reactiver le pack a chaque lancement.
-  if(match&&!packs.includes(packName)){
-    await fs.writeFile(markerPath,'Choix du pack initialise par TomizeCorp v1'+os.EOL,'utf8');
-    return;
-  }
+  // Le pack EPSILON est obligatoire, y compris sur les anciennes installations.
   if(!packs.includes(packName))packs.push(packName);
   const newLine=`resourcePacks:${JSON.stringify(packs)}`;
   options=match?options.replace(linePattern,newLine):`${options}${options&&!options.endsWith(os.EOL)?os.EOL:''}${newLine}${os.EOL}`;
@@ -95,7 +88,6 @@ async function enableTomizeResourcePack(instancePath) {
     }
   }
   await fs.writeFile(optionsPath,options,'utf8');
-  await fs.writeFile(markerPath,'Pack TomizeCorpUI active une seule fois'+os.EOL,'utf8');
 }
 
 const musicPreferencePattern=/^soundCategory_music:([^\r\n]+)$/m;
